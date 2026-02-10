@@ -1,7 +1,7 @@
 # Sunlight Visualizer
 
 
-A **Sunlight Intensity Visualizer** for your House using Home Assistant. 
+A **Interactive Sunlight Intensity Visualizer** for your House using Home Assistant. 
 
 The integration includes a Lovelace card that visualizes real‑time sunlight intensity on a 2.5D house. <br>
 It also displays roof and wall sunlight intensity, shadows, and optional solar power, in a single HACS install.
