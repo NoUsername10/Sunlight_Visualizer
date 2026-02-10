@@ -25,6 +25,43 @@ What can you do with this card?
 - `sunlight_visualizer` integration (sensors + numbers + selects)
 - `sunlight-visualizer-card.js` Lovelace card (auto‑registered by the integration)
 
+## Features
+
+☀️ **Real‑Time Sun Physics**  
+Calculates wall and roof sunlight intensity based on sun azimuth/elevation, house orientation, and roof tilt.
+
+🏠 **2.5D House Visualizer (Lovelace Card)**  
+Interactive SVG card showing:
+- Live sun position, rays, and floor compass
+- Wall & roof intensity labels
+- Roof tilt + roof direction visualization
+- Real‑time shadow casting
+- Auto‑rotate camera with FPS readout
+
+📊 **Sensors for Every Surface**  
+Creates intensity sensors for:
+- Front / Right / Back / Left walls
+- Roof (ceiling) surface
+- Solar alignment percentage + status
+
+⚙️ **Full Integration + Card in One HACS Install**  
+One download installs both:
+- `sunlight_visualizer` integration
+- `sunlight‑visualizer‑card.js` Lovelace card
+
+🔧 **Configurable & Test‑Friendly**  
+Options include:
+- House direction, roof tilt, roof direction
+- Force Sun Fallback (azimuth + elevation) for testing
+- Optional roof power sensor & invert option
+- Camera rotation controls + auto‑rotate speed
+
+🧭 **Compass & Orientation**  
+Floor compass ring + sun direction indicator for easy real‑world alignment.
+
+🧪 **Debug & Diagnostics**  
+Includes diagnostic sensors and attributes for troubleshooting + override indicator in the card.
+
 ## Installation (HACS)
 1. Add this repository to HACS (as an **Integration**).
 2. Install it. HACS will place:
