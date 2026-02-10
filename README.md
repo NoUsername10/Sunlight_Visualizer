@@ -1,7 +1,8 @@
 # Sunlight Visualizer
 
-This repo bundles the **Sunlight Visualizer integration** and the **Lovelace card** into a single HACS install.
+
 A **Sunlight Intensity Visualiser** for your House using Home Assistant. 
+
 The integration includes a Lovelace card that visualizes real‑time sunlight on a 2.5D house 
 roof and wall intensity, shadows, and solar power, in a single HACS install.
 
