@@ -1,0 +1,85 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konfiguration av Sunlight Visualizer",
+        "description": "Konfigurera integrationen Sunlight Visualizer. Aktuell Home Assistant-plats: {location_name} ({latitude:.6f}, {longitude:.6f})",
+        "data": {
+          "use_custom_angle": "Använd egen vinkel (istället för kompassriktning)",
+          "direction": "Kompassriktning (används om egen vinkel är AV)",
+          "roof_direction": "Taksidans riktning (nedförsida)",
+          "roof_power_entity": "Takets effektsensor (valfri)",
+          "roof_power_enabled": "Aktivera takets effektvärde",
+          "roof_power_invert": "Invertera effekt (tvinga positivt)",
+          "house_angle": "Husvinkel (grader, 0° = front mot norr)",
+          "ceiling_tilt": "Taklutning (0–90°, 0 = horisontell)",
+          "update_interval": "Uppdateringsintervall (minuter)"
+        },
+        "data_description": {
+          "use_custom_angle": "Markera för att ange exakt vinkel, avmarkera för att välja kompassriktning",
+          "direction": "Välj kompassriktning (N, NE, E, osv.) – endast aktiv när egen vinkel är AV",
+          "roof_direction": "Välj vilken sida av huset taket lutar ned mot",
+          "roof_power_entity": "Välj effektsensor som visas under takets % (W/kW)",
+          "roof_power_enabled": "Visa effektvärde under takets %",
+          "roof_power_invert": "Invertera effektvärden (om sensorn är negativ)",
+          "house_angle": "Vinkel för husets front i förhållande till norr (0–359°)",
+          "ceiling_tilt": "Lutningsvinkel för tak/solpaneler (0° = plant, 90° = vertikalt)",
+          "update_interval": "Hur ofta solens position beräknas om (1–60 minuter)"
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Latitud måste vara mellan -90 och 90 grader",
+      "invalid_longitude": "Longitud måste vara mellan -180 och 180 grader",
+      "invalid_house_angle": "Husvinkel måste vara mellan 0 och 360 grader",
+      "invalid_ceiling_tilt": "Taklutning måste vara mellan 0 och 90 grader",
+      "invalid_update_interval": "Uppdateringsintervallet måste vara mellan 1 och 60 minuter",
+      "invalid_force_sun_azimuth": "Tvingad solazimut måste vara mellan 0 och 359 grader",
+      "invalid_force_sun_elevation": "Tvingad solhöjd måste vara mellan −90 och 90 grader",
+      "invalid_coordinates": "Ange giltiga decimaltal för koordinater",
+      "latitude_out_of_range": "Latitud måste vara mellan -90° och 90°",
+      "longitude_out_of_range": "Longitud måste vara mellan -180° och 180°",
+      "direction_required": "Välj en kompassriktning när egen vinkel inte används",
+      "unknown": "Ett oväntat fel inträffade"
+    },
+    "abort": {
+      "single_instance_allowed": "Endast en konfiguration av Sunlight Visualizer är tillåten."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Alternativ för Sunlight Visualizer",
+        "description": "Uppdatera konfigurationen för Sunlight Visualizer. Plats: {source} ({current_lat}, {current_lon})",
+        "data": {
+          "use_custom_angle": "Använd egen vinkel (istället för kompassriktning)",
+          "direction": "Kompassriktning (används om egen vinkel är AV)",
+          "roof_direction": "Taksidans riktning (nedförsida)",
+          "roof_power_entity": "Takets effektsensor (valfri)",
+          "roof_power_enabled": "Aktivera takets effektvärde",
+          "roof_power_invert": "Invertera effekt (tvinga positivt)",
+          "force_sun_fallback": "Tvinga sol‑fallback",
+          "force_sun_azimuth": "Tvinga solazimut",
+          "force_sun_elevation": "Tvinga solhöjd",
+          "house_angle": "Husvinkel (grader, 0° = front mot norr)",
+          "ceiling_tilt": "Taklutning (0–90°, 0 = horisontell)",
+          "update_interval": "Uppdateringsintervall (minuter)"
+        },
+        "data_description": {
+          "use_custom_angle": "Markera för att ange exakt vinkel, avmarkera för att välja kompassriktning",
+          "direction": "Välj kompassriktning (N, NE, E, osv.) – endast aktiv när egen vinkel är AV",
+          "roof_direction": "Välj vilken sida av huset taket lutar ned mot",
+          "roof_power_entity": "Välj effektsensor som visas under takets % (W/kW)",
+          "roof_power_enabled": "Visa effektvärde under takets %",
+          "roof_power_invert": "Invertera effektvärden (om sensorn är negativ)",
+          "force_sun_fallback": "Tvinga fallback‑solvärden (test)",
+          "force_sun_azimuth": "Azimut som används vid tvingad fallback (0–359°)",
+          "force_sun_elevation": "Höjd som används vid tvingad fallback (−90° till 90°)",
+          "house_angle": "Vinkel för husets front i förhållande till norr (0–359°)",
+          "ceiling_tilt": "Lutningsvinkel för tak/solpaneler (0° = plant, 90° = vertikalt)",
+          "update_interval": "Hur ofta solens position beräknas om (1–60 minuter)"
+        }
+      }
+    }
+  }
+}

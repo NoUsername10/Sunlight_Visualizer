@@ -1,0 +1,85 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sunlight Visualizer Configuration",
+        "description": "Configure the Sunlight Visualizer integration. Current Home Assistant location: {location_name} ({latitude:.6f}, {longitude:.6f})",
+        "data": {
+          "use_custom_angle": "Use custom angle (instead of compass direction)",
+          "direction": "Compass direction (used if custom angle is OFF)",
+          "roof_direction": "Roof direction (downhill side)",
+          "roof_power_entity": "Roof power sensor (optional)",
+          "roof_power_enabled": "Enable roof power label",
+          "roof_power_invert": "Invert roof power (force positive)",
+          "house_angle": "House Angle (degrees, 0° = North-facing front)",
+          "ceiling_tilt": "Ceiling tilt angle (0-90°, 0 = horizontal)",
+          "update_interval": "Update interval (minutes)"
+        },
+        "data_description": {
+          "use_custom_angle": "Check to enter exact angle, uncheck to select compass direction",
+          "direction": "Select compass direction (N, NE, E, etc.) - only active when custom angle is OFF",
+          "roof_direction": "Select which side of the house the roof slopes down toward",
+          "roof_power_entity": "Select a power sensor to show below roof % (W/kW)",
+          "roof_power_enabled": "Show roof power value under the roof %",
+          "roof_power_invert": "Invert power values (useful if sensor is negative)",
+          "house_angle": "Angle of your house's front relative to North (0-359°)",
+          "ceiling_tilt": "Tilt angle of ceiling/solar panels (0° = flat, 90° = vertical)",
+          "update_interval": "How often to recalculate sun position (1-60 minutes)"
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Latitude must be between -90 and 90 degrees",
+      "invalid_longitude": "Longitude must be between -180 and 180 degrees",
+      "invalid_house_angle": "House angle must be between 0 and 360 degrees",
+      "invalid_ceiling_tilt": "Ceiling tilt must be between 0 and 90 degrees",
+      "invalid_update_interval": "Update interval must be between 1 and 60 minutes",
+      "invalid_force_sun_azimuth": "Force Sun Azimuth must be between 0 and 359 degrees",
+      "invalid_force_sun_elevation": "Force Sun Elevation must be between -90 and 90 degrees",
+      "invalid_coordinates": "Please enter valid decimal numbers for coordinates",
+      "latitude_out_of_range": "Latitude must be between -90° and 90°",
+      "longitude_out_of_range": "Longitude must be between -180° and 180°",
+      "direction_required": "Please select a compass direction when custom angle is not used",
+      "unknown": "Unexpected error occurred"
+    },
+    "abort": {
+      "single_instance_allowed": "Only a single configuration of Sunlight Visualizer is allowed."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Sunlight Visualizer Options",
+        "description": "Update the Sunlight Visualizer configuration. Location: {source} ({current_lat}, {current_lon})",
+        "data": {
+          "use_custom_angle": "Use custom angle (instead of compass direction)",
+          "direction": "Compass direction (used if custom angle is OFF)",
+          "roof_direction": "Roof direction (downhill side)",
+          "roof_power_entity": "Roof power sensor (optional)",
+          "roof_power_enabled": "Enable roof power label",
+          "roof_power_invert": "Invert roof power (force positive)",
+          "force_sun_fallback": "Force Sun Fallback",
+          "force_sun_azimuth": "Force Sun Azimuth",
+          "force_sun_elevation": "Force Sun Elevation",
+          "house_angle": "House Angle (degrees, 0° = North-facing front)",
+          "ceiling_tilt": "Ceiling tilt angle (0-90°, 0 = horizontal)",
+          "update_interval": "Update interval (minutes)"
+        },
+        "data_description": {
+          "use_custom_angle": "Check to enter exact angle, uncheck to select compass direction",
+          "direction": "Select compass direction (N, NE, E, etc.) - only active when custom angle is OFF",
+          "roof_direction": "Select which side of the house the roof slopes down toward",
+          "roof_power_entity": "Select a power sensor to show below roof % (W/kW)",
+          "roof_power_enabled": "Show roof power value under the roof %",
+          "roof_power_invert": "Invert power values (useful if sensor is negative)",
+          "force_sun_fallback": "Force fallback sun values (testing)",
+          "force_sun_azimuth": "Azimuth to use when forcing fallback (0-359°)",
+          "force_sun_elevation": "Elevation to use when forcing fallback (-90° to 90°)",
+          "house_angle": "Angle of your house's front relative to North (0-359°)",
+          "ceiling_tilt": "Tilt angle of ceiling/solar panels (0° = flat, 90° = vertical)",
+          "update_interval": "How often to recalculate sun position (1-60 minutes)"
+        }
+      }
+    }
+  }
+}
