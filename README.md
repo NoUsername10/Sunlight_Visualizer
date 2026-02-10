@@ -1,10 +1,24 @@
 # Sunlight Visualizer
 
 
-A **Sunlight Intensity Visualiser** for your House using Home Assistant. 
+A **Sunlight Intensity Visualizer** for your House using Home Assistant. 
 
-The integration includes a Lovelace card that visualizes real‑time sunlight on a 2.5D house 
-roof and wall intensity, shadows, and solar power, in a single HACS install.
+The integration includes a Lovelace card that visualizes real‑time sunlight intensity on a 2.5D house. <br>
+It also displays roof and wall sunlight intensity, shadows, and optional solar power, in a single HACS install.
+
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-visualized.png" width=50% height=50%>
+
+
+[![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
+
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+
+
+What can you do with this card?
+- Visualise current solar intensity on all walls (and the ceiling) on your house.
+- Get data so you know when the sun is at its peak, when sun reaches the porch or when to close the blinds.
+- Know when its time to get the coconut butter and get a great tan.
+- Understand when your solar system is at its peak, or when the sun is optimally aligned to the panels / roof.
 
 ## What you get
 - `sunlight_visualizer` integration (sensors + numbers + selects)
