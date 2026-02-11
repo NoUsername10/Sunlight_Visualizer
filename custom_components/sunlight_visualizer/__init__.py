@@ -79,7 +79,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def _deferred_register(_: object) -> None:
         await _async_register_card_resource(hass)
-        async_call_later(hass, 5, lambda _: hass.async_create_task(_async_register_card_resource(hass)))
+        async def _retry(_: object) -> None:
+            await _async_register_card_resource(hass)
+        async_call_later(hass, 5, _retry)
 
     if not hass.is_running:
         hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STARTED, _deferred_register)
