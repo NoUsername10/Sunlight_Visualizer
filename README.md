@@ -310,12 +310,3 @@ autoRotateAdaptiveFpsThreshold: 0.80
 autoRotateCalibrateMs: 2000
 autoRotateCalibrateFactor: 0.85
 ```
-
-## Development (card)
-The card source lives in `frontend/`.
-```bash
-cd frontend
-npm install
-npm run build
-```
-This outputs `dist/sunlight-visualizer-card.js` at repo root.
