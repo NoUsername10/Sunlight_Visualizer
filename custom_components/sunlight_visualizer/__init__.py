@@ -2,23 +2,19 @@
 from __future__ import annotations
 
 import json
-import os 
+import os
 import logging
-
+import asyncio
+from pathlib import Path
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.event import async_call_later
-from homeassistant.const import EVENT_HOMEASSISTANT_STARTED
+from homeassistant.const import EVENT_HOMEASSISTANT_STARTED, EVENT_COMPONENT_LOADED
+
+from homeassistant.components.http import StaticPathConfig
+from homeassistant.helpers.importlib import async_import_module
 
 from .const import DOMAIN
-
-try:
-    from homeassistant.components.lovelace import resources
-    from homeassistant.components.lovelace.const import DOMAIN as LOVELACE_DOMAIN
-except Exception:  # pragma: no cover - lovelace may not be loaded
-    resources = None
-    LOVELACE_DOMAIN = "lovelace"
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -38,7 +34,37 @@ PLATFORMS: list[Platform] = [
 # Local resource URL for the bundled card
 CARD_RESOURCE_URL = "/sunlight_visualizer/sunlight-visualizer-card.js"
 CARD_STATIC_PATH = "/sunlight_visualizer"
-CARD_STATIC_DIR = os.path.join(os.path.dirname(__file__), "www")
+CARD_STATIC_DIR = Path(__file__).parent / "www"
+CARD_JS_PATH = CARD_STATIC_DIR / "sunlight-visualizer-card.js"
+
+async def _async_register_static_path(hass: HomeAssistant) -> bool:
+    """Serve the Lovelace card JS directly from the integration (single-install)."""
+    if hass.data.get(DOMAIN, {}).get("_static_registered"):
+        return True
+    try:
+        if not CARD_JS_PATH.exists():
+            raise RuntimeError(f"Card JS not found at {CARD_JS_PATH}")
+
+        if hasattr(hass.http, "async_register_static_paths"):
+            await hass.http.async_register_static_paths([
+                StaticPathConfig(CARD_STATIC_PATH, str(CARD_STATIC_DIR), False)
+            ])
+        elif hasattr(hass.http, "async_register_static_path"):
+            await hass.http.async_register_static_path(
+                CARD_STATIC_PATH, str(CARD_STATIC_DIR), False
+            )
+        elif hasattr(hass.http, "register_static_path"):
+            hass.http.register_static_path(
+                CARD_STATIC_PATH, str(CARD_STATIC_DIR), False
+            )
+        else:
+            raise RuntimeError("No static path registration method found")
+
+        hass.data.setdefault(DOMAIN, {})["_static_registered"] = True
+        return True
+    except Exception as err:  # pragma: no cover - best effort
+        _LOGGER.warning("Failed to register static path for card JS: %s", err)
+        return False
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Sunlight Visualizer from a config entry."""
@@ -56,14 +82,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "coordinator": coordinator
     }
 
-    # Serve the Lovelace card JS directly from the integration (single-install)
-    if not hass.data[DOMAIN].get("_static_registered"):
-        try:
-            # register_static_path is available on hass.http
-            hass.http.register_static_path(CARD_STATIC_PATH, CARD_STATIC_DIR, cache_headers=True)
-            hass.data[DOMAIN]["_static_registered"] = True
-        except Exception as err:  # pragma: no cover - best effort
-            _LOGGER.warning("Failed to register static path for card JS: %s", err)
+    await _async_register_static_path(hass)
     
     # Set up update listener for config entry changes
     entry.async_on_unload(
@@ -74,31 +93,63 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     # Auto-register the Lovelace resource for the card (best-effort)
-    # Do it now, and also retry after HA is fully started.
     await _async_register_card_resource(hass)
 
-    async def _deferred_register(_: object) -> None:
+    async def _register_when_lovelace_loaded(event) -> None:
+        if event.data.get("component") != "lovelace":
+            return
         await _async_register_card_resource(hass)
-        async def _retry(_: object) -> None:
-            await _async_register_card_resource(hass)
-        async_call_later(hass, 5, _retry)
 
-    if not hass.is_running:
-        hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STARTED, _deferred_register)
+    hass.bus.async_listen(EVENT_COMPONENT_LOADED, _register_when_lovelace_loaded)
+
+    async def _startup_retry(_: object | None = None) -> None:
+        await _async_register_card_resource(hass)
+
+    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STARTED, _startup_retry)
+
+    # Retry for a short window in case Lovelace registry is late to initialize
+    hass.async_create_task(_async_retry_register_card_resource(hass))
     
     return True
 
 
-async def _async_register_card_resource(hass: HomeAssistant) -> None:
-    if resources is None:
-        return
-    if LOVELACE_DOMAIN not in hass.config.components:
-        return
-    try:
-        registry = await resources.async_get_registry(hass)
-    except Exception as err:  # pragma: no cover - registry not ready
-        _LOGGER.debug("Lovelace registry not ready: %s", err)
-        return
+async def _async_get_lovelace_registry(hass: HomeAssistant):
+    """Return the Lovelace resource registry across HA versions."""
+    # Newer/older module API (try multiple module paths)
+    for mod_name in (
+        "homeassistant.components.lovelace.resources",
+        "homeassistant.components.lovelace",
+    ):
+        try:
+            mod = await async_import_module(hass, mod_name)
+            async_get_registry = getattr(mod, "async_get_registry", None)
+            if async_get_registry:
+                return await async_get_registry(hass)
+        except Exception as err:  # pragma: no cover - module may not be ready yet
+            _LOGGER.debug("Lovelace resources module not ready (%s): %s", mod_name, err)
+
+    # Fallback: look in hass.data
+    lovelace_data = hass.data.get("lovelace")
+    if lovelace_data:
+        # dict-style storage
+        if isinstance(lovelace_data, dict):
+            for key in ("resources", "resource_registry", "lovelace_resources"):
+                reg = lovelace_data.get(key)
+                if reg and hasattr(reg, "async_items") and hasattr(reg, "async_create_item"):
+                    return reg
+        # object-style storage
+        for attr in ("resources", "resource_registry", "lovelace_resources"):
+            reg = getattr(lovelace_data, attr, None)
+            if reg and hasattr(reg, "async_items") and hasattr(reg, "async_create_item"):
+                return reg
+    return None
+
+
+async def _async_register_card_resource(hass: HomeAssistant) -> bool:
+    registry = await _async_get_lovelace_registry(hass)
+    if registry is None:
+        _LOGGER.debug("Lovelace registry not ready")
+        return False
 
     existing = False
     for item in registry.async_items():
@@ -110,17 +161,36 @@ async def _async_register_card_resource(hass: HomeAssistant) -> None:
             break
 
     if existing:
-        return
+        hass.data.setdefault(DOMAIN, {})["_resource_registered"] = True
+        return True
 
     try:
         await registry.async_create_item({"res_type": "module", "url": CARD_RESOURCE_URL})
         _LOGGER.info("Registered Lovelace resource: %s", CARD_RESOURCE_URL)
+        hass.data.setdefault(DOMAIN, {})["_resource_registered"] = True
+        return True
     except Exception:
         try:
             await registry.async_create_item({"type": "module", "url": CARD_RESOURCE_URL})
             _LOGGER.info("Registered Lovelace resource: %s", CARD_RESOURCE_URL)
+            hass.data.setdefault(DOMAIN, {})["_resource_registered"] = True
+            return True
         except Exception as err:
             _LOGGER.warning("Failed to auto-register Lovelace resource: %s", err)
+            return False
+
+
+async def _async_retry_register_card_resource(
+    hass: HomeAssistant,
+    attempts: int = 12,
+    delay: float = 5.0,
+) -> None:
+    """Retry resource registration for a short period after startup."""
+    for _ in range(attempts):
+        if await _async_register_card_resource(hass):
+            return
+        await asyncio.sleep(delay)
+    _LOGGER.warning("Failed to auto-register Lovelace resource after retries")
 
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Handle options update by reloading the entry."""
