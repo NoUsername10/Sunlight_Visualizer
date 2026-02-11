@@ -13,6 +13,11 @@ It  displays roof and wall sunlight intensity, shadows, and optional solar power
 
 [![Demo](assets/icon.png)](assets/rotation.mp4)
 
+
+
+[Watch the video](assets/rotation.mp4)
+
+
 [![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
