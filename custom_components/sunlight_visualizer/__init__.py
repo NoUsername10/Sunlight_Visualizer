@@ -6,15 +6,27 @@ import os
 import logging
 import asyncio
 from pathlib import Path
+import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.const import EVENT_HOMEASSISTANT_STARTED, EVENT_COMPONENT_LOADED
 
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.helpers.importlib import async_import_module
 
-from .const import DOMAIN
+from .const import (
+    DOMAIN,
+    CONF_HOUSE_ANGLE,
+    CONF_CEILING_TILT,
+    CONF_ROOF_DIRECTION,
+    CONF_CAMERA_ROT_H,
+    CONF_CAMERA_ROT_V,
+    CONF_AUTO_ROTATE_SPEED,
+    CONF_ROOF_POWER_ENTITY,
+    CONF_ROOF_POWER_ENABLED,
+    CONF_ROOF_POWER_INVERT,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -36,6 +48,34 @@ CARD_RESOURCE_URL = "/sunlight_visualizer/sunlight-visualizer-card.js"
 CARD_STATIC_PATH = "/sunlight_visualizer"
 CARD_STATIC_DIR = Path(__file__).parent / "www"
 CARD_JS_PATH = CARD_STATIC_DIR / "sunlight-visualizer-card.js"
+SERVICE_SET_OPTIONS = "set_options"
+
+SERVICE_SET_OPTIONS_SCHEMA = vol.Schema(
+    {
+        vol.Optional("entry_id"): str,
+        vol.Optional(CONF_HOUSE_ANGLE): vol.All(vol.Coerce(int), vol.Range(min=0, max=359)),
+        vol.Optional(CONF_CEILING_TILT): vol.All(vol.Coerce(int), vol.Range(min=0, max=90)),
+        vol.Optional(CONF_ROOF_DIRECTION): vol.In(["front", "back", "left", "right"]),
+        vol.Optional(CONF_CAMERA_ROT_H): vol.All(vol.Coerce(int), vol.Range(min=0, max=359)),
+        vol.Optional(CONF_CAMERA_ROT_V): vol.All(vol.Coerce(int), vol.Range(min=0, max=90)),
+        vol.Optional(CONF_AUTO_ROTATE_SPEED): vol.All(vol.Coerce(float), vol.Range(min=1, max=90)),
+        vol.Optional(CONF_ROOF_POWER_ENTITY): vol.Any(None, str),
+        vol.Optional(CONF_ROOF_POWER_ENABLED): bool,
+        vol.Optional(CONF_ROOF_POWER_INVERT): bool,
+    }
+)
+
+SET_OPTIONS_KEYS = {
+    CONF_HOUSE_ANGLE,
+    CONF_CEILING_TILT,
+    CONF_ROOF_DIRECTION,
+    CONF_CAMERA_ROT_H,
+    CONF_CAMERA_ROT_V,
+    CONF_AUTO_ROTATE_SPEED,
+    CONF_ROOF_POWER_ENTITY,
+    CONF_ROOF_POWER_ENABLED,
+    CONF_ROOF_POWER_INVERT,
+}
 
 async def _async_register_static_path(hass: HomeAssistant) -> bool:
     """Serve the Lovelace card JS directly from the integration (single-install)."""
@@ -82,6 +122,43 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "coordinator": coordinator
     }
 
+    async def _async_handle_set_options(call: ServiceCall) -> None:
+        entry_id = call.data.get("entry_id")
+        target_entry: ConfigEntry | None = None
+
+        if entry_id:
+            target_entry = hass.config_entries.async_get_entry(entry_id)
+            if not target_entry or target_entry.domain != DOMAIN:
+                _LOGGER.warning("set_options called with invalid entry_id: %s", entry_id)
+                return
+        else:
+            domain_entries = hass.config_entries.async_entries(DOMAIN)
+            if not domain_entries:
+                _LOGGER.warning("set_options called but no %s entries found", DOMAIN)
+                return
+            target_entry = domain_entries[0]
+
+        updates = {k: call.data[k] for k in SET_OPTIONS_KEYS if k in call.data}
+        if not updates:
+            return
+
+        new_options = dict(target_entry.options)
+        for key, value in updates.items():
+            if key == CONF_ROOF_POWER_ENTITY and (value is None or value == ""):
+                new_options.pop(CONF_ROOF_POWER_ENTITY, None)
+            else:
+                new_options[key] = value
+
+        hass.config_entries.async_update_entry(target_entry, options=new_options)
+
+    if not hass.services.has_service(DOMAIN, SERVICE_SET_OPTIONS):
+        hass.services.async_register(
+            DOMAIN,
+            SERVICE_SET_OPTIONS,
+            _async_handle_set_options,
+            schema=SERVICE_SET_OPTIONS_SCHEMA,
+        )
+
     await _async_register_static_path(hass)
     
     # Set up update listener for config entry changes
@@ -100,15 +177,27 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             return
         await _async_register_card_resource(hass)
 
-    hass.bus.async_listen(EVENT_COMPONENT_LOADED, _register_when_lovelace_loaded)
+    unsub_component_loaded = hass.bus.async_listen(
+        EVENT_COMPONENT_LOADED, _register_when_lovelace_loaded
+    )
+    entry.async_on_unload(unsub_component_loaded)
 
     async def _startup_retry(_: object | None = None) -> None:
         await _async_register_card_resource(hass)
 
-    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STARTED, _startup_retry)
+    unsub_started = hass.bus.async_listen_once(
+        EVENT_HOMEASSISTANT_STARTED, _startup_retry
+    )
+    entry.async_on_unload(unsub_started)
 
     # Retry for a short window in case Lovelace registry is late to initialize
-    hass.async_create_task(_async_retry_register_card_resource(hass))
+    retry_task = hass.async_create_task(_async_retry_register_card_resource(hass))
+
+    def _cancel_retry_task() -> None:
+        if not retry_task.done():
+            retry_task.cancel()
+
+    entry.async_on_unload(_cancel_retry_task)
     
     return True
 
@@ -199,8 +288,22 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    # Clean up data
-    if DOMAIN in hass.data and entry.entry_id in hass.data[DOMAIN]:
-        del hass.data[DOMAIN][entry.entry_id]
-    
-    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if not unload_ok:
+        return False
+
+    domain_data = hass.data.get(DOMAIN)
+    if isinstance(domain_data, dict):
+        domain_data.pop(entry.entry_id, None)
+
+        has_active_entries = any(not str(key).startswith("_") for key in domain_data.keys())
+        if not has_active_entries:
+            if hass.services.has_service(DOMAIN, SERVICE_SET_OPTIONS):
+                hass.services.async_remove(DOMAIN, SERVICE_SET_OPTIONS)
+            domain_data.pop("_static_registered", None)
+            domain_data.pop("_resource_registered", None)
+
+        if not domain_data:
+            hass.data.pop(DOMAIN, None)
+
+    return True
