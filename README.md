@@ -64,13 +64,13 @@ Includes diagnostic sensors and attributes for troubleshooting + override indica
 
 ## Installation (HACS)
 1. Add this repository to HACS (as an **Integration**).
-2. Install it. HACS will place:
-   - Integration under `custom_components/sunlight_visualizer`
-   - Card file under `/local/community/sunlight_visualizer/sunlight-visualizer-card.js`
-3. The integration attempts to **auto‑register** the Lovelace resource.
-   - If the resource isn’t added automatically, add it manually:
-     - URL: `/hacsfiles/sunlight_visualizer/sunlight-visualizer-card.js`
-     - Type: `module`
+2. Install it. HACS will place the integration under `custom_components/sunlight_visualizer`.
+3. The integration **serves and auto‑registers** the Lovelace card from:
+   - `/sunlight_visualizer/sunlight-visualizer-card.js`
+
+If the resource isn’t added automatically, add it manually:
+- URL: `/sunlight_visualizer/sunlight-visualizer-card.js`
+- Type: `module`
 
 ## Card usage (minimal)
 ```yaml
