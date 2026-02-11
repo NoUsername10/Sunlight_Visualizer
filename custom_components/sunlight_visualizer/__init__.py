@@ -8,6 +8,7 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.components.http import async_register_static_path
 
 from .const import DOMAIN
 
@@ -33,8 +34,10 @@ PLATFORMS: list[Platform] = [
     Platform.SELECT, 
 ]
 
-# HACS resource URL for the bundled card
-CARD_RESOURCE_URL = "/hacsfiles/sunlight_visualizer/sunlight-visualizer-card.js"
+# Local resource URL for the bundled card
+CARD_RESOURCE_URL = "/sunlight_visualizer/sunlight-visualizer-card.js"
+CARD_STATIC_PATH = "/sunlight_visualizer"
+CARD_STATIC_DIR = os.path.join(os.path.dirname(__file__), "www")
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Sunlight Visualizer from a config entry."""
@@ -51,6 +54,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data[DOMAIN][entry.entry_id] = {
         "coordinator": coordinator
     }
+
+    # Serve the Lovelace card JS directly from the integration (single-install)
+    if not hass.data[DOMAIN].get("_static_registered"):
+        try:
+            async_register_static_path(hass, CARD_STATIC_PATH, CARD_STATIC_DIR, cache_headers=True)
+            hass.data[DOMAIN]["_static_registered"] = True
+        except Exception as err:  # pragma: no cover - best effort
+            _LOGGER.warning("Failed to register static path for card JS: %s", err)
     
     # Set up update listener for config entry changes
     entry.async_on_unload(
