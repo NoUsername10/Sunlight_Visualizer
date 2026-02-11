@@ -1,4 +1,5 @@
-# Sunlight Visualizer
+# Sunlight Visualizer 
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width=10% height=10%>
 
 
 A **Interactive Sunlight Intensity Visualizer** for your House using Home Assistant. 
