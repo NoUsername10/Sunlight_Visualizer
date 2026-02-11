@@ -8,7 +8,6 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.components.http import async_register_static_path
 
 from .const import DOMAIN
 
@@ -58,7 +57,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Serve the Lovelace card JS directly from the integration (single-install)
     if not hass.data[DOMAIN].get("_static_registered"):
         try:
-            async_register_static_path(hass, CARD_STATIC_PATH, CARD_STATIC_DIR, cache_headers=True)
+            # register_static_path is available on hass.http
+            hass.http.register_static_path(CARD_STATIC_PATH, CARD_STATIC_DIR, cache_headers=True)
             hass.data[DOMAIN]["_static_registered"] = True
         except Exception as err:  # pragma: no cover - best effort
             _LOGGER.warning("Failed to register static path for card JS: %s", err)
