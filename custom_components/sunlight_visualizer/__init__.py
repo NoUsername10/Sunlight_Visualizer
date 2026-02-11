@@ -8,6 +8,8 @@ import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.event import async_call_later
+from homeassistant.const import EVENT_HOMEASSISTANT_STARTED
 
 from .const import DOMAIN
 
@@ -72,7 +74,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     # Auto-register the Lovelace resource for the card (best-effort)
+    # Do it now, and also retry after HA is fully started.
     await _async_register_card_resource(hass)
+
+    async def _deferred_register(_: object) -> None:
+        await _async_register_card_resource(hass)
+        async_call_later(hass, 5, lambda _: hass.async_create_task(_async_register_card_resource(hass)))
+
+    if not hass.is_running:
+        hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STARTED, _deferred_register)
     
     return True
 
