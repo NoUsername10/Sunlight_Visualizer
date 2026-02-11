@@ -9,6 +9,7 @@ It  displays roof and wall sunlight intensity, shadows, and optional solar power
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-visualized.png" width=50% height=50%>
 
+<video src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.mp4"></video>
 
 [![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
