@@ -24,6 +24,7 @@ from .const import (
     CONF_ROOF_POWER_ENTITY,
     CONF_ROOF_POWER_ENABLED,
     CONF_ROOF_POWER_INVERT,
+    CONF_AUTO_ROTATE_SPEED,
     CONF_FORCE_SUN_FALLBACK,
     CONF_FORCE_SUN_AZIMUTH,
     CONF_FORCE_SUN_ELEVATION,
@@ -38,6 +39,7 @@ from .const import (
     DEFAULT_ROOF_POWER_ENTITY,
     DEFAULT_ROOF_POWER_ENABLED,
     DEFAULT_ROOF_POWER_INVERT,
+    DEFAULT_AUTO_ROTATE_SPEED,
     DEFAULT_FORCE_SUN_FALLBACK,
     DEFAULT_FORCE_SUN_AZIMUTH,
     DEFAULT_FORCE_SUN_ELEVATION,
@@ -54,6 +56,10 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> FlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
+        
+        # Enforce single instance for this integration
+        if self._async_current_entries():
+            return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
             # Always use HA's location (removed advanced mode)
@@ -84,11 +90,6 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             elif user_input.get(CONF_ROOF_POWER_ENTITY) in ("", None):
                 user_input.pop(CONF_ROOF_POWER_ENTITY, None)
             user_input.pop(CONF_ADVANCED_MODE, None)  # Remove if it exists
-            if not user_input.get(CONF_ROOF_POWER_ENABLED, DEFAULT_ROOF_POWER_ENABLED):
-                user_input.pop(CONF_ROOF_POWER_ENTITY, None)
-                user_input.pop(CONF_ROOF_POWER_INVERT, None)
-            elif user_input.get(CONF_ROOF_POWER_ENTITY) in ("", None):
-                user_input.pop(CONF_ROOF_POWER_ENTITY, None)
             
             # Validate house angle
             try:
@@ -113,6 +114,14 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     errors[CONF_UPDATE_INTERVAL] = "invalid_update_interval"
             except (ValueError, TypeError):
                 errors[CONF_UPDATE_INTERVAL] = "invalid_update_interval"
+
+            # Validate auto-rotate speed
+            try:
+                auto_rotate_speed = float(user_input.get(CONF_AUTO_ROTATE_SPEED, DEFAULT_AUTO_ROTATE_SPEED))
+                if not (1 <= auto_rotate_speed <= 90):
+                    errors[CONF_AUTO_ROTATE_SPEED] = "invalid_auto_rotate_speed"
+            except (ValueError, TypeError):
+                errors[CONF_AUTO_ROTATE_SPEED] = "invalid_auto_rotate_speed"
 
             if not errors:
                 # Create the config entry
@@ -163,6 +172,13 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             ): vol.All(
                 cv.positive_int,  # Using cv.positive_int for slider display
                 vol.Range(min=MIN_UPDATE_INTERVAL, max=MAX_UPDATE_INTERVAL)
+            ),
+            vol.Required(
+                CONF_AUTO_ROTATE_SPEED,
+                default=DEFAULT_AUTO_ROTATE_SPEED
+            ): vol.All(
+                vol.Coerce(float),
+                vol.Range(min=1, max=90)
             ),
             vol.Required(
                 CONF_ROOF_POWER_ENABLED,
@@ -245,6 +261,11 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
             # Remove UI-only fields from saved data
             user_input.pop(CONF_DIRECTION, None)
             user_input.pop(CONF_USE_CUSTOM_ANGLE, None)
+            if not user_input.get(CONF_ROOF_POWER_ENABLED, DEFAULT_ROOF_POWER_ENABLED):
+                user_input.pop(CONF_ROOF_POWER_ENTITY, None)
+                user_input.pop(CONF_ROOF_POWER_INVERT, None)
+            elif user_input.get(CONF_ROOF_POWER_ENTITY) in ("", None):
+                user_input.pop(CONF_ROOF_POWER_ENTITY, None)
             
             # Validate inputs
             try:
@@ -267,6 +288,14 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                     errors[CONF_UPDATE_INTERVAL] = "invalid_update_interval"
             except (ValueError, TypeError):
                 errors[CONF_UPDATE_INTERVAL] = "invalid_update_interval"
+
+            # Validate auto-rotate speed
+            try:
+                auto_rotate_speed = float(user_input.get(CONF_AUTO_ROTATE_SPEED, DEFAULT_AUTO_ROTATE_SPEED))
+                if not (1 <= auto_rotate_speed <= 90):
+                    errors[CONF_AUTO_ROTATE_SPEED] = "invalid_auto_rotate_speed"
+            except (ValueError, TypeError):
+                errors[CONF_AUTO_ROTATE_SPEED] = "invalid_auto_rotate_speed"
 
             if not errors:
                 # Return options data
@@ -295,6 +324,7 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
         # Get other current values
         current_ceiling_tilt = current_config.get(CONF_CEILING_TILT, DEFAULT_CEILING_TILT)
         current_update_interval = current_config.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)
+        current_auto_rotate_speed = current_config.get(CONF_AUTO_ROTATE_SPEED, DEFAULT_AUTO_ROTATE_SPEED)
         current_roof_direction = current_config.get(CONF_ROOF_DIRECTION, DEFAULT_ROOF_DIRECTION)
         current_roof_power = current_config.get(CONF_ROOF_POWER_ENTITY, DEFAULT_ROOF_POWER_ENTITY)
         current_force_sun = current_config.get(CONF_FORCE_SUN_FALLBACK, DEFAULT_FORCE_SUN_FALLBACK)
@@ -354,6 +384,13 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
             ): vol.All(
                 cv.positive_int,
                 vol.Range(min=MIN_UPDATE_INTERVAL, max=MAX_UPDATE_INTERVAL)
+            ),
+            vol.Required(
+                CONF_AUTO_ROTATE_SPEED,
+                default=current_auto_rotate_speed
+            ): vol.All(
+                vol.Coerce(float),
+                vol.Range(min=1, max=90)
             ),
             vol.Required(
                 CONF_ROOF_POWER_ENABLED,

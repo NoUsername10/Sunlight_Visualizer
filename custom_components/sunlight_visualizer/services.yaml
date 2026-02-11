@@ -1,0 +1,90 @@
+set_options:
+  name: Set options
+  description: Update Sunlight Visualizer options for the active config entry.
+  fields:
+    entry_id:
+      name: Config entry ID
+      description: Optional. If omitted, the first Sunlight Visualizer entry is used.
+      selector:
+        text:
+
+    house_angle:
+      name: House angle
+      description: Front wall direction in degrees (0-359).
+      selector:
+        number:
+          min: 0
+          max: 359
+          step: 1
+          mode: box
+
+    ceiling_tilt:
+      name: Ceiling tilt
+      description: Roof tilt angle in degrees (0-90).
+      selector:
+        number:
+          min: 0
+          max: 90
+          step: 1
+          mode: box
+
+    roof_direction:
+      name: Roof direction
+      description: Side where the roof slopes down.
+      selector:
+        select:
+          mode: dropdown
+          options:
+            - front
+            - back
+            - left
+            - right
+
+    camera_rotation_h:
+      name: Camera rotation H
+      description: Horizontal camera rotation in degrees (0-359).
+      selector:
+        number:
+          min: 0
+          max: 359
+          step: 1
+          mode: box
+
+    camera_rotation_v:
+      name: Camera rotation V
+      description: Vertical camera rotation in degrees (0-90).
+      selector:
+        number:
+          min: 0
+          max: 90
+          step: 1
+          mode: box
+
+    auto_rotate_speed:
+      name: Auto-rotate speed
+      description: Card auto-rotation speed in degrees per second (1-90).
+      selector:
+        number:
+          min: 1
+          max: 90
+          step: 1
+          mode: box
+
+    roof_power_entity:
+      name: Roof power sensor
+      description: Optional power sensor shown under the roof percentage.
+      selector:
+        entity:
+          domain: sensor
+
+    roof_power_enabled:
+      name: Enable roof power label
+      description: Show or hide roof power label.
+      selector:
+        boolean:
+
+    roof_power_invert:
+      name: Invert roof power value
+      description: Invert power value (useful for negative-export sensors).
+      selector:
+        boolean:

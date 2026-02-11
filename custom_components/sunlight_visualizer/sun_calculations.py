@@ -346,6 +346,7 @@ def calculate_optimal_alignment_time(
         )
 
         current_percentage = (current_intensity / max_intensity) * 100 if max_intensity > 0 else 0
+        current_percentage = max(0.0, min(100.0, current_percentage))
 
         if optimal_time and max_intensity > 0:
             time_diff = (optimal_time - now).total_seconds() / 60

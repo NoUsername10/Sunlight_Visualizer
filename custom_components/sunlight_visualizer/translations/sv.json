@@ -11,6 +11,7 @@
           "roof_power_entity": "Takets effektsensor (valfri)",
           "roof_power_enabled": "Aktivera takets effektvärde",
           "roof_power_invert": "Invertera effekt (tvinga positivt)",
+          "auto_rotate_speed": "Auto-roteringshastighet (grader/sek)",
           "house_angle": "Husvinkel (grader, 0° = front mot norr)",
           "ceiling_tilt": "Taklutning (0–90°, 0 = horisontell)",
           "update_interval": "Uppdateringsintervall (minuter)"
@@ -22,6 +23,7 @@
           "roof_power_entity": "Välj effektsensor som visas under takets % (W/kW)",
           "roof_power_enabled": "Visa effektvärde under takets %",
           "roof_power_invert": "Invertera effektvärden (om sensorn är negativ)",
+          "auto_rotate_speed": "Standardhastighet för auto-rotation i kortet (1–90 grader/sek)",
           "house_angle": "Vinkel för husets front i förhållande till norr (0–359°)",
           "ceiling_tilt": "Lutningsvinkel för tak/solpaneler (0° = plant, 90° = vertikalt)",
           "update_interval": "Hur ofta solens position beräknas om (1–60 minuter)"
@@ -34,6 +36,7 @@
       "invalid_house_angle": "Husvinkel måste vara mellan 0 och 360 grader",
       "invalid_ceiling_tilt": "Taklutning måste vara mellan 0 och 90 grader",
       "invalid_update_interval": "Uppdateringsintervallet måste vara mellan 1 och 60 minuter",
+      "invalid_auto_rotate_speed": "Auto-roteringshastigheten måste vara mellan 1 och 90 grader/sek",
       "invalid_force_sun_azimuth": "Tvingad solazimut måste vara mellan 0 och 359 grader",
       "invalid_force_sun_elevation": "Tvingad solhöjd måste vara mellan −90 och 90 grader",
       "invalid_coordinates": "Ange giltiga decimaltal för koordinater",
@@ -61,6 +64,7 @@
           "force_sun_fallback": "Tvinga sol‑fallback",
           "force_sun_azimuth": "Tvinga solazimut",
           "force_sun_elevation": "Tvinga solhöjd",
+          "auto_rotate_speed": "Auto-roteringshastighet (grader/sek)",
           "house_angle": "Husvinkel (grader, 0° = front mot norr)",
           "ceiling_tilt": "Taklutning (0–90°, 0 = horisontell)",
           "update_interval": "Uppdateringsintervall (minuter)"
@@ -75,6 +79,7 @@
           "force_sun_fallback": "Tvinga fallback‑solvärden (test)",
           "force_sun_azimuth": "Azimut som används vid tvingad fallback (0–359°)",
           "force_sun_elevation": "Höjd som används vid tvingad fallback (−90° till 90°)",
+          "auto_rotate_speed": "Standardhastighet för auto-rotation i kortet (1–90 grader/sek)",
           "house_angle": "Vinkel för husets front i förhållande till norr (0–359°)",
           "ceiling_tilt": "Lutningsvinkel för tak/solpaneler (0° = plant, 90° = vertikalt)",
           "update_interval": "Hur ofta solens position beräknas om (1–60 minuter)"

@@ -11,6 +11,7 @@
           "roof_power_entity": "Roof power sensor (optional)",
           "roof_power_enabled": "Enable roof power label",
           "roof_power_invert": "Invert roof power (force positive)",
+          "auto_rotate_speed": "Auto-rotate speed (deg/sec)",
           "house_angle": "House Angle (degrees, 0° = North-facing front)",
           "ceiling_tilt": "Ceiling tilt angle (0-90°, 0 = horizontal)",
           "update_interval": "Update interval (minutes)"
@@ -22,6 +23,7 @@
           "roof_power_entity": "Select a power sensor to show below roof % (W/kW)",
           "roof_power_enabled": "Show roof power value under the roof %",
           "roof_power_invert": "Invert power values (useful if sensor is negative)",
+          "auto_rotate_speed": "Default auto-rotate speed for the card (1-90 deg/sec)",
           "house_angle": "Angle of your house's front relative to North (0-359°)",
           "ceiling_tilt": "Tilt angle of ceiling/solar panels (0° = flat, 90° = vertical)",
           "update_interval": "How often to recalculate sun position (1-60 minutes)"
@@ -34,6 +36,7 @@
       "invalid_house_angle": "House angle must be between 0 and 360 degrees",
       "invalid_ceiling_tilt": "Ceiling tilt must be between 0 and 90 degrees",
       "invalid_update_interval": "Update interval must be between 1 and 60 minutes",
+      "invalid_auto_rotate_speed": "Auto-rotate speed must be between 1 and 90 deg/sec",
       "invalid_force_sun_azimuth": "Force Sun Azimuth must be between 0 and 359 degrees",
       "invalid_force_sun_elevation": "Force Sun Elevation must be between -90 and 90 degrees",
       "invalid_coordinates": "Please enter valid decimal numbers for coordinates",
@@ -61,6 +64,7 @@
           "force_sun_fallback": "Force Sun Fallback",
           "force_sun_azimuth": "Force Sun Azimuth",
           "force_sun_elevation": "Force Sun Elevation",
+          "auto_rotate_speed": "Auto-rotate speed (deg/sec)",
           "house_angle": "House Angle (degrees, 0° = North-facing front)",
           "ceiling_tilt": "Ceiling tilt angle (0-90°, 0 = horizontal)",
           "update_interval": "Update interval (minutes)"
@@ -75,6 +79,7 @@
           "force_sun_fallback": "Force fallback sun values (testing)",
           "force_sun_azimuth": "Azimuth to use when forcing fallback (0-359°)",
           "force_sun_elevation": "Elevation to use when forcing fallback (-90° to 90°)",
+          "auto_rotate_speed": "Default auto-rotate speed for the card (1-90 deg/sec)",
           "house_angle": "Angle of your house's front relative to North (0-359°)",
           "ceiling_tilt": "Tilt angle of ceiling/solar panels (0° = flat, 90° = vertical)",
           "update_interval": "How often to recalculate sun position (1-60 minutes)"

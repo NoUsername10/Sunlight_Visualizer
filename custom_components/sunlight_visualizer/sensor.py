@@ -35,6 +35,7 @@ from .const import (
     CONF_FORCE_SUN_FALLBACK,
     CONF_FORCE_SUN_AZIMUTH,
     CONF_FORCE_SUN_ELEVATION,
+    CONF_AUTO_ROTATE_SPEED,
     CONF_CEILING_TILT,
     CONF_UPDATE_INTERVAL,
     CONF_ADVANCED_MODE,
@@ -44,6 +45,7 @@ from .const import (
     DEFAULT_FORCE_SUN_FALLBACK,
     DEFAULT_FORCE_SUN_AZIMUTH,
     DEFAULT_FORCE_SUN_ELEVATION,
+    DEFAULT_AUTO_ROTATE_SPEED,
     WALLS,
     DEFAULT_UPDATE_INTERVAL,
     ROOF_DIRECTIONS,
@@ -108,7 +110,7 @@ class SolarAlignmentPercentageSensor(CoordinatorEntity, SensorEntity):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self._config_entry = config_entry
-        self._attr_name = "Solar Alignment Percentage"
+        self._attr_name = "Sun Roof Alignment Percentage"
         self._attr_unique_id = f"{config_entry.entry_id}_solar_alignment_percentage"
         self._attr_icon = "mdi:chart-line"
         self._attr_state_class = SensorStateClass.MEASUREMENT
@@ -187,7 +189,7 @@ class SolarAlignmentStatusSensor(CoordinatorEntity, SensorEntity):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self._config_entry = config_entry
-        self._attr_name = "Solar Alignment Status"
+        self._attr_name = "Sun Roof Alignment Status"
         self._attr_unique_id = f"{config_entry.entry_id}_solar_alignment_status"
         self._attr_icon = "mdi:sun-clock"
         # We're returning a string, so no state_class or native_unit_of_measurement
@@ -659,6 +661,7 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             if optimal_data and optimal_data.get('max_intensity_today', 0) > 0:
                 max_intensity = optimal_data['max_intensity_today']
                 current_percentage = (current_intensity / max_intensity) * 100
+                current_percentage = max(0.0, min(100.0, current_percentage))
                 
                 # Determine status
                 optimal_time = optimal_data.get('optimal_time')
@@ -850,6 +853,11 @@ class SunWallIntensitySensor(CoordinatorEntity, SensorEntity):
                 self._config_entry.options.get(CONF_ROOF_POWER_INVERT)
                 if self._config_entry.options.get(CONF_ROOF_POWER_INVERT) is not None
                 else self._config_entry.data.get(CONF_ROOF_POWER_INVERT)
+            ),
+            'auto_rotate_speed': (
+                self._config_entry.options.get(CONF_AUTO_ROTATE_SPEED)
+                if self._config_entry.options.get(CONF_AUTO_ROTATE_SPEED) is not None
+                else self._config_entry.data.get(CONF_AUTO_ROTATE_SPEED, DEFAULT_AUTO_ROTATE_SPEED)
             ),
             'wall': self._wall,
             'last_updated': self.coordinator.data.get('last_updated', ''),
