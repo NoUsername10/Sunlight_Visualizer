@@ -57,9 +57,10 @@ Configuration:
 
 
 Sensors: 
-- Solar Alignment Percentage, how well aligned is the sun right now to your ceiling.<br>
-  For example, this can be 100%, but the Roof intensity below is 45%, that means this is the best alignment we get today.
+- Solar Alignment Percentage, how well aligned is the sun right now to your roof.<br>
+  For example, this can be 100%, but the Sun Roof Intensity is at 45%, that means this is the best alignment we get today.
 - Solar Alignment Status, approaching, at or leving optimal alignment.
+- Sun Roof Intensity, sunlight intensity for the roof.
 - Sun Wall Intensity Back, sunlight intensity for the Back wall.
 - Sun Wall Intensity Back, sunlight intensity for the Front wall.
 - Sun Wall Intensity Back, sunlight intensity for the Left wall.
