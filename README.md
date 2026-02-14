@@ -25,6 +25,24 @@ Watch video:<br>
 
 
 
+Setup options: 
+- House Direction, quick select of your house compass rotation.
+- Roof Direction, select the rotation of your roof tilt.
+- House Angle (compass direction of your house (front door).
+- Ceiling tilt angle (or solar array angle).
+- Update interval, how often the card will update the sun position.
+- Set rotation speed during autorotation.
+- Enable roof power sensor.
+- Invert your power seonsor, if your sensor displays a negative (-) value.
+- Force sun fallback (override), For testing (perhaps the sun is down)
+- Select azimuth and elevation for the override
+- Select roof power sensor.
+
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/options.png" width=30% height=30%>
+<br>
+
+
+
 Configuration: 
 - Ceiling tilt angle (or solar array angle).
 - House Angle (compass direction of your house (front door).
