@@ -17,6 +17,8 @@ wallWindowsEnabled: true <br>
 backTreeEnabled: true <br>
 
 
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width=50% height=50%>
+
 
 Watch video:<br>
 <a href="assets/rotation.mp4">
