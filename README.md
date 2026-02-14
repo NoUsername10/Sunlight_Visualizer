@@ -9,6 +9,13 @@ It  displays roof and wall sunlight intensity, shadows, and optional solar power
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-visualized.png" width=50% height=50%>
 
+To enable all visual features, enter this yaml: <br>
+houseStyleV2: true <br>
+flatRoofEnabled: true <br>
+wallWindowsEnabled: true <br>
+backTreeEnabled: true <br>
+
+
 
 Watch video:<br>
 <a href="assets/rotation.mp4">
