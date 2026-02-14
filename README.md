@@ -25,7 +25,7 @@ Watch video:<br>
 
 
 
-Configuration: <br>
+Configuration: 
 - Ceiling tilt angle (or solar array angle).
 - House Angle (compass direction of your house (front door).
 - Camera Rotation H, Horisontal default camera angle.
@@ -35,10 +35,10 @@ Configuration: <br>
 - Update interval, how often the card will update the sun position.
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/configuration.png" width=50% height=50%>
+<br>
 
 
-
-Sensors: <br>
+Sensors: 
 - Solar Alignment Percentage, how well aligned is the sun right now to your ceiling.<br>
   For example, this can be 100%, but the Roof intensity below is 45%, that means this is the best alignment we get today.
 - Solar Alignment Status, approaching, at or leving optimal alignment.
@@ -48,8 +48,15 @@ Sensors: <br>
 - Sun Wall Intensity Back, sunlight intensity for the Right wall.
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width=50% height=50%>
+<br>
 
 
+Visual card configuration: 
+- Visual configuration of settings.
+- Select Roof power sensor.
+- Set rotation speed during autorotation.
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual_card_configuration.png" width=50% height=50%>
+<br>
 
 
 What can you do with this card?
