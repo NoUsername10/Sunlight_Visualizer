@@ -1,6 +1,11 @@
 # Sunlight Visualizer 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width=10% height=10%>
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+
+[![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
+
+
 
 A **Interactive Sunlight Intensity Visualizer** for your House using Home Assistant. 
 
@@ -8,11 +13,6 @@ The integration includes a Lovelace card that visualizes real‑time sunlight in
 It  displays roof and wall sunlight intensity, shadows, and optional solar power (or any power sensor you select), in a single HACS install. <br>
 In this new update we also included some clouds, animations and additional visual enhancements, more to come.<br>
 
-To enable all visual features, enter this yaml: <br>
-houseStyleV2: true <br>
-flatRoofEnabled: true <br>
-wallWindowsEnabled: true <br>
-backTreeEnabled: true <br>
 
 GIF (Right click and choose "Play animation" on a mac) <br>
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width=50% height=50%>
@@ -25,9 +25,30 @@ Watch video:<br>
 
 
 
-[![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
+Configuration: <br>
+- Ceiling tilt angle (or solar array angle).
+- House Angle (compass direction of your house (front door).
+- Camera Rotation H, Horisontal default camera angle.
+- Camera Rotation V, Vertical default camera angle.
+- House Direction, quick select of your house compass rotation.
+- Roof Direction, select the rotation of your roof tilt.
+- Update interval, how often the card will update the sun position.
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/configuration.png" width=50% height=50%>
+
+
+
+Sensors: <br>
+- Solar Alignment Percentage, how well aligned is the sun right now to your ceiling.<br>
+  For example, this can be 100%, but the Roof intensity below is 45%, that means this is the best alignment we get today.
+- Solar Alignment Status, approaching, at or leving optimal alignment.
+- Sun Wall Intensity Back, sunlight intensity for the Back wall.
+- Sun Wall Intensity Back, sunlight intensity for the Front wall.
+- Sun Wall Intensity Back, sunlight intensity for the Left wall.
+- Sun Wall Intensity Back, sunlight intensity for the Right wall.
+
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width=50% height=50%>
+
 
 
 
