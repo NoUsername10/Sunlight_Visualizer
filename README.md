@@ -6,9 +6,7 @@ A **Interactive Sunlight Intensity Visualizer** for your House using Home Assist
 
 The integration includes a Lovelace card that visualizes real‑time sunlight intensity on a 2.5D house. <br>
 It  displays roof and wall sunlight intensity, shadows, and optional solar power (or any power sensor you select), in a single HACS install. <br>
-In this new update we also included some clouds, animations and additional visual enhancements, more to come.
-
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-visualized.png" width=50% height=50%>
+In this new update we also included some clouds, animations and additional visual enhancements, more to come.<br>
 
 To enable all visual features, enter this yaml: <br>
 houseStyleV2: true <br>
@@ -16,9 +14,10 @@ flatRoofEnabled: true <br>
 wallWindowsEnabled: true <br>
 backTreeEnabled: true <br>
 
-
+GIF (Right click and choose "Play all animations" on a mac)
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width=50% height=50%>
 
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-visualized.png" width=30% height=30%>
 
 Watch video:<br>
 <a href="assets/rotation.mp4">
