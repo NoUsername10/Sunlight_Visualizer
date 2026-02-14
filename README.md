@@ -24,8 +24,34 @@ Watch video:<br>
 </a>
 
 
+What can you do with this card?
+- Double tap the card to autorotate the view, tap to stop the rotation.
+- Visualise current solar intensity on all walls (and the ceiling) on your house.
+- Get data so you know when the sun is at its peak, when sun reaches the porch or when to close the blinds.
+- Know when its time to get the coconut butter and get a great tan.
+- Understand when your solar system is at its peak, or when the sun is optimally aligned to the panels / roof.
 
-Setup options: 
+## What you get
+- `sunlight_visualizer` integration (sensors + numbers + selects)
+- `sunlight-visualizer-card.js` Lovelace card (auto‑registered by the integration)
+
+## Card usage (minimal)
+```yaml
+type: custom:sunlight-visualizer-card
+houseStyleV2: true
+flatRoofEnabled: true
+wallWindowsEnabled: true
+backTreeEnabled: true
+```
+
+
+## All configurations below:
+_Click to expand..._
+
+<details>
+<summary>Setup options</summary><br>
+
+Setup options:
 - House Direction, quick select of your house compass rotation.
 - Roof Direction, select the rotation of your roof tilt.
 - House Angle (compass direction of your house (front door).
@@ -40,8 +66,11 @@ Setup options:
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/options.png" width=30% height=30%>
 <br>
+</details>
 
 
+<details>
+<summary>Configuration options</summary><br>
 
 Configuration: 
 - Ceiling tilt angle (or solar array angle).
@@ -55,6 +84,12 @@ Configuration:
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/configuration.png" width=50% height=50%>
 <br>
 
+</details>
+
+
+
+<details>
+<summary>Sunlight Sensors</summary><br>
 
 Sensors: 
 - Solar Alignment Percentage, how well aligned is the sun right now to your roof.<br>
@@ -69,7 +104,12 @@ Sensors:
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width=50% height=50%>
 <br>
 
+</details>
 
+
+<details>
+<summary>Visual card configuration</summary><br>
+  
 Visual card configuration: 
 - Visual configuration of settings.
 - Select Roof power sensor.
@@ -77,17 +117,8 @@ Visual card configuration:
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual_card_configuration.png" width=50% height=50%>
 <br>
 
+</details>
 
-What can you do with this card?
-- Double tap the card to autorotate the view, tap to stop the rotation.
-- Visualise current solar intensity on all walls (and the ceiling) on your house.
-- Get data so you know when the sun is at its peak, when sun reaches the porch or when to close the blinds.
-- Know when its time to get the coconut butter and get a great tan.
-- Understand when your solar system is at its peak, or when the sun is optimally aligned to the panels / roof.
-
-## What you get
-- `sunlight_visualizer` integration (sensors + numbers + selects)
-- `sunlight-visualizer-card.js` Lovelace card (auto‑registered by the integration)
 
 ## Features
 
@@ -164,8 +195,13 @@ In **Settings → Devices & Services → Sunlight Visualizer → Configure**, yo
 These override live sun values for testing.
 When enabled, the card shows a red **SUN OVERRIDE ENABLED** indicator in the bottom-left.
 
+
 ## All YAML settings (grouped)
 Below is the full list of configurable options. You can set any of these in YAML.
+
+<details>
+<summary>YAML Settings</summary><br>
+<br>
 
 ### Size & layout
 ```yaml
@@ -378,3 +414,5 @@ autoRotateAdaptiveFpsThreshold: 0.80
 autoRotateCalibrateMs: 2000
 autoRotateCalibrateFactor: 0.85
 ```
+
+</details>
