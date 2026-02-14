@@ -26,7 +26,7 @@ Watch video:<br>
 
 What can you do with this card?
 - Double tap the card to autorotate the view, tap to stop the rotation.
-- Visualise current solar intensity on all walls (and the ceiling) on your house.
+- Visualise current solar intensity on all walls (and the roof) on your house.
 - Get data so you know when the sun is at its peak, when sun reaches the porch or when to close the blinds.
 - Know when its time to get the coconut butter and get a great tan.
 - Understand when your solar system is at its peak, or when the sun is optimally aligned to the panels / roof.
