@@ -92,6 +92,10 @@ If the resource isn’t added automatically, add it manually:
 ## Card usage (minimal)
 ```yaml
 type: custom:sunlight-visualizer-card
+houseStyleV2: true
+flatRoofEnabled: true
+wallWindowsEnabled: true
+backTreeEnabled: true
 ```
 
 The card **auto‑binds** to this integration’s sensors using the marker attribute:
