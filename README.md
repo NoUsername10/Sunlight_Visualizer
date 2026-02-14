@@ -17,7 +17,6 @@ backTreeEnabled: true <br>
 GIF (Right click and choose "Play animation" on a mac) <br>
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width=50% height=50%>
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-visualized.png" width=30% height=30%>
 
 Watch video:<br>
 <a href="assets/rotation.mp4">
