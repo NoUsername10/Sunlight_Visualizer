@@ -89,10 +89,24 @@ def angle_to_percentage(sun_azimuth, surface_azimuth, surface, sun_elevation, su
         direction_factor = (90 - distance) / 90.0
 
     if surface == "ceiling":
-        optimal_elevation = 90 - surface_tilt
-        elevation_diff = abs(sun_elevation - optimal_elevation)
-        elevation_factor = math.cos(math.radians(elevation_diff))
-        return round(direction_factor * elevation_factor * 100, 2)
+        # Ceiling uses full vector incidence with tilt.
+        # `surface_azimuth` follows integration semantics (roof facing direction).
+        az_rad = math.radians(float(surface_azimuth))
+        el_rad = math.radians(float(sun_elevation))
+        tilt_rad = math.radians(max(0.0, min(89.9, float(surface_tilt))))
+
+        # Surface normal (tilt=0 -> straight up). Horizontal lean follows surface azimuth.
+        n_x = math.sin(tilt_rad) * math.sin(az_rad)
+        n_y = math.cos(tilt_rad)
+        n_z = math.sin(tilt_rad) * math.cos(az_rad)
+
+        # Sun direction.
+        s_x = math.cos(el_rad) * math.sin(math.radians(float(sun_azimuth)))
+        s_y = math.sin(el_rad)
+        s_z = math.cos(el_rad) * math.cos(math.radians(float(sun_azimuth)))
+
+        incidence = max(0.0, n_x * s_x + n_y * s_y + n_z * s_z)
+        return round(incidence * 100, 2)
 
     if surface_tilt > 0:
         optimal_elevation = surface_tilt

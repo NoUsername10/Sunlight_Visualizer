@@ -1,4 +1,5 @@
 {
+  "title": "Sunlight Visualizer",
   "config": {
     "step": {
       "user": {
@@ -83,6 +84,54 @@
           "house_angle": "Vinkel för husets front i förhållande till norr (0–359°)",
           "ceiling_tilt": "Lutningsvinkel för tak/solpaneler (0° = plant, 90° = vertikalt)",
           "update_interval": "Hur ofta solens position beräknas om (1–60 minuter)"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Sätt alternativ",
+      "description": "Uppdatera Sunlight Visualizer-alternativ för den aktiva konfigurationsposten.",
+      "fields": {
+        "entry_id": {
+          "name": "ID för konfigurationspost",
+          "description": "Valfritt. Om utelämnat används den första Sunlight Visualizer-posten."
+        },
+        "house_angle": {
+          "name": "Husvinkel",
+          "description": "Frontväggens riktning i grader (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Taklutning",
+          "description": "Takets lutningsvinkel i grader (0-90)."
+        },
+        "roof_direction": {
+          "name": "Takriktning",
+          "description": "Sidan där taket lutar ned."
+        },
+        "camera_rotation_h": {
+          "name": "Kamerarotation H",
+          "description": "Horisontell kamerarotation i grader (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Kamerarotation V",
+          "description": "Vertikal kamerarotation i grader (0-90)."
+        },
+        "auto_rotate_speed": {
+          "name": "Auto-roteringshastighet",
+          "description": "Kortets auto-roteringshastighet i grader per sekund (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Takets effektsensor",
+          "description": "Valfri effektsensor som visas under takets procentvärde."
+        },
+        "roof_power_enabled": {
+          "name": "Aktivera takets effektetikett",
+          "description": "Visa eller dölj takets effektetikett."
+        },
+        "roof_power_invert": {
+          "name": "Invertera takets effektvärde",
+          "description": "Invertera effektvärdet (användbart för sensorer med negativ export)."
         }
       }
     }

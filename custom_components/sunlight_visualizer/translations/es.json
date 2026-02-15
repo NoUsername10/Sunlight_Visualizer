@@ -1,0 +1,139 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuracion de Sunlight Visualizer",
+        "description": "Configura la integracion Sunlight Visualizer. Ubicacion actual de Home Assistant: {location_name} ({latitude:.6f}, {longitude:.6f})",
+        "data": {
+          "use_custom_angle": "Usar angulo personalizado (en lugar de direccion de brujula)",
+          "direction": "Direccion de brujula (se usa si el angulo personalizado esta desactivado)",
+          "roof_direction": "Direccion del techo (lado de bajada)",
+          "roof_power_entity": "Sensor de potencia del techo (opcional)",
+          "roof_power_enabled": "Activar etiqueta de potencia del techo",
+          "roof_power_invert": "Invertir potencia del techo (forzar positivo)",
+          "auto_rotate_speed": "Velocidad de auto-rotacion (grados/segundo)",
+          "house_angle": "Angulo de la casa (grados, 0° = frente hacia el norte)",
+          "ceiling_tilt": "Inclinacion del techo (0-90°, 0 = horizontal)",
+          "update_interval": "Intervalo de actualizacion (minutos)"
+        },
+        "data_description": {
+          "use_custom_angle": "Activa para introducir un angulo exacto; desactiva para elegir direccion de brujula",
+          "direction": "Selecciona direccion de brujula (N, NE, E, etc.); solo activa cuando el angulo personalizado esta desactivado",
+          "roof_direction": "Selecciona hacia que lado de la casa baja el techo",
+          "roof_power_entity": "Selecciona un sensor de potencia para mostrar debajo del % del techo (W/kW)",
+          "roof_power_enabled": "Mostrar valor de potencia del techo debajo del %",
+          "roof_power_invert": "Invertir valores de potencia (util para sensores con valores negativos)",
+          "auto_rotate_speed": "Velocidad predeterminada de auto-rotacion para la tarjeta (1-90 grados/seg)",
+          "house_angle": "Angulo del frente de tu casa respecto al norte (0-359°)",
+          "ceiling_tilt": "Angulo de inclinacion del techo/paneles solares (0° = plano, 90° = vertical)",
+          "update_interval": "Con que frecuencia se recalcula la posicion del sol (1-60 minutos)"
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "La latitud debe estar entre -90 y 90 grados",
+      "invalid_longitude": "La longitud debe estar entre -180 y 180 grados",
+      "invalid_house_angle": "El angulo de la casa debe estar entre 0 y 360 grados",
+      "invalid_ceiling_tilt": "La inclinacion del techo debe estar entre 0 y 90 grados",
+      "invalid_update_interval": "El intervalo de actualizacion debe estar entre 1 y 60 minutos",
+      "invalid_auto_rotate_speed": "La velocidad de auto-rotacion debe estar entre 1 y 90 grados/seg",
+      "invalid_force_sun_azimuth": "El azimut forzado del sol debe estar entre 0 y 359 grados",
+      "invalid_force_sun_elevation": "La elevacion forzada del sol debe estar entre -90 y 90 grados",
+      "invalid_coordinates": "Introduce coordenadas decimales validas",
+      "latitude_out_of_range": "La latitud debe estar entre -90° y 90°",
+      "longitude_out_of_range": "La longitud debe estar entre -180° y 180°",
+      "direction_required": "Selecciona una direccion de brujula cuando no se use angulo personalizado",
+      "unknown": "Se produjo un error inesperado"
+    },
+    "abort": {
+      "single_instance_allowed": "Solo se permite una configuracion de Sunlight Visualizer."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones de Sunlight Visualizer",
+        "description": "Actualiza la configuracion de Sunlight Visualizer. Ubicacion: {source} ({current_lat}, {current_lon})",
+        "data": {
+          "use_custom_angle": "Usar angulo personalizado (en lugar de direccion de brujula)",
+          "direction": "Direccion de brujula (se usa si el angulo personalizado esta desactivado)",
+          "roof_direction": "Direccion del techo (lado de bajada)",
+          "roof_power_entity": "Sensor de potencia del techo (opcional)",
+          "roof_power_enabled": "Activar etiqueta de potencia del techo",
+          "roof_power_invert": "Invertir potencia del techo (forzar positivo)",
+          "force_sun_fallback": "Forzar sol de respaldo",
+          "force_sun_azimuth": "Forzar azimut del sol",
+          "force_sun_elevation": "Forzar elevacion del sol",
+          "auto_rotate_speed": "Velocidad de auto-rotacion (grados/segundo)",
+          "house_angle": "Angulo de la casa (grados, 0° = frente hacia el norte)",
+          "ceiling_tilt": "Inclinacion del techo (0-90°, 0 = horizontal)",
+          "update_interval": "Intervalo de actualizacion (minutos)"
+        },
+        "data_description": {
+          "use_custom_angle": "Activa para introducir un angulo exacto; desactiva para elegir direccion de brujula",
+          "direction": "Selecciona direccion de brujula (N, NE, E, etc.); solo activa cuando el angulo personalizado esta desactivado",
+          "roof_direction": "Selecciona hacia que lado de la casa baja el techo",
+          "roof_power_entity": "Selecciona un sensor de potencia para mostrar debajo del % del techo (W/kW)",
+          "roof_power_enabled": "Mostrar valor de potencia del techo debajo del %",
+          "roof_power_invert": "Invertir valores de potencia (util para sensores con valores negativos)",
+          "force_sun_fallback": "Forzar valores de sol de respaldo (pruebas)",
+          "force_sun_azimuth": "Azimut a usar al forzar respaldo (0-359°)",
+          "force_sun_elevation": "Elevacion a usar al forzar respaldo (-90° a 90°)",
+          "auto_rotate_speed": "Velocidad predeterminada de auto-rotacion para la tarjeta (1-90 grados/seg)",
+          "house_angle": "Angulo del frente de tu casa respecto al norte (0-359°)",
+          "ceiling_tilt": "Angulo de inclinacion del techo/paneles solares (0° = plano, 90° = vertical)",
+          "update_interval": "Con que frecuencia se recalcula la posicion del sol (1-60 minutos)"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Establecer opciones",
+      "description": "Actualiza las opciones de Sunlight Visualizer para la entrada de configuracion activa.",
+      "fields": {
+        "entry_id": {
+          "name": "ID de entrada de configuracion",
+          "description": "Opcional. Si se omite, se usa la primera entrada de Sunlight Visualizer."
+        },
+        "house_angle": {
+          "name": "Angulo de la casa",
+          "description": "Direccion de la pared frontal en grados (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Inclinacion del techo",
+          "description": "Angulo de inclinacion del techo en grados (0-90)."
+        },
+        "roof_direction": {
+          "name": "Direccion del techo",
+          "description": "Lado hacia el que baja el techo."
+        },
+        "camera_rotation_h": {
+          "name": "Rotacion de camara H",
+          "description": "Rotacion horizontal de la camara en grados (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Rotacion de camara V",
+          "description": "Rotacion vertical de la camara en grados (0-90)."
+        },
+        "auto_rotate_speed": {
+          "name": "Velocidad de auto-rotacion",
+          "description": "Velocidad de auto-rotacion de la tarjeta en grados por segundo (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Sensor de potencia del techo",
+          "description": "Sensor de potencia opcional mostrado debajo del porcentaje del techo."
+        },
+        "roof_power_enabled": {
+          "name": "Activar etiqueta de potencia del techo",
+          "description": "Mostrar u ocultar la etiqueta de potencia del techo."
+        },
+        "roof_power_invert": {
+          "name": "Invertir valor de potencia del techo",
+          "description": "Invertir el valor de potencia (util para sensores de exportacion negativa)."
+        }
+      }
+    }
+  }
+}
