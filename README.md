@@ -10,15 +10,14 @@ It includes:
 - A custom integration (`sunlight_visualizer`) that calculates wall/roof sunlight values.
 - A Lovelace card (`custom:sunlight-visualizer-card`) that renders a 2.5D house with sun, shadows, roof/wall values, optional roof power, sky effects, and camera controls.
 
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="25%" height="25%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-dawn.png" width="25%" height="25%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="25%" height="25%">
+
+
 GIF (on macOS Safari: right click + "Play animation"):
 <br>
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="50%" height="50%">
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="40%" height="40%">
 
-Video:
-<br>
-<a href="assets/rotation.mp4">
-  <img src="assets/house-visualized.png" width="100">
-</a>
+
 
 ## Instant Overview
 - Real-time sun physics from azimuth/elevation + house angle + roof tilt.
@@ -36,7 +35,12 @@ Minimal:
 ```yaml
 type: custom:sunlight-visualizer-card
 ```
-
+## Card Behavior
+- Double tap card: start/stop auto-rotation.
+- Side/bottom controls: manual camera rotate.
+- Rotation stops automatically after configured turn count.
+- Save button stores current camera H/V to integration entities.
+- Restore button returns to saved integration camera values.
 
 ## Most Used (Start Here)
 <details>
@@ -136,6 +140,10 @@ If manual resource registration is needed:
   - `/custom_components/sunlight_visualizer/translations/es.json`
 
 ## What The Integration Creates
+
+<details>
+<summary>Sensors, Numbers, Enteties</summary><br>
+
 ### Sensors
 - `sensor.sun_wall_intensity_front` — Front wall sunlight intensity (%).
 - `sensor.sun_wall_intensity_left` — Left wall sunlight intensity (%).
@@ -156,12 +164,8 @@ If manual resource registration is needed:
 - `select.house_direction`
 - `select.roof_direction`
 
-## Card Behavior
-- Double tap card: start/stop auto-rotation.
-- Side/bottom controls: manual camera rotate.
-- Rotation stops automatically after configured turn count.
-- Save button stores current camera H/V to integration entities.
-- Restore button returns to saved integration camera values.
+</details>
+
 
 ## Auto Binding
 By default the card auto-binds to integration entities using:
