@@ -1,6 +1,5 @@
 {
   "name": "Sunlight Visualizer",
   "content_in_root": false,
-  "render_readme": true,
-  "domains": ["sunlight_visualizer"]
+  "render_readme": true
 }
