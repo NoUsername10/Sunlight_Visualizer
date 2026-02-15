@@ -1,228 +1,172 @@
-# Sunlight Visualizer 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width=10% height=10%>
+# Sunlight Visualizer
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="10%" height="10%">
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
-
 [![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
+An interactive sunlight intensity visualizer for Home Assistant.
 
+It includes:
+- A custom integration (`sunlight_visualizer`) that calculates wall/roof sunlight values.
+- A Lovelace card (`custom:sunlight-visualizer-card`) that renders a 2.5D house with sun, shadows, roof/wall values, optional roof power, sky effects, and camera controls.
 
-A **Interactive Sunlight Intensity Visualizer** for your House using Home Assistant. 
+GIF (on macOS Safari: right click + "Play animation"):
+<br>
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="50%" height="50%">
 
-The integration includes a Lovelace card that visualizes real‑time sunlight intensity on a 2.5D house. <br>
-It  displays roof and wall sunlight intensity, shadows, and optional solar power (or any power sensor you select), in a single HACS install. <br>
-In this new update we also included some clouds, animations and additional visual enhancements, more to come.<br>
-
-
-GIF (Right click and choose "Play animation" on a mac) <br>
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width=50% height=50%>
-
-
-Watch video:<br>
+Video:
+<br>
 <a href="assets/rotation.mp4">
   <img src="assets/house-visualized.png" width="100">
 </a>
 
+## Instant Overview
+- Real-time sun physics from azimuth/elevation + house angle + roof tilt.
+- Surface intensity sensors for all 4 walls + roof.
+- Roof alignment percentage/status sensors.
+- Roof power label (optional) with invert support.
+- Flat-roof v2 visuals: overhang, windows, door, roof panels, tree.
+- Day/night scene with clouds, stars, moon, twilight gradients.
+- Auto rotate + manual camera controls + save/restore view.
+- Performance adaptation for slow displays.
 
-What can you do with this card?
-- Double tap the card to autorotate the view, tap to stop the rotation.
-- Visualise current solar intensity on all walls (and the roof) on your house.
-- Get data so you know when the sun is at its peak, when sun reaches the porch or when to close the blinds.
-- Know when its time to get the coconut butter and get a great tan.
-- Understand when your solar system is at its peak, or when the sun is optimally aligned to the panels / roof.
-
-## What you get
-- `sunlight_visualizer` integration (sensors + numbers + selects)
-- `sunlight-visualizer-card.js` Lovelace card (auto‑registered by the integration)
-
-## Card usage (minimal)
+## Quick Start (Card)
+Minimal:
 ```yaml
 type: custom:sunlight-visualizer-card
-houseStyleV2: true
-flatRoofEnabled: true
-wallWindowsEnabled: true
-backTreeEnabled: true
 ```
 
 
-## All configurations below:
-_Click to expand..._
-
+## Most Used (Start Here)
 <details>
 <summary>Setup options</summary><br>
 
-Setup options:
-- House Direction, quick select of your house compass rotation.
-- Roof Direction, select the rotation of your roof tilt.
-- House Angle (compass direction of your house (front door).
-- Ceiling tilt angle (or solar array angle).
-- Update interval, how often the card will update the sun position.
-- Set rotation speed during autorotation.
-- Enable roof power sensor.
-- Invert your power seonsor, if your sensor displays a negative (-) value.
-- Force sun fallback (override), For testing (perhaps the sun is down)
-- Select azimuth and elevation for the override
-- Select roof power sensor.
+These are the most important settings in integration setup/options:
+- House Direction preset or custom House Angle
+- Roof Direction (`front`, `left`, `back`, `right`)
+- Ceiling Tilt
+- Update Interval
+- Auto Rotate Speed
+- Roof power settings:
+  - Enable roof power label
+  - Select roof power sensor
+  - Invert value if your power sensor reports negative production
+- Force Sun Fallback:
+  - Enable/disable override
+  - Set forced sun azimuth/elevation for testing
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/options.png" width=30% height=30%>
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/options.png" width="35%" height="35%">
 <br>
 </details>
-
 
 <details>
 <summary>Configuration options</summary><br>
 
-Configuration: 
-- Ceiling tilt angle (or solar array angle).
-- House Angle (compass direction of your house (front door).
-- Camera Rotation H, Horisontal default camera angle.
-- Camera Rotation V, Vertical default camera angle.
-- House Direction, quick select of your house compass rotation.
-- Roof Direction, select the rotation of your roof tilt.
-- Update interval, how often the card will update the sun position.
+In integration configuration/options you can tune:
+- Ceiling Tilt
+- House Angle
+- Camera Rotation H / V (default view)
+- House Direction preset
+- Roof Direction
+- Update Interval
+- Auto rotate speed
+- Force Sun fallback values
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/configuration.png" width=50% height=50%>
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/configuration.png" width="55%" height="55%">
 <br>
-
 </details>
-
-
 
 <details>
-<summary>Sunlight Sensors</summary><br>
+<summary>Sunlight sensors</summary><br>
 
-Sensors: 
-- Solar Alignment Percentage, how well aligned is the sun right now to your roof.<br>
-  For example, this can be 100%, but the Sun Roof Intensity is at 45%, that means this is the best alignment we get today.
-- Solar Alignment Status, approaching, at or leaving optimal alignment.
-- Sun Roof Intensity, sunlight intensity for the roof.
-- Sun Wall Intensity Back, sunlight intensity for the Back wall.
-- Sun Wall Intensity Back, sunlight intensity for the Front wall.
-- Sun Wall Intensity Back, sunlight intensity for the Left wall.
-- Sun Wall Intensity Back, sunlight intensity for the Right wall.
+Created entities include:
+- `sensor.sun_wall_intensity_front` — Sunlight intensity on front wall (%).
+- `sensor.sun_wall_intensity_left` — Sunlight intensity on left wall (%).
+- `sensor.sun_wall_intensity_back` — Sunlight intensity on back wall (%).
+- `sensor.sun_wall_intensity_right` — Sunlight intensity on right wall (%).
+- `sensor.sun_roof_intensity` — Sunlight intensity on the roof surface (%).
+- `sensor.sun_roof_alignment_percentage` — Current roof alignment versus best possible alignment for today (%).
+- `sensor.sun_roof_alignment_status` — Human-readable status for roof alignment trend.
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width=50% height=50%>
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="55%" height="55%">
 <br>
-
 </details>
-
 
 <details>
 <summary>Visual card configuration</summary><br>
-  
-Visual card configuration: 
-- Visual configuration of settings.
-- Select Roof power sensor.
-- Set rotation speed during autorotation.
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual_card_configuration.png" width=50% height=50%>
-<br>
 
+You can also configure common card behavior visually:
+- Roof power options
+- Auto rotation speed
+- Camera controls
+- House/roof orientation values
+
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual_card_configuration.png" width="55%" height="55%">
+<br>
 </details>
 
 
-## Features
-
-☀️ **Real‑Time Sun Physics**  
-Calculates wall and roof sunlight intensity based on sun azimuth/elevation, house orientation, and roof tilt.
-
-🏠 **2.5D House Visualizer (Lovelace Card)**  
-Interactive SVG card showing:
-- Live sun position, rays, and floor compass
-- Wall & roof intensity labels
-- Roof tilt + roof direction visualization
-- Real‑time shadow casting
-- Auto‑rotate camera with FPS readout
-
-📊 **Sensors for Every Surface**  
-Creates intensity sensors for:
-- Front / Right / Back / Left walls
-- Roof (ceiling) surface
-- Solar alignment percentage + status
-
-⚙️ **Full Integration + Card in One HACS Install**  
-One download installs both:
-- `sunlight_visualizer` integration
-- `sunlight‑visualizer‑card.js` Lovelace card
-
-🔧 **Configurable & Test‑Friendly**  
-Options include:
-- House direction, roof tilt, roof direction
-- Force Sun Fallback (azimuth + elevation) for testing
-- Optional roof power sensor & invert option
-- Camera rotation controls + auto‑rotate speed
-
-🧭 **Compass & Orientation**  
-Floor compass ring + sun direction indicator for easy real‑world alignment.
-
-🧪 **Debug & Diagnostics**  
-Includes diagnostic sensors and attributes for troubleshooting + override indicator in the card.
+## Changelog
+See [`CHANGELOG.md`](./CHANGELOG.md).
 
 ## Installation (HACS)
-1. Add this repository to HACS (as an **Integration**).
-2. Install it. HACS will place the integration under `custom_components/sunlight_visualizer`.
-3. The integration **serves and auto‑registers** the Lovelace card from:
-   - `/sunlight_visualizer/sunlight-visualizer-card.js`
+1. Add this repository in HACS as **Integration**.
+2. Install **Sunlight Visualizer**.
+3. Restart Home Assistant.
+4. Add integration in **Settings → Devices & Services**.
 
-If the resource isn’t added automatically, add it manually:
+The integration serves and auto-registers the card resource at:
+- `/sunlight_visualizer/sunlight-visualizer-card.js`
+
+If manual resource registration is needed:
 - URL: `/sunlight_visualizer/sunlight-visualizer-card.js`
 - Type: `module`
 
-## Card usage (minimal)
-```yaml
-type: custom:sunlight-visualizer-card
-houseStyleV2: true
-flatRoofEnabled: true
-wallWindowsEnabled: true
-backTreeEnabled: true
-```
+## What The Integration Creates
+### Sensors
+- `sensor.sun_wall_intensity_front` — Front wall sunlight intensity (%).
+- `sensor.sun_wall_intensity_left` — Left wall sunlight intensity (%).
+- `sensor.sun_wall_intensity_back` — Back wall sunlight intensity (%).
+- `sensor.sun_wall_intensity_right` — Right wall sunlight intensity (%).
+- `sensor.sun_roof_intensity` — Roof sunlight intensity (%).
+- `sensor.sun_roof_alignment_percentage` — Roof alignment percentage vs today's best available alignment.
+- `sensor.sun_roof_alignment_status` — Alignment trend/status text.
 
-The card **auto‑binds** to this integration’s sensors using the marker attribute:
-`sunlight_visualizer_source: "sunlight_visualizer"`.
+### Number entities
+- `number.house_angle`
+- `number.ceiling_tilt`
+- `number.update_interval`
+- `number.house_camera_rotation_h`
+- `number.house_camera_rotation_v`
 
-## Camera rotation sliders
-The integration also provides two camera sliders (view only):
-- `number.house_camera_rotation_h` (default 225°)
-- `number.house_camera_rotation_v` (default 35°)
+### Select entities
+- `select.house_direction`
+- `select.roof_direction`
 
-The card auto‑binds to these via the marker attribute and `camera_rotation: "h"|"v"`.
+## Card Behavior
+- Double tap card: start/stop auto-rotation.
+- Side/bottom controls: manual camera rotate.
+- Rotation stops automatically after configured turn count.
+- Save button stores current camera H/V to integration entities.
+- Restore button returns to saved integration camera values.
 
-## Force Sun Fallback (integration options)
-In **Settings → Devices & Services → Sunlight Visualizer → Configure**, you can enable:
-- **Force Sun Fallback** (toggle)
-- **Force Sun Azimuth** (0–359°)
-- **Force Sun Elevation** (−90° to 90°)
+## Auto Binding
+By default the card auto-binds to integration entities using:
+- `sunlight_visualizer_source: sunlight_visualizer`
 
-These override live sun values for testing.
-When enabled, the card shows a red **SUN OVERRIDE ENABLED** indicator in the bottom-left.
+You can still override entities in YAML when needed.
 
-
-## All YAML settings (grouped)
-Below is the full list of configurable options. You can set any of these in YAML.
-
+## Advanced (Full YAML Reference)
 <details>
-<summary>YAML Settings</summary><br>
-<br>
+<summary>Core / Binding</summary><br>
 
-### Size & layout
 ```yaml
 cardWidth: 450
 cardHeight: 450
-floorScale: 2.6
-floorColor: "#2f2f2f"
-faceColors:
-  front: "#faf5f5ff"
-  right: "#d8d2d2ff"
-  top: "#13a057"
-  back: "#d8d2d2ff"
-  left: "#d8d2d2ff"
-  bottom: "#d8d2d2ff"
-```
+preferIntegrationSettings: true
 
-### Integration & entity binding
-```yaml
 siSourceAttr: sunlight_visualizer_source
 siSourceValue: sunlight_visualizer
-preferIntegrationSettings: true
 
 rotationHEntity: number.house_camera_rotation_h
 rotationVEntity: number.house_camera_rotation_v
@@ -234,30 +178,37 @@ wallBackPctEntity: sensor.sun_wall_intensity_back
 wallLeftPctEntity: sensor.sun_wall_intensity_left
 roofPctEntity: sensor.sun_roof_intensity
 
-roofPowerEntity: null   # optional (auto-bound from integration if available)
+roofPowerEntity: null
 roofPowerEnabled: false
 roofPowerInvert: false
 
-sunAzEntity: sensor.sun_azimuth
-sunElEntity: sensor.sun_elevation
+sunAzEntity: null
+sunElEntity: null
 useSunEntity: false
 sunEntityId: sun.sun
 ```
+</details>
 
-### Sun position (manual fallback)
+<details>
+<summary>Manual Sun / Visual Sun Position</summary><br>
+
 ```yaml
 sunDistance: 3.0
 sunAz: 135
 sunEl: 55
+sunVisualElevationBiasDeg: 6
+sunVisualElevationScale: 1.0
 ```
+</details>
 
-### House & roof orientation
+<details>
+<summary>House / Roof Orientation</summary><br>
+
 ```yaml
 houseAngle: 0
-
 roofTiltEnabled: true
 roofTiltDeg: 25
-roofTiltFace: front     # front | back | left | right
+roofTiltFace: front
 roofTiltMax: 89
 roofTiltOpacity: 1.0
 
@@ -265,76 +216,123 @@ roofBackEnabled: true
 roofBackMix: 0.7
 roofBackOpacity: 1.0
 
-roofGradientDarkMix: 0.125
-roofGradientLightMix: 1.25
-
 roofSidesEnabled: true
 roofSideMix: 0.45
 roofSideOpacity: 1.0
-
+roofSideDepthBias: 0.012
 roofCapEnabled: true
+
+roofGradientDarkMix: 0.125
+roofGradientLightMix: 1.25
 ```
+</details>
 
-### Shadows
+<details>
+<summary>V2 House Style</summary><br>
+
 ```yaml
-shadowEnabled: true
-shadowOpacity: 0.35
-shadowBlur: 4
-shadowContactOpacity: 0.12
-shadowContactBlur: 2.5
-shadowColor: "#000000"
-shadowClipInset: 0.02
+houseStyleV2: true
+flatRoofEnabled: true
+flatRoofOverhang: 0.15
+flatRoofThickness: 0.12
+flatRoofLift: 0.0
+flatRoofTopColor: "#e6e8ee"
+flatRoofSideColor: "#9ea4af"
+flatRoofEdgeColor: "#c7ccd5"
+flatRoofTopOpacity: 1.0
+flatRoofEdgeOpacity: 1.0
+flatRoofTopDepthBias: 0.06
+flatRoofSideDepthBias: 0.025
+flatRoofSkirtDepthBias: 0.02
+flatRoofSideShade: 0.40
+
+wallWindowsEnabled: true
+wallWindowGlassColor: "rgba(110,178,212,0.68)"
+wallWindowFrameColor: "rgba(221,228,236,0.98)"
+wallWindowStrokeColor: "rgba(62,105,130,0.65)"
+wallWindowStrokeWidth: 1.0
+
+frontDoorEnabled: true
+frontDoorWidth: 0.55
+frontDoorHeight: 1.1
+frontDoorBottomInset: 0.05
+frontDoorOffset: 0.01
+frontDoorOpacity: 0.9
+frontDoorColor: "rgba(0,0,0,0.55)"
+frontDoorFrameColor: "rgba(219,225,232,0.98)"
+frontDoorKnobColor: "rgba(236,198,111,0.95)"
+
+roofPanelsEnabled: true
+roofPanelsCols: 3
+roofPanelsWidthFrac: 0.90
+roofPanelsGapFrac: 0.025
+roofPanelsT0: 0.05
+roofPanelsT1: 0.26
+roofPanelColor: "#2d3f7b"
+roofPanelGridColor: "rgba(214,230,255,0.65)"
+roofPanelBorderColor: "rgba(185,204,234,0.85)"
+roofPanelBorderWidth: 0.9
+roofPanelGridCols: 5
+roofPanelGridRows: 3
 ```
+</details>
 
-### Sunlight floor gradient
+<details>
+<summary>Tree / Patio / Plinth</summary><br>
+
 ```yaml
-sunlightEnabled: true
-sunlightColor: [255, 225, 160]
-sunlightOpacity: 0.7
-sunlightSpread: 0.7
+backTreeEnabled: true
+backTreeX: -2.2
+backTreeZ: -2.2
+backTreeScale: 1.0
+backTreeLeafColor: "#9bc94b"
+backTreeTrunkColor: "#6f4b2a"
+backTreeShadowEnabled: houseStyleV2
+backTreeShadowLength: 0.015
+backTreeShadowOpacity: 0.35
+backTreeShadowBlur: 1.1
+
+plinthBandEnabled: houseStyleV2
+plinthBandHeight: 0.06
+plinthBandMix: 0.62
+
+patioStepEnabled: houseStyleV2
+patioStepWidth: 1.1
+patioStepDepth: 0.24
+patioStepInset: 0.02
+patioStepColor: "rgba(226,230,235,0.75)"
+patioGridColor: "rgba(164,170,182,0.8)"
+patioGridWidth: 1.0
 ```
+</details>
 
-### Wall & ceiling gradients
+<details>
+<summary>Floor / Compass / Pointer</summary><br>
+
 ```yaml
-wallBottomMix: 0.01
-wallMidMix: 0.7
-wallTopMix: 1.3
-ceilingDarkMix: 0.1
-ceilingLightMix: 1.40
-```
+floorScale: 2.6
+floorColor: "#2f2f2f"
+floorCornerRadius: 26
+floorGrassEnabled: true
+floorGrassColorA: "rgb(136,186,88)"
+floorGrassColorB: "rgb(96,150,62)"
+floorGrassOpacity: 0.30
+floorThicknessPx: 7
+floorThicknessColor: "rgba(150,106,64,0.9)"
+floorTopStrokeColor: "rgba(72,112,56,0.8)"
+floorTopStrokeWidth: 1.4
 
-### Horizon & vignette
-```yaml
-horizonEnabled: true
-horizonBase: 0.55
-horizonTiltStrength: 0.65
-horizonBand: 0.15
-horizonTopColor: [120, 170, 220]
-horizonBandColor: [255, 210, 150]
-horizonBottomColor: [70, 80, 95]
-
-vignetteEnabled: true
-vignetteOpacity: 0.35
-vignetteRadius: 0.65
-vignetteInner: 0.85
-vignetteColor: [0, 0, 0]
-```
-
-### Compass ring & arrow
-```yaml
 floorCompassStroke: 4
 floorCompassRingBand: 0.09
 floorCompassRingMiddleColor: "rgba(255,255,255,0.9)"
 floorCompassRingSideColor: "rgba(210,140,140,0.345)"
 floorCompassRingSideWidth: 3
-
 floorCompassTicksEnabled: true
 floorCompassTickColor: "rgba(0,0,0,0.75)"
 floorCompassTickWidth: 1
 floorCompassTickMajorWidth: 4
 floorCompassTickLength: -0.1
 floorCompassTickMajorLength: -0.2
-
 floorCompassLabelSize: 20
 floorCompassLabelInset: -0.25
 floorCompassLabelScaleBoost: 1.2
@@ -345,25 +343,19 @@ floorCompassLabelStroke: 1
 arrowScaleBoost: 0.60
 floorPointerScaleMin: 0.05
 floorPointerScaleMax: 1.0
-floorPointerBaseWidth: 3
-floorPointerBaseHead: 15
+floorPointerBaseWidth: 3.4
+floorPointerBaseHead: 18
+floorPointerColor: gold
+floorPointerShadowEnabled: true
+floorPointerShadowOpacity: 0.8
+floorPointerShadowBlur: 1.1
+floorPointerShadowOffset: 2.9
 ```
+</details>
 
-### Floor wall labels (Front/Right/Back/Left text on floor)
-```yaml
-floorWallLabelSize: 12
-floorWallLabelOffset: 0.55
-floorWallLabelScaleBoost: 1.2
-floorWallLabelScaleMin: 0.5
-floorWallLabelScaleMax: 1.8
-floorWallLabelScreenLift: 6
-floorWallLabelColor: "rgba(255,255,255,0.9)"
-floorWallLabelStroke: "rgba(0,0,0,0.6)"
-floorWallLabelStrokeWidth: 0.5
-wallLabelVisibleThreshold: -0.05
-```
+<details>
+<summary>Surface Labels</summary><br>
 
-### Surface % labels (walls + roof)
 ```yaml
 surfaceLabelEnabled: true
 surfaceLabelSize: 12
@@ -379,24 +371,146 @@ wallPctVisibleThreshold: -0.215
 wallPctAreaThreshold: 120
 wallPctVerticalPos: 0.66
 
-# Roof power label (below %)
-roofPowerLabelScale: 0.85
+roofPctLabelScale: 1.18
+roofPowerLabelScale: 0.70
 roofPowerLabelColor: "rgba(255,255,255,0.9)"
 
+floorWallLabelSize: 12
+floorWallLabelOffset: 0.55
+floorWallLabelScaleBoost: 1.2
+floorWallLabelScaleMin: 0.5
+floorWallLabelScaleMax: 1.8
+floorWallLabelScreenLift: 6
+floorWallLabelColor: "rgba(255,255,255,0.9)"
+floorWallLabelStroke: "rgba(0,0,0,0.6)"
+floorWallLabelStrokeWidth: 0.5
+wallLabelVisibleThreshold: -0.05
 ```
+</details>
 
-### Front door notch (front wall)
+<details>
+<summary>Sunlight / Shadows / Dimming</summary><br>
+
 ```yaml
-frontDoorEnabled: true
-frontDoorWidth: 0.55
-frontDoorHeight: 1.1
-frontDoorBottomInset: 0.05
-frontDoorOffset: 0.01
-frontDoorColor: "rgba(0,0,0,0.55)"
-frontDoorOpacity: 0.9
-```
+shadowEnabled: true
+shadowOpacity: 0.35
+shadowBlur: 4
+shadowContactOpacity: 0.12
+shadowContactBlur: 2.5
+shadowColor: "#000000"
+shadowClipInset: 0.02
+shadowSunMoonBlendDeg: 3
 
-### Auto-rotate view (local only)
+sunlightEnabled: true
+sunlightColor: [255, 225, 160]
+sunlightOpacity: 0.7
+sunlightSpread: 0.7
+
+facadeSunDimmingEnabled: true
+facadeSunMinFactor: 0.2
+facadeSunNoDimAtPct: 90
+facadeSunCurve: 8
+
+baseAnchorShadowEnabled: true
+baseAnchorShadowOpacity: 0.65
+baseAnchorShadowBlur: 0.2
+baseAnchorShadowSpread: 0.05
+baseAnchorShadowColor: "#000000"
+```
+</details>
+
+<details>
+<summary>Sky / Horizon / Night</summary><br>
+
+```yaml
+horizonEnabled: true
+horizonBase: 0.55
+horizonTiltStrength: 0.65
+horizonBand: 0.15
+horizonTopColor: [120, 170, 220]
+horizonBandColor: [255, 210, 150]
+horizonBottomColor: [70, 80, 95]
+
+horizonSunriseTopColor: [118, 150, 206]
+horizonSunriseBandColor: [236, 162, 132]
+horizonSunriseBottomColor: [84, 70, 90]
+
+horizonSunsetTopColor: [98, 106, 178]
+horizonSunsetBandColor: [255, 122, 90]
+horizonSunsetBottomColor: [82, 48, 76]
+
+horizonNightTopColor: [12, 20, 42]
+horizonNightBandColor: [32, 44, 82]
+horizonNightBottomColor: [6, 10, 22]
+
+skyTwilightRangeDeg: 6
+
+skyCloudsEnabled: true
+skyCloudSpeed: 1.0
+skyCloudOpacity: 0.34
+skyCloudBlur: 3.3
+skyCloudScale: 1.5
+skyCloudHeight: 0.5
+
+skyStarsEnabled: true
+skyStarsCount: 34
+skyStarsOpacity: 0.9
+skyStarsTwinkleEnabled: true
+
+skyMoonEnabled: true
+skyMoonX: 0.86
+skyMoonY: 0.12
+skyMoonSize: 14
+skyMoonPhase: 0.72
+skyMoonOpacity: 0.92
+
+moonlightEnabled: true
+moonlightColor: [178, 208, 255]
+moonlightOpacity: 0.22
+moonlightSpread: 0.60
+moonlightWashOpacity: 0.08
+moonShadowYawDeg: -45
+moonShadowElevationDeg: 18
+```
+</details>
+
+<details>
+<summary>Sun Beams / Sun Ray Animation</summary><br>
+
+```yaml
+sunBeamStaticOpacity: 0.07
+sunBeamStaticWidth: 1.6
+sunBeamFlowEnabled: true
+sunBeamFlowColor: "rgba(255,200,50,0.85)"
+sunBeamFlowOpacity: 0.55
+sunBeamFlowWidthScale: 0.6
+sunBeamFlowDash: 8
+sunBeamFlowGap: 50
+sunBeamFlowDuration: 2.5
+sunBeamFlowPhaseStep: 0.1
+sunBeamDepthScaleBoost: 1.0
+sunBeamDepthScaleMin: 0.55
+sunBeamDepthScaleMax: 1.2
+sunBeamRaySpacingPx: 40
+sunBeamRayMinSepPx: 16
+sunBeamSilhouetteMinRays: 3
+sunBeamSilhouetteMaxRays: 7
+
+sunRayAnimEnabled: true
+sunRayAnimScaleMin: 0.5
+sunRayAnimScaleMax: 0.75
+sunRayAnimOpacityMin: 0.45
+sunRayAnimOpacityMax: 0.85
+sunRayAnimDurationMin: 1.8
+sunRayAnimDurationMax: 3.0
+sunRayAnimColorA: "rgb(255,240,110)"
+sunRayAnimColorB: "rgb(255,175,35)"
+```
+</details>
+
+<details>
+<summary>Rotation / Performance</summary><br>
+
 ```yaml
 autoRotateEnabledDefault: false
 autoRotateSpeed: 10
@@ -413,6 +527,47 @@ autoRotateAdaptiveCheckMs: 1000
 autoRotateAdaptiveFpsThreshold: 0.80
 autoRotateCalibrateMs: 2000
 autoRotateCalibrateFactor: 0.85
-```
 
+cssFpsDebugEnabled: false
+cssFpsUiUpdateMs: 500
+cssFpsWindowMs: 1000
+cssFpsAutoLimitEnabled: true
+cssFpsLimitThreshold: 20
+cssFpsLimitFactor: 0.5
+cssFpsLimitMin: 1
+cssFpsLimitMax: 30
+cssFpsCalibrateMs: 2000
+cssFpsLimitTextEnabled: true
+```
 </details>
+
+<details>
+<summary>Color tuning (walls/ceiling)</summary><br>
+
+```yaml
+faceColors:
+  front: "#faf5f5ff"
+  right: "#d8d2d2ff"
+  top: "#13a057"
+  back: "#d8d2d2ff"
+  left: "#d8d2d2ff"
+  bottom: "#d8d2d2ff"
+
+wallBottomMix: 0.01
+wallMidMix: 0.7
+wallTopMix: 1.3
+ceilingDarkMix: 0.1
+ceilingLightMix: 1.40
+
+vignetteEnabled: true
+vignetteOpacity: 0.35
+vignetteRadius: 0.65
+vignetteInner: 0.85
+vignetteColor: [0, 0, 0]
+```
+</details>
+
+## Notes
+- With `preferIntegrationSettings: true` (default), integration entities/options are the primary source for camera/orientation/power settings.
+- In Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED`.
+- Legacy/reserved keys with no active visual effect are intentionally omitted.
