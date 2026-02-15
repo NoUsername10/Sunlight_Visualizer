@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 - Placeholder for upcoming changes.
 
+## [0.2.2] - 2026-02-15
+### Changed
+- Bumped integration/card release version to `0.2.2`.
+- Finalized manifest/HACS metadata to satisfy strict validator rules used by Hassfest and HACS.
+- Confirmed CI validation flow for:
+  - HACS validation (`.github/workflows/hacs.yaml`)
+  - Hassfest validation (`.github/workflows/hassfest.yaml`)
+
+### Fixed
+- Resolved manifest schema and ordering issues flagged by Hassfest.
+- Resolved `hacs.json` schema mismatch flagged by HACS validation.
+
 ## [0.2.1] - 2026-02-15
 ### Added
 - Home Assistant translation files for English, Swedish, and Spanish:

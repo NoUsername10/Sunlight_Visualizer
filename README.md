@@ -129,8 +129,13 @@ If manual resource registration is needed:
 - Type: `module`
 
 ## Validation
+- Current release: `0.2.2` (validated for HACS + Hassfest).
 - HACS validation workflow: `.github/workflows/hacs.yaml`
 - Hassfest validation workflow: `.github/workflows/hassfest.yaml`
+- Validation scope includes:
+  - `hacs.json` schema checks
+  - Home Assistant manifest schema/order checks
+  - Integration packaging checks for HACS custom repositories
 
 ## Localization
 - Default source strings: `/custom_components/sunlight_visualizer/strings.json`
