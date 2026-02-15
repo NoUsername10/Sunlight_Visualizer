@@ -2,5 +2,5 @@
   "name": "Sunlight Visualizer",
   "content_in_root": false,
   "render_readme": true,
-  "filename": "sunlight-visualizer-card.js"
+  "domains": ["sunlight_visualizer"]
 }

@@ -25,6 +25,7 @@ Video:
 - Surface intensity sensors for all 4 walls + roof.
 - Roof alignment percentage/status sensors.
 - Roof power label (optional) with invert support.
+- Localized config/options/services text (English, Swedish, Spanish).
 - Flat-roof v2 visuals: overhang, windows, door, roof panels, tree.
 - Day/night scene with clouds, stars, moon, twilight gradients.
 - Auto rotate + manual camera controls + save/restore view.
@@ -114,6 +115,7 @@ See [`CHANGELOG.md`](./CHANGELOG.md).
 2. Install **Sunlight Visualizer**.
 3. Restart Home Assistant.
 4. Add integration in **Settings → Devices & Services**.
+5. Add the card in Lovelace as `custom:sunlight-visualizer-card`.
 
 The integration serves and auto-registers the card resource at:
 - `/sunlight_visualizer/sunlight-visualizer-card.js`
@@ -121,6 +123,17 @@ The integration serves and auto-registers the card resource at:
 If manual resource registration is needed:
 - URL: `/sunlight_visualizer/sunlight-visualizer-card.js`
 - Type: `module`
+
+## Validation
+- HACS validation workflow: `.github/workflows/hacs.yaml`
+- Hassfest validation workflow: `.github/workflows/hassfest.yaml`
+
+## Localization
+- Default source strings: `/custom_components/sunlight_visualizer/strings.json`
+- Runtime translations:
+  - `/custom_components/sunlight_visualizer/translations/en.json`
+  - `/custom_components/sunlight_visualizer/translations/sv.json`
+  - `/custom_components/sunlight_visualizer/translations/es.json`
 
 ## What The Integration Creates
 ### Sensors
@@ -536,6 +549,7 @@ cssFpsLimitThreshold: 20
 cssFpsLimitFactor: 0.5
 cssFpsLimitMin: 1
 cssFpsLimitMax: 30
+cssFpsRotationStartBoost: 2
 cssFpsCalibrateMs: 2000
 cssFpsLimitTextEnabled: true
 ```
