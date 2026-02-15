@@ -1,13 +1,13 @@
 {
   "domain": "sunlight_visualizer",
   "name": "Sunlight Visualizer",
+  "after_dependencies": ["lovelace"],
   "codeowners": ["@NoUsername10"],
   "config_flow": true,
-  "documentation": "https://github.com/NoUsername10/Sunlight_Visualizer",
-  "issue_tracker": "https://github.com/NoUsername10/Sunlight_Visualizer/issues",
   "dependencies": ["http"],
-  "after_dependencies": ["lovelace"],
+  "documentation": "https://github.com/NoUsername10/Sunlight_Visualizer",
   "integration_type": "service",
   "iot_class": "calculated",
+  "issue_tracker": "https://github.com/NoUsername10/Sunlight_Visualizer/issues",
   "version": "0.2.1"
 }
