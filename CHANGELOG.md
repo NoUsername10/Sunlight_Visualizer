@@ -3,8 +3,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
+
+### Planned
+- More translations.
+- Finer precalculated sun data for sunrise and sunset
+- Adding some calculated attributes to sensor section
+
+
 ### Added
 - Placeholder for upcoming changes.
+- Fixed error in translation layer.
+
 
 ## [0.2.2] - 2026-02-15
 ### Changed
