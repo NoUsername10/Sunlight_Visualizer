@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - More translations.
 - Finer precalculated sun data for sunrise and sunset
 - Adding some calculated attributes to sensor section
+- Auto adjust size based on width of card
 
 
 ### Added
