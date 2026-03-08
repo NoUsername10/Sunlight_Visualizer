@@ -296,8 +296,8 @@ const Wf = (S, a) => {
   let o, w = a === 2 ? "<svg>" : a === 3 ? "<math>" : "", v = cs;
   for (let P = 0; P < c; P++) {
     const k = S[P];
-    let W, Y, V = -1, J = 0;
-    for (; J < k.length && (v.lastIndex = J, Y = v.exec(k), Y !== null); ) J = v.lastIndex, v === cs ? Y[1] === "!--" ? v = rc : Y[1] !== void 0 ? v = cc : Y[2] !== void 0 ? (_c.test(Y[2]) && (o = RegExp("</" + Y[2], "g")), v = zo) : Y[3] !== void 0 && (v = zo) : v === zo ? Y[0] === ">" ? (v = o ?? cs, V = -1) : Y[1] === void 0 ? V = -2 : (V = v.lastIndex - Y[2].length, W = Y[1], v = Y[3] === void 0 ? zo : Y[3] === '"' ? hc : lc) : v === hc || v === lc ? v = zo : v === rc || v === cc ? v = cs : (v = zo, o = void 0);
+    let W, Y, V = -1, Q = 0;
+    for (; Q < k.length && (v.lastIndex = Q, Y = v.exec(k), Y !== null); ) Q = v.lastIndex, v === cs ? Y[1] === "!--" ? v = rc : Y[1] !== void 0 ? v = cc : Y[2] !== void 0 ? (_c.test(Y[2]) && (o = RegExp("</" + Y[2], "g")), v = zo) : Y[3] !== void 0 && (v = zo) : v === zo ? Y[0] === ">" ? (v = o ?? cs, V = -1) : Y[1] === void 0 ? V = -2 : (V = v.lastIndex - Y[2].length, W = Y[1], v = Y[3] === void 0 ? zo : Y[3] === '"' ? hc : lc) : v === hc || v === lc ? v = zo : v === rc || v === cc ? v = cs : (v = zo, o = void 0);
     const q = v === zo && S[P + 1].startsWith("/>") ? " " : "";
     w += v === cs ? k + Pf : V >= 0 ? (l.push(W), k.slice(0, V) + yc + k.slice(V) + po + q) : k + po + (V === -2 ? P : q);
   }
@@ -316,15 +316,15 @@ class ds {
     for (; (o = Wo.nextNode()) !== null && k.length < P; ) {
       if (o.nodeType === 1) {
         if (o.hasAttributes()) for (const V of o.getAttributeNames()) if (V.endsWith(yc)) {
-          const J = Y[v++], q = o.getAttribute(V).split(po), O = /([.?@])?(.*)/.exec(J);
+          const Q = Y[v++], q = o.getAttribute(V).split(po), O = /([.?@])?(.*)/.exec(Q);
           k.push({ type: 1, index: w, name: O[2], strings: q, ctor: O[1] === "." ? If : O[1] === "?" ? Vf : O[1] === "@" ? Hf : Sa }), o.removeAttribute(V);
         } else V.startsWith(po) && (k.push({ type: 6, index: w }), o.removeAttribute(V));
         if (_c.test(o.tagName)) {
-          const V = o.textContent.split(po), J = V.length - 1;
-          if (J > 0) {
+          const V = o.textContent.split(po), Q = V.length - 1;
+          if (Q > 0) {
             o.textContent = _a ? _a.emptyScript : "";
-            for (let q = 0; q < J; q++) o.append(V[q], us()), Wo.nextNode(), k.push({ type: 2, index: ++w });
-            o.append(V[J], us());
+            for (let q = 0; q < Q; q++) o.append(V[q], us()), Wo.nextNode(), k.push({ type: 2, index: ++w });
+            o.append(V[Q], us());
           }
         }
       } else if (o.nodeType === 8) if (o.data === $c) k.push({ type: 2, index: w });
@@ -652,7 +652,7 @@ const Xf = qf(On), jn = class jn extends be {
     }), P = (N) => w((D) => {
       var X;
       return ((X = D == null ? void 0 : D.attributes) == null ? void 0 : X.si_setting) === N;
-    }), k = a.rotationHEntity ?? v("h") ?? "", W = a.rotationVEntity ?? v("v") ?? "", Y = a.houseAngleEntity ?? P("house_angle") ?? "", V = P("ceiling_tilt") ?? "", J = P("house_direction") ?? "", q = P("roof_direction") ?? "", O = (N, D = !1) => {
+    }), k = a.rotationHEntity ?? v("h") ?? "", W = a.rotationVEntity ?? v("v") ?? "", Y = a.houseAngleEntity ?? P("house_angle") ?? "", V = P("ceiling_tilt") ?? "", Q = P("house_direction") ?? "", q = P("roof_direction") ?? "", O = (N, D = !1) => {
       if (N == null || N === "") return D;
       if (typeof N == "boolean") return N;
       if (typeof N == "number") return N !== 0;
@@ -666,12 +666,12 @@ const Xf = qf(On), jn = class jn extends be {
     let F = "", kt, Nt;
     for (const [, N] of o)
       !F && ((mt = N == null ? void 0 : N.attributes) != null && mt.roof_power_entity) && (F = N.attributes.roof_power_entity), kt === void 0 && (($o = N == null ? void 0 : N.attributes) == null ? void 0 : $o.roof_power_enabled) !== void 0 && (kt = N.attributes.roof_power_enabled), Nt === void 0 && ((zt = N == null ? void 0 : N.attributes) == null ? void 0 : zt.roof_power_invert) !== void 0 && (Nt = N.attributes.roof_power_invert);
-    const Bt = a.preferIntegrationSettings ?? !0, Pt = o.length > 0, Jt = Bt ? F || a.roofPowerEntity || "" : a.roofPowerEntity || F || "", Q = Bt ? O(kt, O(a.roofPowerEnabled, !1)) : O(a.roofPowerEnabled, O(kt, !1)), tt = Bt ? O(Nt, O(a.roofPowerInvert, !1)) : O(a.roofPowerInvert, O(Nt, !1)), Et = Number((bt = (eo = (Ut = o.find(([, N]) => {
+    const Bt = a.preferIntegrationSettings ?? !0, Pt = o.length > 0, Qt = Bt ? F || a.roofPowerEntity || "" : a.roofPowerEntity || F || "", J = Bt ? O(kt, O(a.roofPowerEnabled, !1)) : O(a.roofPowerEnabled, O(kt, !1)), tt = Bt ? O(Nt, O(a.roofPowerInvert, !1)) : O(a.roofPowerInvert, O(Nt, !1)), Et = Number((bt = (eo = (Ut = o.find(([, N]) => {
       var D;
       return ((D = N == null ? void 0 : N.attributes) == null ? void 0 : D.auto_rotate_speed) != null;
     })) == null ? void 0 : Ut[1]) == null ? void 0 : eo.attributes) == null ? void 0 : bt.auto_rotate_speed), to = Bt && Number.isFinite(Et) ? Et : Number(a.autoRotateSpeed ?? (Number.isFinite(Et) ? Et : 10));
     Number(((xt = (wt = (Lt = this._hass) == null ? void 0 : Lt.states) == null ? void 0 : wt[Y]) == null ? void 0 : xt.state) ?? a.houseAngle ?? 0);
-    const Tt = ["North", "NE", "East", "SE", "South", "SW", "West", "NW", "Custom"], ot = ["front", "back", "left", "right"], oo = !!J, bo = !!q, ye = oo ? (($t = (nt = (_o = (jt = this._hass) == null ? void 0 : jt.states) == null ? void 0 : _o[J]) == null ? void 0 : nt.attributes) == null ? void 0 : $t.options) ?? Tt : Tt, Ho = bo ? ((Uo = (_e = (Ft = (ht = this._hass) == null ? void 0 : ht.states) == null ? void 0 : Ft[q]) == null ? void 0 : _e.attributes) == null ? void 0 : Uo.options) ?? ot : ot, go = oo ? ((gs = (bs = (ms = this._hass) == null ? void 0 : ms.states) == null ? void 0 : bs[J]) == null ? void 0 : gs.state) ?? "Custom" : a.houseDirection ?? "Custom", Go = bo ? ((ve = ($s = (ys = this._hass) == null ? void 0 : ys.states) == null ? void 0 : $s[q]) == null ? void 0 : ve.state) ?? "front" : a.roofTiltFace ?? "front", $e = !!k, rt = !!W, yo = !!V;
+    const Tt = ["North", "NE", "East", "SE", "South", "SW", "West", "NW", "Custom"], ot = ["front", "back", "left", "right"], oo = !!Q, bo = !!q, ye = oo ? (($t = (nt = (_o = (jt = this._hass) == null ? void 0 : jt.states) == null ? void 0 : _o[Q]) == null ? void 0 : nt.attributes) == null ? void 0 : $t.options) ?? Tt : Tt, Ho = bo ? ((Uo = (_e = (Ft = (ht = this._hass) == null ? void 0 : ht.states) == null ? void 0 : Ft[q]) == null ? void 0 : _e.attributes) == null ? void 0 : Uo.options) ?? ot : ot, go = oo ? ((gs = (bs = (ms = this._hass) == null ? void 0 : ms.states) == null ? void 0 : bs[Q]) == null ? void 0 : gs.state) ?? "Custom" : a.houseDirection ?? "Custom", Go = bo ? ((ve = ($s = (ys = this._hass) == null ? void 0 : ys.states) == null ? void 0 : $s[q]) == null ? void 0 : ve.state) ?? "front" : a.roofTiltFace ?? "front", $e = !!k, rt = !!W, yo = !!V;
     return Lo`
       <div class="section">
         <div class="title">Size</div>
@@ -719,10 +719,10 @@ const Xf = qf(On), jn = class jn extends be {
               @value-changed=${(N) => {
       var X;
       const D = ((X = N.detail) == null ? void 0 : X.value) ?? go;
-      oo ? (this._setSelectEntityOption(J, D), this._setConfigValue("houseDirection", void 0)) : this._setConfigValue("houseDirection", D);
+      oo ? (this._setSelectEntityOption(Q, D), this._setConfigValue("houseDirection", void 0)) : this._setConfigValue("houseDirection", D);
     }}
             ></ha-selector>
-            <div class="helper">Quick preset for the house front orientation</div>
+            <div class="helper">Select compass direction your front door is facing.</div>
           </div>
         </div>
         <div class="row">
@@ -801,7 +801,7 @@ const Xf = qf(On), jn = class jn extends be {
           <ha-selector
             .hass=${this._hass}
             .selector=${{ entity: { domain: ["sensor", "number", "input_number"] } }}
-            .value=${Jt}
+            .value=${Qt}
             @value-changed=${(N) => {
       var X;
       const D = (X = N.detail) == null ? void 0 : X.value;
@@ -813,7 +813,7 @@ const Xf = qf(On), jn = class jn extends be {
           <div class="switch-row">
             <span>Enable power label</span>
             <ha-switch
-              .checked=${Q ?? !1}
+              .checked=${J ?? !1}
               @change=${(N) => {
       var X;
       const D = !!((X = N.target) != null && X.checked);
@@ -983,7 +983,7 @@ const qn = class qn extends be {
           return;
         }
       } else if (this._manualRotateAxis === "v") {
-        const J = Number(this._manualRotateBaseVDeg ?? 35), q = Number(this._manualRotateVOffsetDeg || 0), O = Math.min(90, Math.max(0, J + q)), F = Math.min(90, Math.max(0, O + V));
+        const Q = Number(this._manualRotateBaseVDeg ?? 35), q = Number(this._manualRotateVOffsetDeg || 0), O = Math.min(90, Math.max(0, Q + q)), F = Math.min(90, Math.max(0, O + V));
         if (this._manualRotateVOffsetDeg = q + (F - O), this._manualRotateAccumDeg = (this._manualRotateAccumDeg || 0) + Math.abs(F - O), F <= 1e-3 || F >= 89.999) {
           this._stopManualRotate();
           return;
@@ -1028,16 +1028,16 @@ const qn = class qn extends be {
   render() {
     if (!this._hass)
       return Lo`<ha-card></ha-card>`;
-    const a = this._config || {}, { cardW: c, cardH: l } = this._getEffectiveCardSize(a), o = Math.min(c, l), w = this.renderSvg(c, l), v = !!(this._autoRotateEnabled || this._manualRotateEnabled && this._manualRotateAxis === "h"), P = !!(this._manualRotateEnabled && this._manualRotateAxis === "v"), k = this._normDeg(Number(this._currentCameraH ?? 0)), W = Math.max(0, Math.min(90, Number(this._currentCameraV ?? 35))), Y = this._normDeg(Number(this._savedCameraH ?? k)), V = Math.max(0, Math.min(90, Number(this._savedCameraV ?? W))), J = this._degDiffAbs(k, Y) > 0.25 || Math.abs(W - V) > 0.25, q = o < 400, O = 43, F = 10, kt = 10, Nt = (rt, yo, mt) => Math.max(yo, Math.min(mt, rt));
-    let Bt = !0, Pt = !0, Jt, Q, tt, Et, to, Tt;
+    const a = this._config || {}, { cardW: c, cardH: l } = this._getEffectiveCardSize(a), o = Math.min(c, l), w = this.renderSvg(c, l), v = !!(this._autoRotateEnabled || this._manualRotateEnabled && this._manualRotateAxis === "h"), P = !!(this._manualRotateEnabled && this._manualRotateAxis === "v"), k = this._normDeg(Number(this._currentCameraH ?? 0)), W = Math.max(0, Math.min(90, Number(this._currentCameraV ?? 35))), Y = this._normDeg(Number(this._savedCameraH ?? k)), V = Math.max(0, Math.min(90, Number(this._savedCameraV ?? W))), Q = this._degDiffAbs(k, Y) > 0.25 || Math.abs(W - V) > 0.25, q = o < 400, O = 43, F = 10, kt = 10, Nt = (rt, yo, mt) => Math.max(yo, Math.min(mt, rt));
+    let Bt = !0, Pt = !0, Qt, J, tt, Et, to, Tt;
     if (q) {
       const mt = F + O + 8 + O + 4, $o = c - (o < 260 ? 4 : 10), zt = Math.max(0, $o - mt), Ut = o < 260 ? 2 : 8, eo = 18;
       if (Bt = o >= 300 && zt >= O * 3 + Ut * 2, Bt) {
         const nt = Nt((zt - O * 3) / 2, Ut, eo), $t = O * 3 + nt * 2, ht = mt + Math.max(0, (zt - $t) / 2);
-        Jt = ht, tt = ht + O + nt, Q = tt + O + nt;
+        Qt = ht, tt = ht + O + nt, J = tt + O + nt;
       } else {
         const nt = Nt(zt - O * 2, Ut, eo), $t = O * 2 + nt, ht = mt + Math.max(0, (zt - $t) / 2);
-        Jt = ht, Q = ht + O + nt;
+        Qt = ht, J = ht + O + nt;
       }
       const bt = l - kt - O, Lt = o < 260 ? 46 : 34, wt = bt - 8, xt = Math.max(0, wt - Lt), jt = o < 260 ? 2 : 6, _o = o < 260 ? 10 : 24;
       if (Pt = o >= 300 && xt >= O * 3 + jt * 2, Pt) {
@@ -1048,12 +1048,12 @@ const qn = class qn extends be {
         Et = ht, to = ht + O + nt;
       }
     }
-    const ot = q && tt != null ? tt + O * 0.5 : void 0, oo = q && Tt != null ? Tt + O * 0.5 : void 0, bo = q && Jt != null ? `left:${Jt.toFixed(1)}px; bottom:${kt}px;` : "", ye = q && Q != null ? `left:${Q.toFixed(1)}px; bottom:${kt}px;` : "", Ho = q && ot != null ? `left:${ot.toFixed(1)}px; bottom:${kt}px;` : "", go = q && Et != null ? `left:${F}px; top:${Et.toFixed(1)}px;` : "", Go = q && to != null ? `left:${F}px; top:${to.toFixed(1)}px;` : "", $e = q && oo != null ? `left:${F}px; top:${oo.toFixed(1)}px;` : "";
+    const ot = q && tt != null ? tt + O * 0.5 : void 0, oo = q && Tt != null ? Tt + O * 0.5 : void 0, bo = q && Qt != null ? `left:${Qt.toFixed(1)}px; bottom:${kt}px;` : "", ye = q && J != null ? `left:${J.toFixed(1)}px; bottom:${kt}px;` : "", Ho = q && ot != null ? `left:${ot.toFixed(1)}px; bottom:${kt}px;` : "", go = q && Et != null ? `left:${F}px; top:${Et.toFixed(1)}px;` : "", Go = q && to != null ? `left:${F}px; top:${to.toFixed(1)}px;` : "", $e = q && oo != null ? `left:${F}px; top:${oo.toFixed(1)}px;` : "";
     return Lo`<div class="wrap">
       <ha-card style="width:${c}px; height:${l}px;">
         <div class="scene">${Xf(w)}</div>
         <button class="cam-btn cam-btn-save" title="Save Camera View" @pointerup=${(rt) => this._saveCurrentCamera(rt)}><ha-icon icon="mdi:content-save"></ha-icon></button>
-        ${J ? Lo`<button class="cam-btn cam-btn-restore" title="Restore Saved View" @pointerup=${(rt) => this._restoreSavedCamera(rt)}>↺</button>` : null}
+        ${Q ? Lo`<button class="cam-btn cam-btn-restore" title="Restore Saved View" @pointerup=${(rt) => this._restoreSavedCamera(rt)}>↺</button>` : null}
         <button class="cam-btn cam-btn-h1 ${v ? "cam-btn-stop" : ""}" style=${bo} @pointerup=${(rt) => this._handleControlTap("h", 1, rt)}>${v ? "■" : "⇠"}</button>
         <button class="cam-btn cam-btn-h2 ${v ? "cam-btn-stop" : ""}" style=${ye} @pointerup=${(rt) => this._handleControlTap("h", -1, rt)}>${v ? "■" : "⇢"}</button>
         <button class="cam-btn cam-btn-v1 ${P ? "cam-btn-stop" : ""}" style=${go} @pointerup=${(rt) => this._handleControlTap("v", 1, rt)}>${P ? "■" : "⇡"}</button>
@@ -1092,17 +1092,17 @@ const qn = class qn extends be {
         return ((n = s == null ? void 0 : s.attributes) == null ? void 0 : n.si_setting) === t;
       });
       return e ? e[0] : void 0;
-    }, J = k(
+    }, Q = k(
       (t) => {
         var e, s;
         return ((e = t == null ? void 0 : t.attributes) == null ? void 0 : e.sun_azimuth) != null && ((s = t == null ? void 0 : t.attributes) == null ? void 0 : s.sun_elevation) != null;
       }
-    ), q = J ? J[1].attributes : null, O = k(
+    ), q = Q ? Q[1].attributes : null, O = k(
       (t) => {
         var e, s, n;
         return ((e = t == null ? void 0 : t.attributes) == null ? void 0 : e.roof_direction) != null || ((s = t == null ? void 0 : t.attributes) == null ? void 0 : s.ceiling_tilt) != null || ((n = t == null ? void 0 : t.attributes) == null ? void 0 : n.house_angle) != null;
       }
-    ), F = O ? O[1].attributes : null, kt = !!(F != null && F.force_sun_fallback), Nt = Number(a ?? o.cardWidth ?? 450), Bt = Number(c ?? o.cardHeight ?? 450), Pt = Nt, Jt = Bt, Q = Pt, tt = Jt, Et = Q, to = tt, Tt = Q * 0.1, ot = o.floorScale ?? 2.6, oo = Q * 0.5, bo = tt * 0.4, ye = o.floorColor ?? "#2f2f2f", Ho = Number(o.floorCornerRadius ?? 26), go = Number(o.floorThicknessPx ?? 7), Go = o.floorThicknessColor ?? "rgba(150,106,64,0.9)", $e = o.floorTopStrokeColor ?? "rgba(72,112,56,0.8)", rt = Number(o.floorTopStrokeWidth ?? 1.4), yo = o.floorGrassEnabled ?? !0, mt = Number(o.floorGrassOpacity ?? 0.3), $o = o.floorGrassColorA ?? "rgb(136,186,88)", zt = o.floorGrassColorB ?? "rgb(96,150,62)", Ut = o.rotationHEntity ?? Y("h") ?? "input_number.cube_rotation_h", eo = o.rotationVEntity ?? Y("v") ?? "input_number.cube_rotation_v";
+    ), F = O ? O[1].attributes : null, kt = !!(F != null && F.force_sun_fallback), Nt = Number(a ?? o.cardWidth ?? 450), Bt = Number(c ?? o.cardHeight ?? 450), Pt = Nt, Qt = Bt, J = Pt, tt = Qt, Et = J, to = tt, Tt = J * 0.1, ot = o.floorScale ?? 2.6, oo = J * 0.5, bo = tt * 0.4, ye = o.floorColor ?? "#2f2f2f", Ho = Number(o.floorCornerRadius ?? 26), go = Number(o.floorThicknessPx ?? 7), Go = o.floorThicknessColor ?? "rgba(150,106,64,0.9)", $e = o.floorTopStrokeColor ?? "rgba(72,112,56,0.8)", rt = Number(o.floorTopStrokeWidth ?? 1.4), yo = o.floorGrassEnabled ?? !0, mt = Number(o.floorGrassOpacity ?? 0.3), $o = o.floorGrassColorA ?? "rgb(136,186,88)", zt = o.floorGrassColorB ?? "rgb(96,150,62)", Ut = o.rotationHEntity ?? Y("h") ?? "input_number.cube_rotation_h", eo = o.rotationVEntity ?? Y("v") ?? "input_number.cube_rotation_v";
     this._rotationHEntity = Ut, this._rotationVEntity = eo;
     const bt = o.preferIntegrationSettings ?? !0, Lt = o.houseAngleEntity ?? null;
     let wt = Number(o.houseAngle ?? 0);
@@ -1128,15 +1128,15 @@ const qn = class qn extends be {
     Yo && l.states[Yo] ? no = Number(((Hr = l.states[Yo]) == null ? void 0 : Hr.state) ?? no) : (bt || o.roofTiltDeg == null) && (F == null ? void 0 : F.ceiling_tilt) != null && (no = Number(F.ceiling_tilt ?? no)), Xo && l.states[Xo] ? H = String(((Gr = l.states[Xo]) == null ? void 0 : Gr.state) ?? H) : (bt || o.roofTiltFace == null) && (F == null ? void 0 : F.roof_direction) != null && (H = String(F.roof_direction));
     const So = o.houseStyleV2 ?? !0, Rt = o.flatRoofEnabled ?? !0, Rs = Number(o.flatRoofOverhang ?? 0.15), Ms = Number(o.flatRoofThickness ?? 0.12), Cs = Number(o.flatRoofLift ?? 0), xe = o.flatRoofTopColor ?? "#e6e8ee";
     o.flatRoofEdgeColor;
-    const Re = o.flatRoofSideColor ?? "#9ea4af", Me = Number(o.flatRoofSideShade ?? 0.4), Ce = Number(o.flatRoofTopOpacity ?? 1), Zo = Number(o.flatRoofEdgeOpacity ?? 1), ke = Number(o.flatRoofTopDepthBias ?? 0.06), Ne = Number(o.flatRoofSideDepthBias ?? 0.025), ks = Number(o.flatRoofSkirtDepthBias ?? 0.02), Ns = o.wallWindowsEnabled ?? !0, Es = o.wallWindowFrameColor ?? "rgba(221,228,236,0.98)", Ts = o.wallWindowGlassColor ?? "rgba(110,178,212,0.68)", Fs = o.wallWindowStrokeColor ?? "rgba(62,105,130,0.65)", Ee = Number(o.wallWindowStrokeWidth ?? 1), As = o.roofPanelsEnabled ?? So, Ds = o.roofPanelColor ?? "#2d3f7b", Te = o.roofPanelGridColor ?? "rgba(214,230,255,0.65)", Bs = o.roofPanelBorderColor ?? "rgba(185,204,234,0.85)", Ps = Number(o.roofPanelBorderWidth ?? 0.9), Ko = Math.max(1, Math.round(Number(o.roofPanelsCols ?? 3))), zs = M(Number(o.roofPanelsWidthFrac ?? 0.9), 0.4, 0.98), Ls = M(Number(o.roofPanelsGapFrac ?? 0.025), 0, 0.08), Fe = M(Number(o.roofPanelsT0 ?? 0.05), 0, 0.95), Ae = M(Number(o.roofPanelsT1 ?? 0.26), 0.01, 0.98), De = Math.max(1, Math.round(Number(o.roofPanelGridCols ?? 5))), Be = Math.max(1, Math.round(Number(o.roofPanelGridRows ?? 3))), Pe = o.backTreeEnabled ?? !0, wo = Number(o.backTreeX ?? -2.2), xo = Number(o.backTreeZ ?? -2.2), ze = Number(o.backTreeScale ?? 1), io = o.backTreeLeafColor ?? "#9bc94b", ro = o.backTreeTrunkColor ?? "#6f4b2a", Le = o.backTreeShadowEnabled ?? So, Ws = Number(o.backTreeShadowOpacity ?? 0.35), Os = Number(o.backTreeShadowBlur ?? 1.1), Is = Number(o.backTreeShadowLength ?? 0.015), Vs = o.plinthBandEnabled ?? So, N = Number(o.plinthBandHeight ?? 0.06), D = Number(o.plinthBandMix ?? 0.62), X = o.patioStepEnabled ?? So, Hs = Number(o.patioStepDepth ?? 0.24), Gs = Number(o.patioStepWidth ?? 1.1), Sc = Number(o.patioStepInset ?? 0.02), wc = o.patioStepColor ?? "rgba(226,230,235,0.75)", Yn = o.patioGridColor ?? "rgba(164,170,182,0.8)", Xn = Number(o.patioGridWidth ?? 1), xa = o.shadowEnabled ?? !0, xc = Number(o.shadowOpacity ?? 0.35), Rc = Number(o.shadowBlur ?? 4), Mc = Number(o.shadowContactOpacity ?? 0.12), Cc = Number(o.shadowContactBlur ?? 2.5), Qo = o.shadowColor ?? "#000000", Zn = Number(o.shadowClipInset ?? 0.02), Ra = o.baseAnchorShadowEnabled ?? !0, kc = Number(o.baseAnchorShadowOpacity ?? 0.65), Nc = Number(o.baseAnchorShadowBlur ?? 0.2), Ec = Number(o.baseAnchorShadowSpread ?? 0.05), Tc = o.baseAnchorShadowColor ?? "#000000", Ma = o.sunlightEnabled ?? !0, Ca = o.sunlightColor ?? [255, 225, 160], Kn = Number(o.sunlightOpacity ?? 0.7), Fc = Number(o.sunlightSpread ?? 0.7), Ac = Number(o.sunBeamStaticOpacity ?? 0.07), Dc = Number(o.sunBeamStaticWidth ?? 1.6), ka = o.sunBeamFlowEnabled ?? !0, Bc = o.sunBeamFlowColor ?? "rgba(255,200,50,0.85)", Pc = Number(o.sunBeamFlowOpacity ?? 0.55), zc = Number(o.sunBeamFlowWidthScale ?? 0.6), Na = Number(o.sunBeamFlowDash ?? 8), Ea = Number(o.sunBeamFlowGap ?? 50), Lc = Number(o.sunBeamFlowDuration ?? 2.5), Wc = Number(o.sunBeamFlowPhaseStep ?? 0.1), Oc = Number(o.sunBeamDepthScaleBoost ?? 1), Ic = Number(o.sunBeamDepthScaleMin ?? 0.55), Vc = Number(o.sunBeamDepthScaleMax ?? 1.2), Hc = o.sunRayAnimEnabled ?? !0, Ta = Number(o.sunRayAnimDurationMin ?? 1.8), Fa = Number(o.sunRayAnimDurationMax ?? 3), Gc = Number(o.sunRayAnimScaleMin ?? 0.5), Uc = Number(o.sunRayAnimScaleMax ?? 0.75), jc = Number(o.sunRayAnimOpacityMin ?? 0.45);
+    const Re = o.flatRoofSideColor ?? "#9ea4af", Me = Number(o.flatRoofSideShade ?? 0.4), Ce = Number(o.flatRoofTopOpacity ?? 1), Zo = Number(o.flatRoofEdgeOpacity ?? 1), ke = Number(o.flatRoofTopDepthBias ?? 0.06), Ne = Number(o.flatRoofSideDepthBias ?? 0.025), ks = Number(o.flatRoofSkirtDepthBias ?? 0.02), Ns = o.wallWindowsEnabled ?? !0, Es = o.wallWindowFrameColor ?? "rgba(221,228,236,0.98)", Ts = o.wallWindowGlassColor ?? "rgba(110,178,212,0.68)", Fs = o.wallWindowStrokeColor ?? "rgba(62,105,130,0.65)", Ee = Number(o.wallWindowStrokeWidth ?? 1), As = o.roofPanelsEnabled ?? So, Ds = o.roofPanelColor ?? "#2d3f7b", Te = o.roofPanelGridColor ?? "rgba(214,230,255,0.65)", Bs = o.roofPanelBorderColor ?? "rgba(185,204,234,0.85)", Ps = Number(o.roofPanelBorderWidth ?? 0.9), Ko = Math.max(1, Math.round(Number(o.roofPanelsCols ?? 3))), zs = M(Number(o.roofPanelsWidthFrac ?? 0.9), 0.4, 0.98), Ls = M(Number(o.roofPanelsGapFrac ?? 0.025), 0, 0.08), Fe = M(Number(o.roofPanelsT0 ?? 0.05), 0, 0.95), Ae = M(Number(o.roofPanelsT1 ?? 0.26), 0.01, 0.98), De = Math.max(1, Math.round(Number(o.roofPanelGridCols ?? 5))), Be = Math.max(1, Math.round(Number(o.roofPanelGridRows ?? 3))), Pe = o.backTreeEnabled ?? !0, wo = Number(o.backTreeX ?? -2.2), xo = Number(o.backTreeZ ?? -2.2), ze = Number(o.backTreeScale ?? 1), io = o.backTreeLeafColor ?? "#9bc94b", ro = o.backTreeTrunkColor ?? "#6f4b2a", Le = o.backTreeShadowEnabled ?? So, Ws = Number(o.backTreeShadowOpacity ?? 0.35), Os = Number(o.backTreeShadowBlur ?? 1.1), Is = Number(o.backTreeShadowLength ?? 0.015), Vs = o.plinthBandEnabled ?? So, N = Number(o.plinthBandHeight ?? 0.06), D = Number(o.plinthBandMix ?? 0.62), X = o.patioStepEnabled ?? So, Hs = Number(o.patioStepDepth ?? 0.24), Gs = Number(o.patioStepWidth ?? 1.1), Sc = Number(o.patioStepInset ?? 0.02), wc = o.patioStepColor ?? "rgba(226,230,235,0.75)", Yn = o.patioGridColor ?? "rgba(164,170,182,0.8)", Xn = Number(o.patioGridWidth ?? 1), xa = o.shadowEnabled ?? !0, xc = Number(o.shadowOpacity ?? 0.35), Rc = Number(o.shadowBlur ?? 4), Mc = Number(o.shadowContactOpacity ?? 0.12), Cc = Number(o.shadowContactBlur ?? 2.5), Jo = o.shadowColor ?? "#000000", Zn = Number(o.shadowClipInset ?? 0.02), Ra = o.baseAnchorShadowEnabled ?? !0, kc = Number(o.baseAnchorShadowOpacity ?? 0.65), Nc = Number(o.baseAnchorShadowBlur ?? 0.2), Ec = Number(o.baseAnchorShadowSpread ?? 0.05), Tc = o.baseAnchorShadowColor ?? "#000000", Ma = o.sunlightEnabled ?? !0, Ca = o.sunlightColor ?? [255, 225, 160], Kn = Number(o.sunlightOpacity ?? 0.7), Fc = Number(o.sunlightSpread ?? 0.7), Ac = Number(o.sunBeamStaticOpacity ?? 0.07), Dc = Number(o.sunBeamStaticWidth ?? 1.6), ka = o.sunBeamFlowEnabled ?? !0, Bc = o.sunBeamFlowColor ?? "rgba(255,200,50,0.85)", Pc = Number(o.sunBeamFlowOpacity ?? 0.55), zc = Number(o.sunBeamFlowWidthScale ?? 0.6), Na = Number(o.sunBeamFlowDash ?? 8), Ea = Number(o.sunBeamFlowGap ?? 50), Lc = Number(o.sunBeamFlowDuration ?? 2.5), Wc = Number(o.sunBeamFlowPhaseStep ?? 0.1), Oc = Number(o.sunBeamDepthScaleBoost ?? 1), Ic = Number(o.sunBeamDepthScaleMin ?? 0.55), Vc = Number(o.sunBeamDepthScaleMax ?? 1.2), Hc = o.sunRayAnimEnabled ?? !0, Ta = Number(o.sunRayAnimDurationMin ?? 1.8), Fa = Number(o.sunRayAnimDurationMax ?? 3), Gc = Number(o.sunRayAnimScaleMin ?? 0.5), Uc = Number(o.sunRayAnimScaleMax ?? 0.75), jc = Number(o.sunRayAnimOpacityMin ?? 0.45);
     Number(o.sunRayAnimOpacityMax ?? 0.85);
-    const Qn = o.sunRayAnimColorA ?? "rgb(255,240,110)";
+    const Jn = o.sunRayAnimColorA ?? "rgb(255,240,110)";
     o.sunRayAnimColorB;
-    const We = o.skyCloudsEnabled ?? !0, Jn = Number(o.skyCloudOpacity ?? 0.34), qc = Number(o.skyCloudBlur ?? 3.3), Aa = Number(o.skyCloudScale ?? 1.5), Da = Number(o.skyCloudSpeed ?? 1), Yc = Number(o.skyCloudHeight ?? 0.5);
+    const We = o.skyCloudsEnabled ?? !0, Qn = Number(o.skyCloudOpacity ?? 0.34), qc = Number(o.skyCloudBlur ?? 3.3), Aa = Number(o.skyCloudScale ?? 1.5), Da = Number(o.skyCloudSpeed ?? 1), Yc = Number(o.skyCloudHeight ?? 0.5);
     Number(o.wallBottomMix ?? 0.01), Number(o.wallMidMix ?? 0.7), Number(o.wallTopMix ?? 1.3);
-    const Xc = o.facadeSunDimmingEnabled ?? !0, Zc = Number(o.facadeSunMinFactor ?? 0.2), Kc = Number(o.facadeSunNoDimAtPct ?? 90), Qc = Number(o.facadeSunCurve ?? 8), Jc = Number(o.ceilingDarkMix ?? 0.1), tl = Number(o.ceilingLightMix ?? 1.4), ti = o.horizonEnabled ?? !0, ol = Number(o.horizonBase ?? 0.55), el = Number(o.horizonTiltStrength ?? 0.65), oi = Number(o.horizonBand ?? 0.15), sl = o.horizonTopColor ?? [120, 170, 220], al = o.horizonBandColor ?? [255, 210, 150], nl = o.horizonBottomColor ?? [70, 80, 95], il = Number(o.skyTwilightRangeDeg ?? 6), rl = o.horizonNightTopColor ?? [12, 20, 42], cl = o.horizonNightBandColor ?? [32, 44, 82], ll = o.horizonNightBottomColor ?? [6, 10, 22], hl = o.horizonSunriseTopColor ?? [118, 150, 206], ul = o.horizonSunriseBandColor ?? [236, 162, 132], fl = o.horizonSunriseBottomColor ?? [84, 70, 90], dl = o.horizonSunsetTopColor ?? [98, 106, 178], pl = o.horizonSunsetBandColor ?? [255, 122, 90], ml = o.horizonSunsetBottomColor ?? [82, 48, 76], Oe = o.skyStarsEnabled ?? !0, Us = Math.max(0, Math.round(Number(o.skyStarsCount ?? 34))), bl = o.skyStarsTwinkleEnabled ?? !0, gl = Number(o.skyStarsOpacity ?? 0.9), Ba = o.skyMoonEnabled ?? !0, yl = Number(o.skyMoonX ?? 0.86), $l = Number(o.skyMoonY ?? 0.12), _l = Number(o.skyMoonSize ?? 14), vl = Number(o.skyMoonPhase ?? 0.72), Sl = Number(o.skyMoonOpacity ?? 0.92), Ie = o.moonlightEnabled ?? !0, js = o.moonlightColor ?? [178, 208, 255], wl = Number(o.moonlightOpacity ?? 0.22), xl = Number(o.moonlightSpread ?? 0.6), Rl = Number(o.moonlightWashOpacity ?? 0.08), Ml = Number(o.moonShadowElevationDeg ?? 18), Cl = Number(o.moonShadowYawDeg ?? -45), kl = Number(o.shadowSunMoonBlendDeg ?? 3), ei = o.vignetteEnabled ?? !0, Nl = Number(o.vignetteOpacity ?? 0.35), El = Number(o.vignetteRadius ?? 0.65), Tl = Number(o.vignetteInner ?? 0.85), Pa = o.vignetteColor ?? [0, 0, 0], Fl = o.roofBackEnabled ?? !0, si = Number(o.roofBackMix ?? 0.7), Al = Number(o.roofBackOpacity ?? 1);
+    const Xc = o.facadeSunDimmingEnabled ?? !0, Zc = Number(o.facadeSunMinFactor ?? 0.2), Kc = Number(o.facadeSunNoDimAtPct ?? 90), Jc = Number(o.facadeSunCurve ?? 8), Qc = Number(o.ceilingDarkMix ?? 0.1), tl = Number(o.ceilingLightMix ?? 1.4), ti = o.horizonEnabled ?? !0, ol = Number(o.horizonBase ?? 0.55), el = Number(o.horizonTiltStrength ?? 0.65), oi = Number(o.horizonBand ?? 0.15), sl = o.horizonTopColor ?? [120, 170, 220], al = o.horizonBandColor ?? [255, 210, 150], nl = o.horizonBottomColor ?? [70, 80, 95], il = Number(o.skyTwilightRangeDeg ?? 6), rl = o.horizonNightTopColor ?? [12, 20, 42], cl = o.horizonNightBandColor ?? [32, 44, 82], ll = o.horizonNightBottomColor ?? [6, 10, 22], hl = o.horizonSunriseTopColor ?? [118, 150, 206], ul = o.horizonSunriseBandColor ?? [236, 162, 132], fl = o.horizonSunriseBottomColor ?? [84, 70, 90], dl = o.horizonSunsetTopColor ?? [98, 106, 178], pl = o.horizonSunsetBandColor ?? [255, 122, 90], ml = o.horizonSunsetBottomColor ?? [82, 48, 76], Oe = o.skyStarsEnabled ?? !0, Us = Math.max(0, Math.round(Number(o.skyStarsCount ?? 34))), bl = o.skyStarsTwinkleEnabled ?? !0, gl = Number(o.skyStarsOpacity ?? 0.9), Ba = o.skyMoonEnabled ?? !0, yl = Number(o.skyMoonX ?? 0.86), $l = Number(o.skyMoonY ?? 0.12), _l = Number(o.skyMoonSize ?? 14), vl = Number(o.skyMoonPhase ?? 0.72), Sl = Number(o.skyMoonOpacity ?? 0.92), Ie = o.moonlightEnabled ?? !0, js = o.moonlightColor ?? [178, 208, 255], wl = Number(o.moonlightOpacity ?? 0.22), xl = Number(o.moonlightSpread ?? 0.6), Rl = Number(o.moonlightWashOpacity ?? 0.08), Ml = Number(o.moonShadowElevationDeg ?? 18), Cl = Number(o.moonShadowYawDeg ?? -45), kl = Number(o.shadowSunMoonBlendDeg ?? 3), ei = o.vignetteEnabled ?? !0, Nl = Number(o.vignetteOpacity ?? 0.35), El = Number(o.vignetteRadius ?? 0.65), Tl = Number(o.vignetteInner ?? 0.85), Pa = o.vignetteColor ?? [0, 0, 0], Fl = o.roofBackEnabled ?? !0, si = Number(o.roofBackMix ?? 0.7), Al = Number(o.roofBackOpacity ?? 1);
     Number(o.roofGradientDarkMix ?? 0.125), Number(o.roofGradientLightMix ?? 1.25);
-    const Dl = o.roofSidesEnabled ?? !0, Bl = Number(o.roofSideMix ?? 0.45), za = Number(o.roofSideOpacity ?? 1), ai = Number(o.roofSideDepthBias ?? 0.012), Pl = o.roofCapEnabled ?? !0, zl = Number(o.floorCompassStroke ?? 4), Ll = Number(o.floorCompassRingBand ?? 0.09), Wl = o.floorCompassRingMiddleColor ?? "rgba(255,255,255,0.9)", ni = o.floorCompassRingSideColor ?? "rgba(210,140,140,0.345)", ii = Number(o.floorCompassRingSideWidth ?? 3), ri = o.floorCompassTicksEnabled ?? !0, Ol = o.floorCompassTickColor ?? "rgba(0,0,0,0.75)", Il = Number(o.floorCompassTickWidth ?? 1), Vl = Number(o.floorCompassTickMajorWidth ?? 4), Hl = Number(o.floorCompassTickLength ?? -0.1), Gl = Number(o.floorCompassTickMajorLength ?? -0.2), Ul = Number(o.floorCompassLabelSize ?? 20), jl = Number(o.floorCompassLabelInset ?? -0.25), ql = Number(o.floorCompassLabelScaleBoost ?? 1.2), Yl = Number(o.floorCompassLabelScaleMin ?? 0.6), Xl = Number(o.floorCompassLabelScaleMax ?? 2), Zl = Number(o.floorCompassLabelStroke ?? 1), ci = Number(o.arrowScaleBoost ?? 0.6), li = Number(o.floorPointerScaleMin ?? 0.05), hi = Number(o.floorPointerScaleMax ?? 1), ui = Number(o.floorPointerBaseWidth ?? 3.4), Kl = Number(o.floorPointerBaseHead ?? 18), La = o.floorPointerColor ?? "gold", fi = o.floorPointerShadowEnabled ?? !0, Wa = Number(o.floorPointerShadowOpacity ?? 0.8), Ql = Number(o.floorPointerShadowBlur ?? 1.1), Jl = Number(o.floorPointerShadowOffset ?? 2.9), th = Number(o.floorWallLabelSize ?? 12), qs = Number(o.floorWallLabelOffset ?? 0.55), oh = Number(o.floorWallLabelScaleBoost ?? 1.2), eh = Number(o.floorWallLabelScaleMin ?? 0.5), sh = Number(o.floorWallLabelScaleMax ?? 1.8), ah = Number(o.floorWallLabelScreenLift ?? 6), nh = o.floorWallLabelColor ?? "rgba(255,255,255,0.9)", ih = o.floorWallLabelStroke ?? "rgba(0,0,0,0.6)", rh = Number(o.floorWallLabelStrokeWidth ?? 0.5), di = Number(o.wallLabelVisibleThreshold ?? -0.05), ch = Number(o.wallPctVisibleThreshold ?? -0.215), lh = Number(o.wallPctAreaThreshold ?? 120), hh = Number(o.wallPctVerticalPos ?? 0.66), pi = o.surfaceLabelEnabled ?? !0, Oa = Number(o.surfaceLabelSize ?? 12), uh = Number(o.surfaceLabelScaleBoost ?? 1.5), fh = Number(o.surfaceLabelScaleMin ?? 0.6), dh = Number(o.surfaceLabelScaleMax ?? 1.6), mi = o.surfaceLabelColor ?? "rgba(255,213,0,.95)", bi = o.surfaceLabelStroke ?? "rgba(0,0,0,0.5)", Ia = Number(o.surfaceLabelStrokeWidth ?? 0.5), Va = Number(o.surfaceLabelOffset ?? 0.03), ph = Number(o.roofPctLabelScale ?? 1.18), mh = Number(o.roofPowerLabelScale ?? 0.7), bh = o.roofPowerLabelColor ?? "rgba(255,255,255,0.9)", gh = o.frontDoorEnabled ?? !0, Ha = Number(o.frontDoorWidth ?? 0.55), gi = Number(o.frontDoorHeight ?? 1.1), yh = Number(o.frontDoorBottomInset ?? 0.05), $h = Number(o.frontDoorOffset ?? 0.01), _h = o.frontDoorColor ?? "rgba(0,0,0,0.55)", yi = Number(o.frontDoorOpacity ?? 0.9), vh = o.frontDoorFrameColor ?? "rgba(219,225,232,0.98)", Sh = o.frontDoorKnobColor ?? "rgba(236,198,111,0.95)", _t = o.faceColors ?? {
+    const Dl = o.roofSidesEnabled ?? !0, Bl = Number(o.roofSideMix ?? 0.45), za = Number(o.roofSideOpacity ?? 1), ai = Number(o.roofSideDepthBias ?? 0.012), Pl = o.roofCapEnabled ?? !0, zl = Number(o.floorCompassStroke ?? 4), Ll = Number(o.floorCompassRingBand ?? 0.09), Wl = o.floorCompassRingMiddleColor ?? "rgba(255,255,255,0.9)", ni = o.floorCompassRingSideColor ?? "rgba(210,140,140,0.345)", ii = Number(o.floorCompassRingSideWidth ?? 3), ri = o.floorCompassTicksEnabled ?? !0, Ol = o.floorCompassTickColor ?? "rgba(0,0,0,0.75)", Il = Number(o.floorCompassTickWidth ?? 1), Vl = Number(o.floorCompassTickMajorWidth ?? 4), Hl = Number(o.floorCompassTickLength ?? -0.1), Gl = Number(o.floorCompassTickMajorLength ?? -0.2), Ul = Number(o.floorCompassLabelSize ?? 20), jl = Number(o.floorCompassLabelInset ?? -0.25), ql = Number(o.floorCompassLabelScaleBoost ?? 1.2), Yl = Number(o.floorCompassLabelScaleMin ?? 0.6), Xl = Number(o.floorCompassLabelScaleMax ?? 2), Zl = Number(o.floorCompassLabelStroke ?? 1), ci = Number(o.arrowScaleBoost ?? 0.6), li = Number(o.floorPointerScaleMin ?? 0.05), hi = Number(o.floorPointerScaleMax ?? 1), ui = Number(o.floorPointerBaseWidth ?? 3.4), Kl = Number(o.floorPointerBaseHead ?? 18), La = o.floorPointerColor ?? "gold", fi = o.floorPointerShadowEnabled ?? !0, Wa = Number(o.floorPointerShadowOpacity ?? 0.8), Jl = Number(o.floorPointerShadowBlur ?? 1.1), Ql = Number(o.floorPointerShadowOffset ?? 2.9), th = Number(o.floorWallLabelSize ?? 12), qs = Number(o.floorWallLabelOffset ?? 0.55), oh = Number(o.floorWallLabelScaleBoost ?? 1.2), eh = Number(o.floorWallLabelScaleMin ?? 0.5), sh = Number(o.floorWallLabelScaleMax ?? 1.8), ah = Number(o.floorWallLabelScreenLift ?? 6), nh = o.floorWallLabelColor ?? "rgba(255,255,255,0.9)", ih = o.floorWallLabelStroke ?? "rgba(0,0,0,0.6)", rh = Number(o.floorWallLabelStrokeWidth ?? 0.5), di = Number(o.wallLabelVisibleThreshold ?? -0.05), ch = Number(o.wallPctVisibleThreshold ?? -0.215), lh = Number(o.wallPctAreaThreshold ?? 120), hh = Number(o.wallPctVerticalPos ?? 0.66), pi = o.surfaceLabelEnabled ?? !0, Oa = Number(o.surfaceLabelSize ?? 12), uh = Number(o.surfaceLabelScaleBoost ?? 1.5), fh = Number(o.surfaceLabelScaleMin ?? 0.6), dh = Number(o.surfaceLabelScaleMax ?? 1.6), mi = o.surfaceLabelColor ?? "rgba(255,213,0,.95)", bi = o.surfaceLabelStroke ?? "rgba(0,0,0,0.5)", Ia = Number(o.surfaceLabelStrokeWidth ?? 0.5), Va = Number(o.surfaceLabelOffset ?? 0.03), ph = Number(o.roofPctLabelScale ?? 1.18), mh = Number(o.roofPowerLabelScale ?? 0.7), bh = o.roofPowerLabelColor ?? "rgba(255,255,255,0.9)", gh = o.frontDoorEnabled ?? !0, Ha = Number(o.frontDoorWidth ?? 0.55), gi = Number(o.frontDoorHeight ?? 1.1), yh = Number(o.frontDoorBottomInset ?? 0.05), $h = Number(o.frontDoorOffset ?? 0.01), _h = o.frontDoorColor ?? "rgba(0,0,0,0.55)", yi = Number(o.frontDoorOpacity ?? 0.9), vh = o.frontDoorFrameColor ?? "rgba(219,225,232,0.98)", Sh = o.frontDoorKnobColor ?? "rgba(236,198,111,0.95)", _t = o.faceColors ?? {
       front: "#faf5f5ff",
       right: "#d8d2d2ff",
       top: "#13a057",
@@ -1148,19 +1148,19 @@ const qn = class qn extends be {
     (bt && Number.isFinite(Ys) || (o.autoRotateSpeed === void 0 || o.autoRotateSpeed === null || o.autoRotateSpeed === "") && Number.isFinite(Ys)) && (Ve = Ys);
     const Mt = Number(o.autoRotateIntervalMs ?? 50), Ga = Number(o.autoRotateTapDelayMs ?? 250), xh = o.autoRotateStopOnFullTurn ?? !0, Ua = Number(o.autoRotateTurnCount ?? 1), Rh = o.autoRotateShowFps ?? !0, Mh = Number(o.autoRotateFpsWindowMs ?? 1e3), Ch = o.autoRotateAdaptiveEnabled ?? !0, $i = Number(o.autoRotateAdaptiveMaxIntervalMs ?? 1e3), kh = Number(o.autoRotateAdaptiveStepMs ?? 10), Nh = Number(o.autoRotateAdaptiveCheckMs ?? 1e3), Eh = Number(o.autoRotateAdaptiveFpsThreshold ?? 0.8), Th = Number(o.autoRotateCalibrateMs ?? 2e3), Fh = Number(o.autoRotateCalibrateFactor ?? 0.85), _i = o.cssFpsDebugEnabled ?? !1, Ah = Number(o.cssFpsWindowMs ?? 1e3), Dh = Number(o.cssFpsUiUpdateMs ?? 500), Xs = o.cssFpsAutoLimitEnabled ?? !0, Bh = Number(o.cssFpsCalibrateMs ?? 2e3), Ph = Number(o.cssFpsLimitThreshold ?? 20), zh = Number(o.cssFpsLimitFactor ?? 0.5), Lh = Number(o.cssFpsLimitMin ?? 1), Wh = Number(o.cssFpsLimitMax ?? 30), Oh = o.cssFpsLimitTextEnabled ?? !0, vi = Number(o.cssFpsRotationStartBoost ?? 2);
     this._autoRotateSpeed = Ve, this._autoRotateIntervalMs = Mt, this._autoRotateTurnCount = Ua, this._autoRotateEnabled === void 0 && (this._autoRotateEnabled = wh), this._autoRotateOffsetDeg === void 0 && (this._autoRotateOffsetDeg = 0), this._autoRotateIntervalMsDynamic === void 0 && (this._autoRotateIntervalMsDynamic = Mt), this._autoRotateFpsSamples === void 0 && (this._autoRotateFpsSamples = []), this._autoRotateFps === void 0 && (this._autoRotateFps = 0), this._autoRotateCalibrated === void 0 && (this._autoRotateCalibrated = !1), this._autoRotateAccumDeg === void 0 && (this._autoRotateAccumDeg = 0), this._autoRotateTargetDeg === void 0 && (this._autoRotateTargetDeg = 0), this._cssFps === void 0 && (this._cssFps = 0), this._cssFpsLimit === void 0 && (this._cssFpsLimit = 0), this._cssPerfLimited === void 0 && (this._cssPerfLimited = !1), this._cssFpsAutoCalibrated === void 0 && (this._cssFpsAutoCalibrated = !1), this._cssFpsMeasured === void 0 && (this._cssFpsMeasured = 0), this._cssRecalibrateRequested === void 0 && (this._cssRecalibrateRequested = !1);
-    const Jo = () => typeof performance < "u" && performance.now ? performance.now() : Date.now(), Si = Jo() / 1e3, Zs = (t, e = 0) => {
+    const Qo = () => typeof performance < "u" && performance.now ? performance.now() : Date.now(), Si = Qo() / 1e3, Zs = (t, e = 0) => {
       const s = Math.max(1e-3, t);
       return -(((Si + e) % s + s) % s);
     }, Ks = (t, e = 0) => {
       const s = Math.max(1e-3, t);
       return -((e % s + s) % s);
-    }, Qs = () => {
+    }, Js = () => {
       const t = Number(this._cssFpsLimit || 0);
       if (!(Xs && !!this._cssPerfLimited && t > 0)) return Mt;
       const s = Math.max(1, Number.isFinite(vi) ? vi : 2), n = Math.max(1, Math.round(t * s));
       return Math.max(Mt, Math.round(1e3 / n));
     };
-    this._cssGlobalTimeSec === void 0 && (this._cssGlobalTimeSec = Jo() / 1e3);
+    this._cssGlobalTimeSec === void 0 && (this._cssGlobalTimeSec = Qo() / 1e3);
     const wi = () => {
       this._cssGlobalTickTimer && (clearInterval(this._cssGlobalTickTimer), this._cssGlobalTickTimer = null), this._cssGlobalTickFps = 0;
     }, Ih = (t) => {
@@ -1169,7 +1169,7 @@ const qn = class qn extends be {
       wi();
       const s = Math.max(1, Math.round(1e3 / e)), n = () => {
         var u, d;
-        const i = Jo() / 1e3, r = Math.floor(i * e) / e;
+        const i = Qo() / 1e3, r = Math.floor(i * e) / e;
         this._cssGlobalTimeSec = r;
         const h = (d = (u = this.renderRoot) == null ? void 0 : u.querySelector) == null ? void 0 : d.call(u, "svg.sv-scene");
         h && h.style.setProperty("--sv-global-time", r.toFixed(3));
@@ -1246,7 +1246,7 @@ const qn = class qn extends be {
       if (s > 0) {
         const i = 1e3 / (s * Fh), r = Math.min(
           $i,
-          Math.max(Qs(), Math.round(i))
+          Math.max(Js(), Math.round(i))
         );
         r !== this._autoRotateIntervalMsDynamic && (this._autoRotateIntervalMsDynamic = r, this._autoRotateTimer && (clearInterval(this._autoRotateTimer), this._autoRotateTimer = null));
       }
@@ -1254,8 +1254,8 @@ const qn = class qn extends be {
     }, qa = () => {
       this._autoRotateEnabled && (this._autoRotateLastTick = 0, this._autoRotateAccumDeg = 0, this._autoRotateTargetDeg = 0, this._autoRotateEnabled = !1, this._autoRotateTimer && (clearInterval(this._autoRotateTimer), this._autoRotateTimer = null), this._autoRotateIntervalMsDynamic = Mt, this._autoRotateFpsSamples = [], this._autoRotateFps = 0, this._autoRotateAdaptiveLastCheck = 0, this._autoRotateCalibrated = !1, this._autoRotateCalibrateStart = 0, this._cssRecalibrateRequested = !0, this._updateTimerMS = Date.now(), this.requestUpdate());
     }, Uh = () => {
-      this._autoRotateEnabled || (this._manualRotateEnabled && this._stopManualRotate(), this._autoRotateEnabled = !0, this._autoRotateLastTick = Jo(), this._autoRotateAccumDeg = 0, this._autoRotateTargetDeg = xh && Ua > 0 ? Ua * 360 : 0, this._autoRotateIntervalMsDynamic = Qs(), this._autoRotateFpsSamples = [], this._autoRotateFps = 0, this._autoRotateAdaptiveLastCheck = 0, this._autoRotateCalibrated = !1, this._autoRotateCalibrateStart = 0, this._autoRotateTimer || (this._autoRotateTimer = setInterval(() => {
-        const t = Jo();
+      this._autoRotateEnabled || (this._manualRotateEnabled && this._stopManualRotate(), this._autoRotateEnabled = !0, this._autoRotateLastTick = Qo(), this._autoRotateAccumDeg = 0, this._autoRotateTargetDeg = xh && Ua > 0 ? Ua * 360 : 0, this._autoRotateIntervalMsDynamic = Js(), this._autoRotateFpsSamples = [], this._autoRotateFps = 0, this._autoRotateAdaptiveLastCheck = 0, this._autoRotateCalibrated = !1, this._autoRotateCalibrateStart = 0, this._autoRotateTimer || (this._autoRotateTimer = setInterval(() => {
+        const t = Qo();
         xi(t), Mi(t), Ri(t);
         const e = this._autoRotateLastTick || t, s = Math.max(0, t - e) / 1e3, n = Ve * s;
         if (this._autoRotateOffsetDeg = (this._autoRotateOffsetDeg || 0) + n, this._autoRotateAccumDeg = (this._autoRotateAccumDeg || 0) + n, this._autoRotateLastTick = t, this._autoRotateTargetDeg > 0 && this._autoRotateAccumDeg >= this._autoRotateTargetDeg) {
@@ -1281,9 +1281,9 @@ const qn = class qn extends be {
         this._autoRotateLastTap && Date.now() - this._autoRotateLastTap >= Ga && (this._autoRotateLastTap = 0, (r = this._autoRotateStop) == null || r.call(this));
       }, Ga + 10);
     }, { capture: !1 })), this._autoRotateEnabled) {
-      const t = Qs();
+      const t = Js();
       Number(this._autoRotateIntervalMsDynamic || Mt) < t && (this._autoRotateIntervalMsDynamic = t, this._autoRotateTimer && (clearInterval(this._autoRotateTimer), this._autoRotateTimer = null)), (!this._autoRotateTimer || this._autoRotateTimerMs !== this._autoRotateIntervalMsDynamic) && (this._autoRotateTimer && clearInterval(this._autoRotateTimer), this._autoRotateTimerMs = this._autoRotateIntervalMsDynamic, this._autoRotateTimer = setInterval(() => {
-        const e = Jo();
+        const e = Qo();
         xi(e), Mi(e), Ri(e);
         const s = this._autoRotateLastTick || e, n = Math.max(0, e - s) / 1e3, i = Ve * n;
         if (this._autoRotateOffsetDeg = (this._autoRotateOffsetDeg || 0) + i, this._autoRotateAccumDeg = (this._autoRotateAccumDeg || 0) + i, this._autoRotateLastTick = e, this._autoRotateTargetDeg > 0 && this._autoRotateAccumDeg >= this._autoRotateTargetDeg) {
@@ -1296,14 +1296,14 @@ const qn = class qn extends be {
     _i ? Hh() : Vh();
     const Ci = !!(this._autoRotateEnabled || this._manualRotateEnabled);
     Xs && this._cssRecalibrateRequested && !Ci && (ja(), this._cssFpsAutoCalibrated = !1, this._cssFpsMeasured = 0, this._cssRecalibrateRequested = !1), Xs ? Gh() : (ja(), this._cssFpsAutoCalibrated = !1, this._cssFpsMeasured = 0, this._cssFpsLimit = 0, this._cssPerfLimited = !1, this._cssRecalibrateRequested = !1);
-    const ut = Xs && this._cssPerfLimited && Number(this._cssFpsLimit) > 0, co = ut ? Number(this._cssFpsLimit) : 0, Js = ut && co <= 5, Ya = Hc && !Js, Xa = bl && !(ut && co <= 1), jh = Qs();
+    const ut = Xs && this._cssPerfLimited && Number(this._cssFpsLimit) > 0, co = ut ? Number(this._cssFpsLimit) : 0, Qs = ut && co <= 5, Ya = Hc && !Qs, Xa = bl && !(ut && co <= 1), jh = Js();
     this._rotationIntervalMsFloor = jh;
     const Za = Ci, qh = ut && Za;
     ut && !Za ? Ih(co) : wi();
     const ki = Number(((Ur = l.states[Ut]) == null ? void 0 : Ur.state) || 210), Ni = Number(((jr = l.states[eo]) == null ? void 0 : jr.state) || 35);
     let ta = ki, oa = Ni;
-    const Ka = Number(this._cameraSavedBaseHOverride), Qa = Number(this._cameraSavedBaseVOverride);
-    Number.isFinite(Ka) && (ta = Ka, Math.abs((ki - Ka + 540) % 360 - 180) < 0.25 && (this._cameraSavedBaseHOverride = void 0)), Number.isFinite(Qa) && (oa = Qa, Math.abs(Ni - Qa) < 0.25 && (this._cameraSavedBaseVOverride = void 0)), this._autoRotateCurrentDeg = this._autoRotateOffsetDeg || 0;
+    const Ka = Number(this._cameraSavedBaseHOverride), Ja = Number(this._cameraSavedBaseVOverride);
+    Number.isFinite(Ka) && (ta = Ka, Math.abs((ki - Ka + 540) % 360 - 180) < 0.25 && (this._cameraSavedBaseHOverride = void 0)), Number.isFinite(Ja) && (oa = Ja, Math.abs(Ni - Ja) < 0.25 && (this._cameraSavedBaseVOverride = void 0)), this._autoRotateCurrentDeg = this._autoRotateOffsetDeg || 0;
     const Ei = (ta + (this._autoRotateOffsetDeg || 0)) * Math.PI / 180;
     this._manualRotateBaseVDeg = oa;
     const Yh = Number(this._manualRotateVOffsetDeg || 0), Ro = Math.min(Math.max(oa + Yh, 0), 90);
@@ -1369,7 +1369,7 @@ const qn = class qn extends be {
       const e = Number(t);
       return Number.isFinite(e) ? `${Math.round(e)}%` : "0%";
     }
-    function Ja(t) {
+    function Qa(t) {
       let e = 0;
       for (let s = 0; s < t.length; s++) {
         const n = (s + 1) % t.length;
@@ -1377,9 +1377,9 @@ const qn = class qn extends be {
       }
       return e;
     }
-    function Qh(t, e) {
+    function Jh(t, e) {
       if (!t.length || e.length < 3) return [];
-      const n = Ja(e) > 0, i = (u, d, f) => {
+      const n = Qa(e) > 0, i = (u, d, f) => {
         const p = (f[0] - d[0]) * (u[1] - d[1]) - (f[1] - d[1]) * (u[0] - d[0]);
         return n ? p >= 0 : p <= 0;
       }, r = (u, d, f, p) => {
@@ -1432,7 +1432,7 @@ const qn = class qn extends be {
       }
       return { basis: y, centerScr: r };
     }
-    function Jh(t, e) {
+    function Qh(t, e) {
       const s = t[0][0], n = t[0][1], i = t[1][0], r = t[1][1], h = t[2][0], u = t[2][1], d = e[0][0], f = e[0][1], p = e[1][0], m = e[1][1], b = e[2][0], g = e[2][1], y = s * (r - u) + i * (u - n) + h * (n - r);
       if (Math.abs(y) < 1e-6) return null;
       const x = (d * (r - u) + p * (u - n) + b * (n - r)) / y, E = (f * (r - u) + m * (u - n) + g * (n - r)) / y, T = (d * (h - i) + p * (s - h) + b * (i - s)) / y, B = (f * (h - i) + m * (s - h) + g * (i - s)) / y, z = (d * (i * u - h * r) + p * (h * n - s * u) + b * (s * r - i * n)) / y, I = (f * (i * u - h * r) + m * (h * n - s * u) + g * (s * r - i * n)) / y;
@@ -1543,7 +1543,7 @@ const qn = class qn extends be {
       left: $s
     }, je = (t) => {
       if (!Xc) return 1;
-      const e = M(Zc, 0, 1), s = M(Kc, 1, 100), i = M(Number.isFinite(t) ? t : 0, 0, s) / s, r = Math.max(1e-3, Qc), h = Math.log(1 + r * i) / Math.log(1 + r);
+      const e = M(Zc, 0, 1), s = M(Kc, 1, 100), i = M(Number.isFinite(t) ? t : 0, 0, s) / s, r = Math.max(1e-3, Jc), h = Math.log(1 + r * i) / Math.log(1 + r);
       return e + (1 - e) * h;
     }, lo = {
       front: je(Ue.front),
@@ -1572,7 +1572,7 @@ const qn = class qn extends be {
     const qe = K.map(ft), Hi = qe.map(G), ca = Hi.map(U);
     let nn = Kh(K[0], K[1], K[2]);
     nn[1] < 0 && (nn = nn.map((t) => -t));
-    const Gi = Ja(ca), la = Gi < 0;
+    const Gi = Qa(ca), la = Gi < 0;
     Rt ? this._roofWindingFront = la : this._roofWindingFront === void 0 ? this._roofWindingFront = la : Math.abs(Gi) > 20 && (this._roofWindingFront = la);
     const ho = Rt ? la : this._roofWindingFront;
     let rn = null;
@@ -1740,7 +1740,7 @@ const qn = class qn extends be {
       }).map((i) => U(G(i))).map((i) => i[0] + "," + i[1]).join(" ");
     }
     const uu = Math.min(...ji.map((t) => t[1])), qi = M(uu - 6, tt * 0.32, tt * 0.82);
-    this._skyClipBottom === void 0 || this._skyClipCardW !== Q || this._skyClipCardH !== tt ? (this._skyClipBottom = qi, this._skyClipVertDeg = Ro, this._skyClipCardW = Q, this._skyClipCardH = tt) : Math.abs(Ro - (this._skyClipVertDeg ?? Ro)) > 0.15 && (this._skyClipBottom = qi, this._skyClipVertDeg = Ro);
+    this._skyClipBottom === void 0 || this._skyClipCardW !== J || this._skyClipCardH !== tt ? (this._skyClipBottom = qi, this._skyClipVertDeg = Ro, this._skyClipCardW = J, this._skyClipCardH = tt) : Math.abs(Ro - (this._skyClipVertDeg ?? Ro)) > 0.15 && (this._skyClipBottom = qi, this._skyClipVertDeg = Ro);
     const Ze = Number(this._skyClipBottom), ko = [
       en[0] * qo,
       en[1] * qo,
@@ -1763,7 +1763,7 @@ const qn = class qn extends be {
       t < -0.03 ? ie = -1 : t > 0.03 && (ie = 1);
     }
     this._prevSunEl = et, this._skyTrend = ie;
-    const mn = ie < 0, re = Math.max(1, il), bn = M((et + re) / (2 * re), 0, 1), $u = M(1 - Math.abs(et) / re, 0, 1), gn = Math.pow($u, 0.85), Ke = M((-et + 1.5) / (re + 5), 0, 1), ua = Oe ? M((-et - 1.2) / (re + 3), 0, 1) : 0, uo = Ba ? M((-et + 0.2) / (re + 2), 0, 1) : 0, _u = M(yl, 0.05, 0.95), vu = M($l, 0.05, 0.95), Eo = _u * Q, To = vu * tt, Vt = M(_l, 6, 44), Su = M(vl, 0, 1), ce = M(uo * Sl, 0, 1), wu = M(Ml, 0.5, 89.5), Zi = (Cl + 180) * Math.PI / 180, yn = wu * Math.PI / 180, xu = gt([
+    const mn = ie < 0, re = Math.max(1, il), bn = M((et + re) / (2 * re), 0, 1), $u = M(1 - Math.abs(et) / re, 0, 1), gn = Math.pow($u, 0.85), Ke = M((-et + 1.5) / (re + 5), 0, 1), ua = Oe ? M((-et - 1.2) / (re + 3), 0, 1) : 0, uo = Ba ? M((-et + 0.2) / (re + 2), 0, 1) : 0, _u = M(yl, 0.05, 0.95), vu = M($l, 0.05, 0.95), Eo = _u * J, To = vu * tt, Vt = M(_l, 6, 44), Su = M(vl, 0, 1), ce = M(uo * Sl, 0, 1), wu = M(Ml, 0.5, 89.5), Zi = (Cl + 180) * Math.PI / 180, yn = wu * Math.PI / 180, xu = gt([
       Math.sin(Zi) * Math.cos(yn),
       Math.sin(yn),
       -Math.cos(Zi) * Math.cos(yn)
@@ -1776,17 +1776,17 @@ const qn = class qn extends be {
       const s = e / fa * Xh;
       return [Math.sin(s), Math.cos(s)];
     }), this._ringUnit = le);
-    const Qi = Math.min(Ll, St * 0.3), Ji = St - Qi, Lu = St + Qi;
+    const Ji = Math.min(Ll, St * 0.3), Qi = St - Ji, Lu = St + Ji;
     function _n(t) {
       return le.map(([e, s]) => {
         const n = G([t * e, Z, t * s]), i = U(n);
         return i[0] + "," + i[1];
       });
     }
-    const Wu = _n(Ji), Ou = _n(St), Iu = _n(Lu);
+    const Wu = _n(Qi), Ou = _n(St), Iu = _n(Lu);
     let tr = [];
     ri && (tr = le.map(([t, e], s) => {
-      const n = s % (fa / 4) === 0, i = n ? Gl : Hl, r = Ji, h = r - i, u = U(G([h * t, Z, h * e])), d = U(G([r * t, Z, r * e]));
+      const n = s % (fa / 4) === 0, i = n ? Gl : Hl, r = Qi, h = r - i, u = U(G([h * t, Z, h * e])), d = U(G([r * t, Z, r * e]));
       return { pIn: u, pOut: d, isMajor: n };
     }));
     const Vu = [["N", 0], ["E", Math.PI / 2], ["S", Math.PI], ["W", 3 * Math.PI / 2]], or = St * (1 - jl), Hu = Vu.map(([t, e]) => {
@@ -1803,18 +1803,18 @@ const qn = class qn extends be {
       Sn[t.id] = e[2] < di;
       const s = sn[t.id];
       if (s) {
-        const n = s.indices.map((r) => Yt[r]), i = Math.abs(Ja(n));
+        const n = s.indices.map((r) => Yt[r]), i = Math.abs(Qa(n));
         wn[t.id] = e[2] < ch && i > lh;
       } else
         wn[t.id] = Sn[t.id];
     });
-    let Qe = null;
-    const xn = Math.max(0.1, kl), sr = M((et + xn) / (2 * xn), 0, 1), Rn = Ot[1] > 0.01 ? Ot : gt([Ot[0], 0.01, Ot[2]]), Xu = et > -xn ? 1 : 0, Zu = Ie && uo > 0.03 && Ht[1] > 0.01 ? 1 : 0, ar = sr * Xu, nr = (1 - sr) * Zu, pa = ar + nr, Je = pa > 1e-6 ? ar / pa : 0, he = pa > 1e-6 ? nr / pa : 0, Mn = Je > 0 || he > 0 ? gt([
-      Rn[0] * Je + Ht[0] * he,
-      Rn[1] * Je + Ht[1] * he,
-      Rn[2] * Je + Ht[2] * he
+    let Je = null;
+    const xn = Math.max(0.1, kl), sr = M((et + xn) / (2 * xn), 0, 1), Rn = Ot[1] > 0.01 ? Ot : gt([Ot[0], 0.01, Ot[2]]), Xu = et > -xn ? 1 : 0, Zu = Ie && uo > 0.03 && Ht[1] > 0.01 ? 1 : 0, ar = sr * Xu, nr = (1 - sr) * Zu, pa = ar + nr, Qe = pa > 1e-6 ? ar / pa : 0, he = pa > 1e-6 ? nr / pa : 0, Mn = Qe > 0 || he > 0 ? gt([
+      Rn[0] * Qe + Ht[0] * he,
+      Rn[1] * Qe + Ht[1] * he,
+      Rn[2] * Qe + Ht[2] * he
     ]) : Ot;
-    if (xa && (Je > 0 || he > 0)) {
+    if (xa && (Qe > 0 || he > 0)) {
       const t = [-Mn[0], -Mn[1], -Mn[2]];
       if (Math.abs(t[1]) > 1e-6) {
         const e = [], s = Co ? qt.concat(qe) : qt;
@@ -1825,11 +1825,11 @@ const qn = class qn extends be {
         const n = Oi(e);
         if (n.length >= 3) {
           const i = M(Zn, 0, 0.2), r = ot * (1 - i), h = ou(n, -r, r, -r, r);
-          h.length >= 3 && (Qe = h.map((u) => U(G([u.x, fn, u.z]))));
+          h.length >= 3 && (Je = h.map((u) => U(G([u.x, fn, u.z]))));
         }
       }
     }
-    const ir = Qe ? Qe.map((t) => t[0] + "," + t[1]).join(" ") : null;
+    const ir = Je ? Je.map((t) => t[0] + "," + t[1]).join(" ") : null;
     let ts = null, os = null;
     if (Ma && vt) {
       const e = Math.hypot(ot * 2, ot * 2) * Fc, s = [fo[0] * St * 0.95, Z, fo[2] * St * 0.95], n = [
@@ -1848,13 +1848,13 @@ const qn = class qn extends be {
       ];
       es = U(G(s)), ss = U(G(n));
     }
-    const rr = `sv-beam-flow-${Math.round((Na + Ea) * 10)}`, cr = `sv-sun-ray-${Math.round((Ta + Fa) * 10)}`, lr = `sv-cloud-drift-${Math.round(Q)}-${Math.round(tt)}`, Ku = Number(o.sunBeamRaySpacingPx ?? 40), Qu = Number(o.sunBeamRayMinSepPx ?? 16), Ju = Number(o.sunBeamSilhouetteMinRays ?? 3), tf = Number(o.sunBeamSilhouetteMaxRays ?? 7), hr = Co ? qt.concat(qe) : qt, ur = hr.map((t, e) => {
+    const rr = `sv-beam-flow-${Math.round((Na + Ea) * 10)}`, cr = `sv-sun-ray-${Math.round((Ta + Fa) * 10)}`, lr = `sv-cloud-drift-${Math.round(J)}-${Math.round(tt)}`, Ku = Number(o.sunBeamRaySpacingPx ?? 40), Ju = Number(o.sunBeamRayMinSepPx ?? 16), Qu = Number(o.sunBeamSilhouetteMinRays ?? 3), tf = Number(o.sunBeamSilhouetteMaxRays ?? 7), hr = Co ? qt.concat(qe) : qt, ur = hr.map((t, e) => {
       const s = G(t), n = U(s);
       return { sourceIdx: e, x: n[0], y: n[1], zCam: s[2], world: t };
     }), yt = eu(
       ur
     ), ue = [], ma = (t, e, s, n = -1, i = [0, 0, 0]) => {
-      const r = Math.max(1, Qu) ** 2;
+      const r = Math.max(1, Ju) ** 2;
       for (const h of ue) {
         const u = h.x - t, d = h.y - e;
         if (u * u + d * d < r) return;
@@ -1902,7 +1902,7 @@ const qn = class qn extends be {
         s.push(t[i]);
       }
       return s;
-    }, as = Math.max(1, Math.floor(Ju)), dr = Math.max(as, Math.floor(tf));
+    }, as = Math.max(1, Math.floor(Qu)), dr = Math.max(as, Math.floor(tf));
     let Dt = ue.slice();
     if (Dt.length > dr && (Dt = fr(Dt, dr)), Dt.length < as) {
       const t = yt.map((e) => ({ x: e.x, y: e.y, zCam: e.zCam, sourceIdx: e.sourceIdx, world: e.world }));
@@ -2013,14 +2013,14 @@ const qn = class qn extends be {
         <stop offset="${(gu * 100).toFixed(2)}%" stop-color="rgb(${zu.join(",")})"/>
         <stop offset="${(yu * 100).toFixed(2)}%" stop-color="rgb(${Ki.join(",")})"/>
         <stop offset="100%" stop-color="rgb(${Ki.join(",")})"/>
-      </linearGradient>`), (We || Oe && ua > 0.01 || Ba && uo > 0.03) && dt.push(`<clipPath id="sky-cloud-clip"><rect x="0" y="0" width="${Q}" height="${Ze}"/></clipPath>`), We && dt.push(`<filter id="sky-cloud-blur" x="-30%" y="-40%" width="160%" height="180%">
+      </linearGradient>`), (We || Oe && ua > 0.01 || Ba && uo > 0.03) && dt.push(`<clipPath id="sky-cloud-clip"><rect x="0" y="0" width="${J}" height="${Ze}"/></clipPath>`), We && dt.push(`<filter id="sky-cloud-blur" x="-30%" y="-40%" width="160%" height="180%">
         <feGaussianBlur in="SourceGraphic" stdDeviation="${Math.max(0, qc)}"/>
       </filter>`), dt.push(`<radialGradient id="sun-glow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="rgba(255,255,200,0.85)"/>
       <stop offset="70%" stop-color="rgba(255,255,150,0.35)"/>
       <stop offset="100%" stop-color="rgba(255,255,100,0)"/>
     </radialGradient>`), dt.push(`<linearGradient id="ceiling-grad" x1="0" y1="1" x2="1" y2="0" gradientUnits="objectBoundingBox">
-      <stop offset="0%" stop-color="${Ct(_t.top, Jc * At)}"/>
+      <stop offset="0%" stop-color="${Ct(_t.top, Qc * At)}"/>
       <stop offset="100%" stop-color="${Ct(_t.top, tl * At)}"/>
     </linearGradient>`), yo && mt > 1e-3 && dt.push(`<linearGradient id="floor-grass-grad" x1="0" y1="0.1" x2="1" y2="0.95" gradientUnits="objectBoundingBox">
         <stop offset="0%" stop-color="${$o}" stop-opacity="${M(mt * 0.55, 0, 1)}"/>
@@ -2033,7 +2033,7 @@ const qn = class qn extends be {
       </filter>`)), Ra && dt.push(`<filter id="base-anchor-shadow-blur" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur in="SourceGraphic" stdDeviation="${Nc}"/>
       </filter>`), fi && dt.push(`<filter id="floor-pointer-shadow-blur" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="${Ql}"/>
+        <feGaussianBlur in="SourceGraphic" stdDeviation="${Jl}"/>
       </filter>`), Le && dt.push(`<filter id="back-tree-shadow-blur" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur in="SourceGraphic" stdDeviation="${Os}"/>
       </filter>`), Ma && vt && ts && os && dt.push(`<linearGradient id="sunlight-grad" x1="${ts[0]}" y1="${ts[1]}"
@@ -2070,7 +2070,7 @@ const qn = class qn extends be {
           animation-timing-function: steps(var(--sv-steps, 1), end);
         }
       `), We) {
-      const e = Q + 140;
+      const e = J + 140;
       Bo.push(`
         @keyframes ${lr} {
           0% { transform: translateX(-140px); }
@@ -2103,7 +2103,7 @@ const qn = class qn extends be {
           animation-timing-function: steps(var(--sv-steps, 1), end);
         }
       `);
-    const yr = `sv-star-twinkle-${Math.round(Q)}-${Math.round(tt)}`;
+    const yr = `sv-star-twinkle-${Math.round(J)}-${Math.round(tt)}`;
     Oe && Xa && Bo.push(`
         @keyframes ${yr} {
           0%, 100% { opacity: calc(var(--star-op, 0.7) * 0.22); }
@@ -2139,10 +2139,10 @@ const qn = class qn extends be {
         }
       ]]></style>`);
     const $ = [], af = `${ut ? "sv-css-limit sv-css-global " : ""}${qh ? "sv-css-pause " : ""}sv-scene`.trim(), nf = Number(this._cssGlobalTimeSec || 0);
-    if ($.push(`<svg class="${af}" style="--sv-global-time:${nf.toFixed(3)}" viewBox="0 0 ${Q} ${tt}" width="${Et}" height="${to}" preserveAspectRatio="xMidYMid meet"><defs>${dt.join("")}</defs>`), ti && $.push(`<rect x="0" y="0" width="${Q}" height="${tt}" fill="url(#horizon-grad)"/>`), Oe && ua > 0.01 && Us > 0) {
+    if ($.push(`<svg class="${af}" style="--sv-global-time:${nf.toFixed(3)}" viewBox="0 0 ${J} ${tt}" width="${Et}" height="${to}" preserveAspectRatio="xMidYMid meet"><defs>${dt.join("")}</defs>`), ti && $.push(`<rect x="0" y="0" width="${J}" height="${tt}" fill="url(#horizon-grad)"/>`), Oe && ua > 0.01 && Us > 0) {
       let t = this._skyStars;
       if (!Array.isArray(t) || t.length !== Us) {
-        let s = 2166136261 ^ Math.round(Q * 13 + tt * 17 + Us * 31);
+        let s = 2166136261 ^ Math.round(J * 13 + tt * 17 + Us * 31);
         const n = () => (s ^= s << 13, s >>>= 0, s ^= s >> 17, s >>>= 0, s ^= s << 5, s >>>= 0, (s >>> 0) / 4294967295);
         t = Array.from({ length: Us }, () => ({
           x: 0.04 + n() * 0.92,
@@ -2155,7 +2155,7 @@ const qn = class qn extends be {
       }
       const e = Ze * 0.97;
       $.push('<g clip-path="url(#sky-cloud-clip)">'), t.forEach((s) => {
-        const n = s.x * Q, i = s.y * e, r = s.r * (0.85 + ua * 0.35), h = M(ua * gl * s.a, 0, 1);
+        const n = s.x * J, i = s.y * e, r = s.r * (0.85 + ua * 0.35), h = M(ua * gl * s.a, 0, 1);
         if (Xa) {
           const u = Math.max(1.2, Number(s.dur)), d = Number(s.phase) || 0, f = ut ? Ks(u, d) : Zs(u, d), p = ut ? Math.max(1, Math.round(u * co)) : 0;
           $.push(`<circle class="sv-star" cx="${n}" cy="${i}" r="${r}"
@@ -2178,10 +2178,10 @@ const qn = class qn extends be {
         { y: Ze * (e[2] + (s[2] - e[2]) * t), s: 0.66 * Aa, dur: 76 / Math.max(0.2, Da), phase: 0.78 }
       ];
       $.push('<g clip-path="url(#sky-cloud-clip)">'), n.forEach((i) => {
-        const r = 1 - 0.35 * Ke, h = M(Jn * r, 0, 1), u = M(Jn * 0.75 * r, 0, 1);
+        const r = 1 - 0.35 * Ke, h = M(Qn * r, 0, 1), u = M(Qn * 0.75 * r, 0, 1);
         [-(i.phase * i.dur), -((i.phase + 0.5) * i.dur)].forEach((f) => {
           $.push(`<g transform="translate(0 ${i.y}) scale(${i.s})">`);
-          const p = Js ? 6 : ut ? 3 : 1, m = i.dur * p, b = ut ? Math.max(1, Math.round(m * co)) : 0, g = -f, y = ut ? Ks(m, g) : Zs(m, g);
+          const p = Qs ? 6 : ut ? 3 : 1, m = i.dur * p, b = ut ? Math.max(1, Math.round(m * co)) : 0, g = -f, y = ut ? Ks(m, g) : Zs(m, g);
           $.push(`<g class="sv-sky-cloud" style="animation-duration:${m}s;--sv-phase-delay:${y.toFixed(3)}s;animation-delay:${y.toFixed(3)}s;--sv-steps:${b}">`), $.push('<g filter="url(#sky-cloud-blur)">'), $.push(`<ellipse cx="0" cy="0" rx="52" ry="20" fill="rgba(255,255,255,${h})"/>`), $.push(`<ellipse cx="28" cy="-12" rx="36" ry="17" fill="rgba(255,255,255,${u})"/>`), $.push(`<ellipse cx="-26" cy="-10" rx="30" ry="15" fill="rgba(255,255,255,${u})"/>`), $.push(`<ellipse cx="64" cy="-4" rx="24" ry="12" fill="rgba(255,255,255,${u * 0.95})"/>`), $.push("</g>"), $.push("</g>"), $.push("</g>");
         });
       }), $.push("</g>");
@@ -2195,11 +2195,11 @@ const qn = class qn extends be {
         [f[0], f[1]]
       ], g = b.map((x) => `${x[0]},${x[1]}`).join(" "), y = Math.max(1.1, Do * 0.16);
       if (fi) {
-        const x = Jl * vn, E = x * 0.55, T = x * 0.75, z = b.map((I) => [I[0] + E, I[1] + T]).map((I) => `${I[0]},${I[1]}`).join(" ");
+        const x = Ql * vn, E = x * 0.55, T = x * 0.75, z = b.map((I) => [I[0] + E, I[1] + T]).map((I) => `${I[0]},${I[1]}`).join(" ");
         $.push(`<line x1="${Fo[0] + E}" y1="${Fo[1] + T}" x2="${u + E}" y2="${d + T}"
-          stroke="${Qo}" stroke-opacity="${M(Wa, 0, 1)}" stroke-width="${m}"
-          stroke-linecap="round" filter="url(#floor-pointer-shadow-blur)"/>`), $.push(`<polygon points="${z}" fill="${Qo}" fill-opacity="${M(Wa * 0.95, 0, 1)}"
-          stroke="${Qo}" stroke-opacity="${M(Wa * 0.95, 0, 1)}"
+          stroke="${Jo}" stroke-opacity="${M(Wa, 0, 1)}" stroke-width="${m}"
+          stroke-linecap="round" filter="url(#floor-pointer-shadow-blur)"/>`), $.push(`<polygon points="${z}" fill="${Jo}" fill-opacity="${M(Wa * 0.95, 0, 1)}"
+          stroke="${Jo}" stroke-opacity="${M(Wa * 0.95, 0, 1)}"
           stroke-width="${y}" stroke-linejoin="round" filter="url(#floor-pointer-shadow-blur)"/>`);
       }
       $.push(`<line x1="${Fo[0]}" y1="${Fo[1]}" x2="${u}" y2="${d}"
@@ -2224,10 +2224,10 @@ const qn = class qn extends be {
       const s = t.map((i) => `${i[0]},${i[1]}`).join(" "), n = M(0.86 - e * 0.08, 0.62, 0.9);
       $.push(`<polygon points="${s}" fill="${Go}" opacity="${n}"/>`);
     }), $.push(`<path d="${ba}" fill="${ye}" stroke="${$e}" stroke-width="${rt}"/>`), yo && mt > 1e-3 && $.push(`<path d="${ba}" fill="url(#floor-grass-grad)"/>`), cf(), Ma && vt && ts && os && $.push(`<path d="${ba}" fill="url(#sunlight-grad)"/>`), Ie && !vt && es && ss && $.push(`<path d="${ba}" fill="url(#moonlight-grad)"/>`), xa && ir) {
-      const t = Qe ? Qe.map((s) => [s[0], s[1]]) : [], e = Qh(t, sf);
+      const t = Je ? Je.map((s) => [s[0], s[1]]) : [], e = Jh(t, sf);
       if (e.length >= 3) {
         const s = e.map((i) => i[0] + "," + i[1]).join(" "), n = 1 - 0.4 * he;
-        $.push(`<polygon points="${s}" fill="${Qo}" opacity="${xc * n}" filter="url(#shadow-blur-soft)"/>`), $.push(`<polygon points="${s}" fill="${Qo}" opacity="${Mc * n}" filter="url(#shadow-blur-contact)"/>`);
+        $.push(`<polygon points="${s}" fill="${Jo}" opacity="${xc * n}" filter="url(#shadow-blur-soft)"/>`), $.push(`<polygon points="${s}" fill="${Jo}" opacity="${Mc * n}" filter="url(#shadow-blur-contact)"/>`);
       }
     }
     rf(), Ra && dn && $.push(`<polygon points="${dn}" fill="${Tc}" opacity="${kc}" filter="url(#base-anchor-shadow-blur)"/>`), $.push(`<polygon points="${Wu.join(" ")}" fill="none" stroke="${ni}" stroke-width="${ii}" stroke-linecap="round"/>`), $.push(`<polygon points="${Ou.join(" ")}" fill="none" stroke="${Wl}" stroke-width="${zl}" stroke-linecap="round"/>`), $.push(`<polygon points="${Iu.join(" ")}" fill="none" stroke="${ni}" stroke-width="${ii}" stroke-linecap="round"/>`), ri && tr.forEach((t) => {
@@ -2262,7 +2262,7 @@ const qn = class qn extends be {
         transform="matrix(${u.bx} ${u.by} ${u.ux} ${u.uy} ${d[0]} ${b})">${t.label}</text>`);
     });
     const hf = Number(this._cssGlobalTimeSec || Si), uf = Math.floor(hf / 1.6);
-    let $r = Js ? 1 : 0;
+    let $r = Qs ? 1 : 0;
     const _r = (t, e = 1, s = 1) => {
       const n = t.length > 0 ? (uf % t.length + t.length) % t.length : -1;
       t.forEach((i, r) => {
@@ -2274,7 +2274,7 @@ const qn = class qn extends be {
         $.push(`<line x1="${it[0]}" y1="${it[1]}" x2="${i.x}" y2="${i.y}"
           stroke="rgba(255,255,150,${d})" stroke-width="${u}"/>`);
         let f = !1;
-        if (Js)
+        if (Qs)
           f = $r > 0 && r === n, f && ($r -= 1);
         else {
           const p = r % 3 !== 2, m = !ut || r % 2 === 0;
@@ -2423,7 +2423,7 @@ const qn = class qn extends be {
       if (t === "front" !== u) return;
       const d = s([n, Z, i]), f = s([n, Z + 0.86 * r, i]), p = Math.max(2.6, 8.5 * f[3] * r), m = M(1 + Is * 10, 0.6, 2.5), b = Math.max(2.2, p * 0.62 * m), g = Math.max(1.1, p * 0.24 * m), y = d[0], x = d[1] + g * 0.28;
       $.push(`<ellipse cx="${y}" cy="${x}" rx="${b}" ry="${g}"
-        fill="${Qo}" opacity="${M(Ws, 0, 1)}" filter="url(#back-tree-shadow-blur)"/>`);
+        fill="${Jo}" opacity="${M(Ws, 0, 1)}" filter="url(#back-tree-shadow-blur)"/>`);
     }
     function Mr(t, e) {
       if (!Pe) return;
@@ -2538,9 +2538,9 @@ const qn = class qn extends be {
       this._roofStripSeed = (this._roofStripSeed || 0) + 1;
       const C = (R, L, A) => [R[0] + (L[0] - R[0]) * A, R[1] + (L[1] - R[1]) * A, R[2] + (L[2] - R[2]) * A], _ = (R, L, A, j, st, pt, lt) => {
         if (!R) return;
-        const Gt = Math.max(L * pt, h * 0.08), Dn = st, qr = st - Gt, Yr = M(-Dn / h, 0, 1), wf = M(-qr / h, 0, 1), xf = C(e, n, Yr), Rf = C(s, i, Yr), Mf = C(e, n, wf), Xr = U(G(xf)), Zr = U(G(Rf)), Kr = U(G(Mf)), Kt = [[0, Dn], [r, Dn], [0, qr]], Qt = [[Xr[0], Xr[1]], [Zr[0], Zr[1]], [Kr[0], Kr[1]]], Po = Jh(Kt, Qt);
+        const Gt = Math.max(L * pt, h * 0.08), Dn = st, qr = st - Gt, Yr = M(-Dn / h, 0, 1), wf = M(-qr / h, 0, 1), xf = C(e, n, Yr), Rf = C(s, i, Yr), Mf = C(e, n, wf), Xr = U(G(xf)), Zr = U(G(Rf)), Kr = U(G(Mf)), Kt = [[0, Dn], [r, Dn], [0, qr]], Jt = [[Xr[0], Xr[1]], [Zr[0], Zr[1]], [Kr[0], Kr[1]]], Po = Qh(Kt, Jt);
         if (!Po) return;
-        const Qr = Math.sign((Kt[1][0] - Kt[0][0]) * (Kt[2][1] - Kt[0][1]) - (Kt[1][1] - Kt[0][1]) * (Kt[2][0] - Kt[0][0])), Jr = Math.sign((Qt[1][0] - Qt[0][0]) * (Qt[2][1] - Qt[0][1]) - (Qt[1][1] - Qt[0][1]) * (Qt[2][0] - Qt[0][0])), tc = Qr !== 0 && Jr !== 0 && Qr !== Jr;
+        const Jr = Math.sign((Kt[1][0] - Kt[0][0]) * (Kt[2][1] - Kt[0][1]) - (Kt[1][1] - Kt[0][1]) * (Kt[2][0] - Kt[0][0])), Qr = Math.sign((Jt[1][0] - Jt[0][0]) * (Jt[2][1] - Jt[0][1]) - (Jt[1][1] - Jt[0][1]) * (Jt[2][0] - Jt[0][0])), tc = Jr !== 0 && Qr !== 0 && Jr !== Qr;
         $.push(`<g transform="matrix(${Po.a} ${Po.b} ${Po.c} ${Po.d} ${Po.e} ${Po.f})">`), tc && $.push(`<g transform="translate(${r} 0) scale(-1 1)">`), $.push(`<text x="${r / 2}" y="${st}" fill="${j}" font-size="${L}"
           stroke="${bi}" stroke-width="${A}" font-weight="700"
           text-anchor="middle" dominant-baseline="middle">${R}</text>`), tc && $.push("</g>"), $.push("</g>");
@@ -2597,19 +2597,19 @@ const qn = class qn extends be {
           $.push(`<line x1="0" y1="0" x2="${i}" y2="0"
             class="sv-sun-ray"
             style="animation-duration:${r.toFixed(2)}s;--sv-phase-delay:${u.toFixed(2)}s;animation-delay:${u.toFixed(2)}s;--ray-min-scale:${d.toFixed(3)};--ray-max-scale:${f.toFixed(3)};--sv-steps:${m};"
-            stroke="${Qn}" stroke-width="${1.5 * No}" stroke-linecap="round" opacity="${p.toFixed(3)}"/>`), $.push("</g>");
+            stroke="${Jn}" stroke-width="${1.5 * No}" stroke-linecap="round" opacity="${p.toFixed(3)}"/>`), $.push("</g>");
         } else
           $.push(`<g transform="translate(${it[0]} ${it[1]}) rotate(${n})">`), $.push(`<line x1="0" y1="0" x2="${i}" y2="0"
-            stroke="${Qn}" stroke-width="${1.5 * No}" stroke-linecap="round" opacity="0.6"/>`), $.push("</g>");
+            stroke="${Jn}" stroke-width="${1.5 * No}" stroke-linecap="round" opacity="0.6"/>`), $.push("</g>");
       }
     }
     if (Ie && !vt && uo > 0.03) {
       const t = Array.isArray(js) ? js : [178, 208, 255], e = M(Rl * uo, 0, 1);
-      $.push(`<rect x="0" y="0" width="${Q}" height="${tt}"
+      $.push(`<rect x="0" y="0" width="${J}" height="${tt}"
         fill="rgb(${t.join(",")})" opacity="${e}"/>`);
     }
     const _f = kt ? ["SUN OVERRIDE ENABLED", "Solar alignment % is disabled"] : [];
-    ei && $.push(`<rect x="0" y="0" width="${Q}" height="${tt}" fill="url(#vignette)"/>`);
+    ei && $.push(`<rect x="0" y="0" width="${J}" height="${tt}" fill="url(#vignette)"/>`);
     const Er = this._autoRotateEnabled ? Number(this._autoRotateIntervalMsDynamic || Mt) : this._manualRotateEnabled ? Number(this._manualRotateIntervalMs || this._rotationIntervalMsFloor || Mt) : Mt, vf = Za && Er > Mt;
     let Sf = 0;
     const rs = () => 18 + Sf++ * 16;
