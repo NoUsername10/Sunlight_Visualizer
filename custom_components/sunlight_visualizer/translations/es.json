@@ -4,10 +4,10 @@
     "step": {
       "user": {
         "title": "Configuracion de Sunlight Visualizer",
-        "description": "Configura la integracion Sunlight Visualizer. Ubicacion actual de Home Assistant: {location_name} ({latitude:.6f}, {longitude:.6f})",
+        "description": "Configura la integracion Sunlight Visualizer. Ubicacion actual de Home Assistant: {location_name} ({latitude}, {longitude})",
         "data": {
           "use_custom_angle": "Usar angulo personalizado (en lugar de direccion de brujula)",
-          "direction": "Direccion de brujula (se usa si el angulo personalizado esta desactivado)",
+          "direction": "Direccion de brujula (Selecciona la direccion hacia la que mira tu puerta principal)",
           "roof_direction": "Direccion del techo (lado de bajada)",
           "roof_power_entity": "Sensor de potencia del techo (opcional)",
           "roof_power_enabled": "Activar etiqueta de potencia del techo",
@@ -19,7 +19,7 @@
         },
         "data_description": {
           "use_custom_angle": "Activa para introducir un angulo exacto; desactiva para elegir direccion de brujula",
-          "direction": "Selecciona direccion de brujula (N, NE, E, etc.); solo activa cuando el angulo personalizado esta desactivado",
+          "direction": "Selecciona direccion de brujula (N, NE, E, etc.) la direccion hacia la que mira tu puerta principal.",
           "roof_direction": "Selecciona hacia que lado de la casa baja el techo",
           "roof_power_entity": "Selecciona un sensor de potencia para mostrar debajo del % del techo (W/kW)",
           "roof_power_enabled": "Mostrar valor de potencia del techo debajo del %",
@@ -57,7 +57,7 @@
         "description": "Actualiza la configuracion de Sunlight Visualizer. Ubicacion: {source} ({current_lat}, {current_lon})",
         "data": {
           "use_custom_angle": "Usar angulo personalizado (en lugar de direccion de brujula)",
-          "direction": "Direccion de brujula (se usa si el angulo personalizado esta desactivado)",
+          "direction": "Direccion de brujula (Selecciona la direccion hacia la que mira tu puerta principal)",
           "roof_direction": "Direccion del techo (lado de bajada)",
           "roof_power_entity": "Sensor de potencia del techo (opcional)",
           "roof_power_enabled": "Activar etiqueta de potencia del techo",
@@ -72,7 +72,7 @@
         },
         "data_description": {
           "use_custom_angle": "Activa para introducir un angulo exacto; desactiva para elegir direccion de brujula",
-          "direction": "Selecciona direccion de brujula (N, NE, E, etc.); solo activa cuando el angulo personalizado esta desactivado",
+          "direction": "Selecciona direccion de brujula (N, NE, E, etc.) la direccion hacia la que mira tu puerta principal.",
           "roof_direction": "Selecciona hacia que lado de la casa baja el techo",
           "roof_power_entity": "Selecciona un sensor de potencia para mostrar debajo del % del techo (W/kW)",
           "roof_power_enabled": "Mostrar valor de potencia del techo debajo del %",

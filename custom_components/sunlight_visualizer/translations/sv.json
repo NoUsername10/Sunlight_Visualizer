@@ -4,10 +4,10 @@
     "step": {
       "user": {
         "title": "Konfiguration av Sunlight Visualizer",
-        "description": "Konfigurera integrationen Sunlight Visualizer. Aktuell Home Assistant-plats: {location_name} ({latitude:.6f}, {longitude:.6f})",
+        "description": "Konfigurera integrationen Sunlight Visualizer. Aktuell Home Assistant-plats: {location_name} ({latitude}, {longitude})",
         "data": {
           "use_custom_angle": "Använd egen vinkel (istället för kompassriktning)",
-          "direction": "Kompassriktning (används om egen vinkel är AV)",
+          "direction": "Kompassriktning (Välj den riktning som din ytterdörr vetter mot)",
           "roof_direction": "Taksidans riktning (nedförsida)",
           "roof_power_entity": "Takets effektsensor (valfri)",
           "roof_power_enabled": "Aktivera takets effektvärde",
@@ -19,7 +19,7 @@
         },
         "data_description": {
           "use_custom_angle": "Markera för att ange exakt vinkel, avmarkera för att välja kompassriktning",
-          "direction": "Välj kompassriktning (N, NE, E, osv.) – endast aktiv när egen vinkel är AV",
+          "direction": "Välj kompassriktning (N, NE, E, osv.) den riktning som din ytterdörr vetter mot.",
           "roof_direction": "Välj vilken sida av huset taket lutar ned mot",
           "roof_power_entity": "Välj effektsensor som visas under takets % (W/kW)",
           "roof_power_enabled": "Visa effektvärde under takets %",
@@ -57,7 +57,7 @@
         "description": "Uppdatera konfigurationen för Sunlight Visualizer. Plats: {source} ({current_lat}, {current_lon})",
         "data": {
           "use_custom_angle": "Använd egen vinkel (istället för kompassriktning)",
-          "direction": "Kompassriktning (används om egen vinkel är AV)",
+          "direction": "Kompassriktning (Välj den riktning som din ytterdörr vetter mot)",
           "roof_direction": "Taksidans riktning (nedförsida)",
           "roof_power_entity": "Takets effektsensor (valfri)",
           "roof_power_enabled": "Aktivera takets effektvärde",
@@ -72,7 +72,7 @@
         },
         "data_description": {
           "use_custom_angle": "Markera för att ange exakt vinkel, avmarkera för att välja kompassriktning",
-          "direction": "Välj kompassriktning (N, NE, E, osv.) – endast aktiv när egen vinkel är AV",
+          "direction": "Välj kompassriktning (N, NE, E, osv.) den riktning som din ytterdörr vetter mot.",
           "roof_direction": "Välj vilken sida av huset taket lutar ned mot",
           "roof_power_entity": "Välj effektsensor som visas under takets % (W/kW)",
           "roof_power_enabled": "Visa effektvärde under takets %",

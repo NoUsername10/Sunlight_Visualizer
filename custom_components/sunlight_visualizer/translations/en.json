@@ -4,10 +4,10 @@
     "step": {
       "user": {
         "title": "Sunlight Visualizer Configuration",
-        "description": "Configure the Sunlight Visualizer integration. Current Home Assistant location: {location_name} ({latitude:.6f}, {longitude:.6f})",
+        "description": "Configure the Sunlight Visualizer integration. Current Home Assistant location: {location_name} ({latitude}, {longitude})",
         "data": {
           "use_custom_angle": "Use custom angle (instead of compass direction)",
-          "direction": "Compass direction (used if custom angle is OFF)",
+          "direction": "Compass direction (Select the direction your front door is facing)",
           "roof_direction": "Roof direction (downhill side)",
           "roof_power_entity": "Roof power sensor (optional)",
           "roof_power_enabled": "Enable roof power label",
@@ -19,7 +19,7 @@
         },
         "data_description": {
           "use_custom_angle": "Check to enter exact angle, uncheck to select compass direction",
-          "direction": "Select compass direction (N, NE, E, etc.) - only active when custom angle is OFF",
+          "direction": "Select compass direction (N, NE, E, etc.) the direction your front door is facing.",
           "roof_direction": "Select which side of the house the roof slopes down toward",
           "roof_power_entity": "Select a power sensor to show below roof % (W/kW)",
           "roof_power_enabled": "Show roof power value under the roof %",
@@ -57,7 +57,7 @@
         "description": "Update the Sunlight Visualizer configuration. Location: {source} ({current_lat}, {current_lon})",
         "data": {
           "use_custom_angle": "Use custom angle (instead of compass direction)",
-          "direction": "Compass direction (used if custom angle is OFF)",
+          "direction": "Compass direction (Select the direction your front door is facing)",
           "roof_direction": "Roof direction (downhill side)",
           "roof_power_entity": "Roof power sensor (optional)",
           "roof_power_enabled": "Enable roof power label",
@@ -72,7 +72,7 @@
         },
         "data_description": {
           "use_custom_angle": "Check to enter exact angle, uncheck to select compass direction",
-          "direction": "Select compass direction (N, NE, E, etc.) - only active when custom angle is OFF",
+          "direction": "Select compass direction (N, NE, E, etc.) the direction your front door is facing.",
           "roof_direction": "Select which side of the house the roof slopes down toward",
           "roof_power_entity": "Select a power sensor to show below roof % (W/kW)",
           "roof_power_enabled": "Show roof power value under the roof %",
