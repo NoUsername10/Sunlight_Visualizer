@@ -46,6 +46,33 @@ from .const import (
 )
 
 
+def _validate_house_angle(value: Any) -> int:
+    """Validate house angle as integer degrees in range 0-359."""
+    if isinstance(value, bool):
+        raise vol.Invalid("invalid_house_angle")
+
+    angle: int
+    if isinstance(value, int):
+        angle = value
+    elif isinstance(value, float):
+        if not value.is_integer():
+            raise vol.Invalid("invalid_house_angle")
+        angle = int(value)
+    elif isinstance(value, str):
+        raw = value.strip()
+        if raw.startswith("+"):
+            raw = raw[1:]
+        if not raw.isdigit():
+            raise vol.Invalid("invalid_house_angle")
+        angle = int(raw)
+    else:
+        raise vol.Invalid("invalid_house_angle")
+
+    if not 0 <= angle <= 359:
+        raise vol.Invalid("invalid_house_angle")
+    return angle
+
+
 class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Sunlight Visualizer."""
 
@@ -79,7 +106,12 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     errors[CONF_DIRECTION] = "direction_required"
             else:
                 # Using custom angle - ignore dropdown
-                user_input[CONF_HOUSE_ANGLE] = user_input.get(CONF_HOUSE_ANGLE, DEFAULT_HOUSE_ANGLE)
+                try:
+                    user_input[CONF_HOUSE_ANGLE] = _validate_house_angle(
+                        user_input.get(CONF_HOUSE_ANGLE, DEFAULT_HOUSE_ANGLE)
+                    )
+                except vol.Invalid:
+                    errors[CONF_HOUSE_ANGLE] = "invalid_house_angle"
             
             # Remove UI-only fields from saved data
             user_input.pop(CONF_DIRECTION, None)
@@ -92,12 +124,11 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             user_input.pop(CONF_ADVANCED_MODE, None)  # Remove if it exists
             
             # Validate house angle
-            try:
-                house_angle = int(user_input[CONF_HOUSE_ANGLE])
-                if not (0 <= house_angle <= 359):
+            if CONF_HOUSE_ANGLE in user_input:
+                try:
+                    user_input[CONF_HOUSE_ANGLE] = _validate_house_angle(user_input[CONF_HOUSE_ANGLE])
+                except (vol.Invalid, ValueError, TypeError):
                     errors[CONF_HOUSE_ANGLE] = "invalid_house_angle"
-            except (ValueError, TypeError):
-                errors[CONF_HOUSE_ANGLE] = "invalid_house_angle"
             
             # Validate ceiling tilt
             try:
@@ -141,7 +172,7 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             vol.Optional(
                 CONF_DIRECTION,
                 default="S",
-                description="Select compass direction"
+                description="Select compass direction your front door is facing."
             ): vol.In(list(DIRECTIONS.keys())),
             vol.Required(
                 CONF_USE_CUSTOM_ANGLE,
@@ -149,16 +180,24 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 description="Check to enter exact angle instead of using compass direction above"
             ): bool,
             vol.Required(
+                CONF_HOUSE_ANGLE,
+                default=DEFAULT_HOUSE_ANGLE,
+                description="Custom house angle (integer 0-359)"
+            ): selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=0,
+                    max=9999,
+                    step=1,
+                    mode=selector.NumberSelectorMode.BOX,
+                )
+            ),
+        }
+        schema_dict.update({
+            vol.Required(
                 CONF_ROOF_DIRECTION,
                 default=DEFAULT_ROOF_DIRECTION,
                 description="Select which side of the house the roof slopes down toward"
             ): vol.In(list(ROOF_DIRECTIONS.keys())),
-            vol.Required(
-                CONF_HOUSE_ANGLE,
-                default=DEFAULT_HOUSE_ANGLE
-            ): vol.All(
-                vol.Coerce(int), vol.Range(min=0, max=359)
-            ),
             vol.Required(
                 CONF_CEILING_TILT,
                 default=DEFAULT_CEILING_TILT
@@ -190,7 +229,7 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 default=DEFAULT_ROOF_POWER_INVERT,
                 description="Invert roof power value (show positive)"
             ): bool,
-        }
+        })
 
         if DEFAULT_ROOF_POWER_ENTITY:
             schema_dict[vol.Optional(
@@ -256,7 +295,12 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                     errors[CONF_DIRECTION] = "direction_required"
             else:
                 # Using custom angle - ignore dropdown
-                user_input[CONF_HOUSE_ANGLE] = user_input.get(CONF_HOUSE_ANGLE, DEFAULT_HOUSE_ANGLE)
+                try:
+                    user_input[CONF_HOUSE_ANGLE] = _validate_house_angle(
+                        user_input.get(CONF_HOUSE_ANGLE, DEFAULT_HOUSE_ANGLE)
+                    )
+                except vol.Invalid:
+                    errors[CONF_HOUSE_ANGLE] = "invalid_house_angle"
             
             # Remove UI-only fields from saved data
             user_input.pop(CONF_DIRECTION, None)
@@ -268,12 +312,11 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 user_input.pop(CONF_ROOF_POWER_ENTITY, None)
             
             # Validate inputs
-            try:
-                house_angle = int(user_input[CONF_HOUSE_ANGLE])
-                if not (0 <= house_angle <= 359):
+            if CONF_HOUSE_ANGLE in user_input:
+                try:
+                    user_input[CONF_HOUSE_ANGLE] = _validate_house_angle(user_input[CONF_HOUSE_ANGLE])
+                except (vol.Invalid, ValueError, TypeError):
                     errors[CONF_HOUSE_ANGLE] = "invalid_house_angle"
-            except (ValueError, TypeError):
-                errors[CONF_HOUSE_ANGLE] = "invalid_house_angle"
             
             try:
                 ceiling_tilt = int(user_input[CONF_CEILING_TILT])
@@ -353,7 +396,7 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
             vol.Optional(
                 CONF_DIRECTION,
                 default=matched_direction,
-                description="Select compass direction"
+                description="Select compass direction your front door is facing."
             ): vol.In(list(DIRECTIONS.keys())),
             vol.Required(
                 CONF_USE_CUSTOM_ANGLE,
@@ -361,16 +404,24 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 description="Check to enter exact angle, uncheck to use compass direction above"
             ): bool,
             vol.Required(
+                CONF_HOUSE_ANGLE,
+                default=current_house_angle,
+                description="Custom house angle (integer 0-359)"
+            ): selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=0,
+                    max=9999,
+                    step=1,
+                    mode=selector.NumberSelectorMode.BOX,
+                )
+            ),
+        }
+        options_schema_dict.update({
+            vol.Required(
                 CONF_ROOF_DIRECTION,
                 default=current_roof_direction,
                 description="Select which side of the house the roof slopes down toward"
             ): vol.In(list(ROOF_DIRECTIONS.keys())),
-            vol.Required(
-                CONF_HOUSE_ANGLE,
-                default=current_house_angle
-            ): vol.All(
-                vol.Coerce(int), vol.Range(min=0, max=359)
-            ),
             vol.Required(
                 CONF_CEILING_TILT,
                 default=current_ceiling_tilt
@@ -417,7 +468,7 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 default=current_force_sun_el,
                 description="Force Sun Elevation (degrees)"
             ): vol.All(vol.Coerce(float), vol.Range(min=-90, max=90)),
-        }
+        })
 
         if current_roof_power:
             options_schema_dict[vol.Optional(
