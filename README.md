@@ -26,7 +26,7 @@ GIF (on macOS Safari: right click + "Play animation"):
 - Real-time sun physics from azimuth/elevation + house angle + roof tilt.
 - Surface intensity sensors for all 4 walls + roof.
 - Roof alignment percentage/status sensors.
-- Roof power label (optional) with invert support.
+- Roof power label for solar power (optional) with invert value support.
 - Localized config/options/services text (English, Swedish, Spanish).
 - Visuals: overhang, windows, door, roof panels, tree and adaptive shadows.
 - Day/night scene with clouds, stars, moon, twilight gradients.
