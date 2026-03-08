@@ -10,8 +10,17 @@
 An interactive sunlight intensity visualizer for Home Assistant.
 
 It includes:
-- A custom integration (`sunlight_visualizer`) that calculates wall/roof sunlight values.
-- A Lovelace card (`custom:sunlight-visualizer-card`) that renders a 2.5D house with sun, shadows, roof/wall values, optional roof power, sky effects, and camera controls.
+- A custom integration (`sunlight_visualizer`) that calculates wall/roof sunlight intensity values that can be used in automations.
+
+   - Facade-Aware Blinds: Auto-close/open blinds on specific walls with the (`front/left/back/right` intensity sensors).
+   - Heat-Load HVAC Prep: Pre-cool when roof or wall sunlight rises, then relax setpoint when exposure drops.
+   - Solar Output Insights: Compare roof sun intensity/alignment with roof power to detect underperformance.
+   - Sunscreen Alert:☀️ “UV attack incoming” bring out the sunscreen, sun reaches the pool.
+
+
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-small.png" width="25%" height="25%">
+
+- A Lovelace card (`custom:sunlight-visualizer-card`) that renders a 2.5D house with accurate sun, shadows, roof/wall values, optional roof power, sky effects, and camera controls.
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="25%" height="25%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-dawn.png" width="25%" height="25%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="25%" height="25%">
 
