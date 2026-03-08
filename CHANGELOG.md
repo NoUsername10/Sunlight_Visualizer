@@ -6,15 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Planned
 - More translations.
-- Finer precalculated sun data for sunrise and sunset
-- Adding some calculated attributes to sensor section
-- Auto adjust size based on width of card
-
+- Finer precalculated sun data for sunrise and sunset.
+- Adding more calculated attributes in the sensor section.
 
 ### Added
 - Placeholder for upcoming changes.
-- Fixed error in translation layer.
 
+## [0.2.3] - 2026-03-08
+### Added
+- Card auto-size down by available width (`autoScaleWidth`, default `true`) with minimum width clamp at `250px`.
+- Visual editor option under Auto‑rotate: `Auto-scale Width`.
+- One-click HACS install badge in README.
+- HACS-approved installation status documented in release notes and README.
+
+### Changed
+- Bumped integration/card release version to `0.2.3`.
+- README install instructions updated for HACS-approved flow and card auto-registration notes.
 
 ## [0.2.2] - 2026-02-15
 ### Changed

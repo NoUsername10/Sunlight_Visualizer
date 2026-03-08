@@ -2,6 +2,7 @@
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="10%" height="10%">
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
 [![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
 An interactive sunlight intensity visualizer for Home Assistant.
@@ -103,6 +104,7 @@ Created entities include:
 You can also configure common card behavior visually:
 - Roof power options
 - Auto rotation speed
+- Auto-scale Width (auto downscale to fit narrow cards)
 - Camera controls
 - House/roof orientation values
 
@@ -115,8 +117,12 @@ You can also configure common card behavior visually:
 See [`CHANGELOG.md`](./CHANGELOG.md).
 
 ## Installation (HACS)
-1. Add this repository in HACS as **Integration**.
-2. Install **Sunlight Visualizer**.
+Use one-click add:
+[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
+
+Then:
+1. Add this repository in HACS as **Integration** (if not already added).
+2. Install **Sunlight Visualizer** from HACS.
 3. Restart Home Assistant.
 4. Add integration in **Settings → Devices & Services**.
 5. Add the card in Lovelace as `custom:sunlight-visualizer-card`.
@@ -129,7 +135,8 @@ If manual resource registration is needed:
 - Type: `module`
 
 ## Validation
-- Current release: `0.2.2` (validated for HACS + Hassfest).
+- Current release: `0.2.3` (validated for HACS + Hassfest).
+- HACS approved repository and installable as an Integration category repo.
 - HACS validation workflow: `.github/workflows/hacs.yaml`
 - Hassfest validation workflow: `.github/workflows/hassfest.yaml`
 - Validation scope includes:
@@ -178,6 +185,18 @@ By default the card auto-binds to integration entities using:
 
 You can still override entities in YAML when needed.
 
+## Geo Location Source
+- No card-side geo setup is needed.
+- `sunlight_visualizer` uses your Home Assistant home location (latitude/longitude + timezone) automatically.
+- The card reads sun/wall/roof values from integration entities, so location is auto-configured through HA.
+If your Home location is not set correctly in Home Assistant:
+1. Go to **Settings**.
+2. Open **Areas, Labels & Zones**.
+3. Open **Zones**.
+4. Edit your **Home** zone position.
+
+This ensures accurate geo data for sun calculations.
+
 ## Advanced (Full YAML Reference)
 <details>
 <summary>Core / Binding</summary><br>
@@ -185,6 +204,7 @@ You can still override entities in YAML when needed.
 ```yaml
 cardWidth: 450
 cardHeight: 450
+autoScaleWidth: true
 preferIntegrationSettings: true
 
 siSourceAttr: sunlight_visualizer_source
