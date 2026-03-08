@@ -2,7 +2,6 @@
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="10%" height="10%">
 
 
-
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 [![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
@@ -11,14 +10,16 @@ An interactive sunlight intensity visualizer for Home Assistant.
 
 It includes:
 - A custom integration (`sunlight_visualizer`) that calculates wall/roof sunlight intensity values that can be used in automations.
-
-   - Facade-Aware Blinds: Auto-close/open blinds on specific walls with the (`front/left/back/right` intensity sensors).
+  
+   - Sunscreen Alert:☀️ “UV attack incoming” Go outside and bring the sunscreen, sun reaches the pool 😎!
    - Heat-Load HVAC Prep: Pre-cool when roof or wall sunlight rises, then relax setpoint when exposure drops.
    - Solar Output Insights: Compare roof sun intensity/alignment with roof power to detect underperformance.
-   - Sunscreen Alert:☀️ “UV attack incoming” Go outside and bring the sunscreen, sun reaches the pool 😎!
-
-
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-small.png" width="25%" height="25%">
+      <br><br>
+      <details>
+      <summary>Sensor information</summary><br>
+      <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="25%" height="25%">
+      </details>
+      <br>
 
 - A Lovelace card (`custom:sunlight-visualizer-card`) that renders a 2.5D house with accurate sun, shadows, roof/wall values, optional roof power, sky effects, and camera controls.
 
@@ -28,7 +29,6 @@ It includes:
 GIF (on macOS Safari: right click + "Play animation"):
 <br>
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="40%" height="40%">
-
 
 
 ## Instant Overview
