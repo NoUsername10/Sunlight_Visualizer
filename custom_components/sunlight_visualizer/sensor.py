@@ -110,7 +110,7 @@ class SolarAlignmentPercentageSensor(CoordinatorEntity, SensorEntity):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self._config_entry = config_entry
-        self._attr_name = "Sun Roof Alignment Percentage"
+        self._attr_name = "Sunlight Roof Alignment Percentage"
         self._attr_unique_id = f"{config_entry.entry_id}_solar_alignment_percentage"
         self._attr_icon = "mdi:chart-line"
         self._attr_state_class = SensorStateClass.MEASUREMENT
@@ -189,7 +189,7 @@ class SolarAlignmentStatusSensor(CoordinatorEntity, SensorEntity):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self._config_entry = config_entry
-        self._attr_name = "Sun Roof Alignment Status"
+        self._attr_name = "Sunlight Roof Alignment Status"
         self._attr_unique_id = f"{config_entry.entry_id}_solar_alignment_status"
         self._attr_icon = "mdi:sun-clock"
         # We're returning a string, so no state_class or native_unit_of_measurement
@@ -806,7 +806,7 @@ class SunWallIntensitySensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self._wall = wall
         self._config_entry = config_entry
-        self._attr_name = f"Sun Wall Intensity {wall.title()}"
+        self._attr_name = f"Sunlight {wall.title()} Wall"
         self._attr_unique_id = f"{config_entry.entry_id}_{wall}"
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_native_unit_of_measurement = PERCENTAGE
@@ -881,7 +881,7 @@ class CeilingIntensitySensor(SunWallIntensitySensor):
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator, config_entry, wall)
-        self._attr_name = f"Sun Roof Intensity"
+        self._attr_name = "Sunlight Roof"
         self._attr_unique_id = f"{config_entry.entry_id}_ceiling"
         self._attr_icon = "mdi:home-sound-in-outline"
 
