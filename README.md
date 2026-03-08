@@ -17,7 +17,7 @@ It includes:
       <br><br>
       <details>
       <summary>Sensor information</summary><br>
-      <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="25%" height="25%">
+      <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="35%" height="35%">
       </details>
       <br>
 
