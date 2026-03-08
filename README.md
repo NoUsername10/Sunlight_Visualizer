@@ -578,7 +578,7 @@ sunRayAnimColorB: "rgb(255,175,35)"
 
 ```yaml
 autoRotateEnabledDefault: false
-autoRotateSpeed: 10
+autoRotateSpeed: 25
 autoRotateIntervalMs: 50
 autoRotateTapDelayMs: 250
 autoRotateStopOnFullTurn: true
