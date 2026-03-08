@@ -110,11 +110,8 @@ These are the most important settings in integration setup/options:
   - Enable roof power label
   - Select roof power sensor
   - Invert value if your power sensor reports negative production
-- Force Sun Fallback:
-  - Enable/disable override
-  - Set forced sun azimuth/elevation for testing
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/options.png" width="35%" height="35%">
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/setup-options.png" width="70%" height="70%">
 <br>
 </details>
 
@@ -129,9 +126,11 @@ In integration configuration/options you can tune:
 - Roof Direction
 - Update Interval
 - Auto rotate speed
-- Force Sun fallback values
+- Force Sun Fallback:
+  - Enable/disable override
+  - Set forced sun azimuth/elevation for testing
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/configuration.png" width="55%" height="55%">
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/options.png" width="70%" height="70%">
 <br>
 </details>
 
@@ -147,7 +146,7 @@ Created entities include:
 - `sensor.sun_roof_alignment_percentage` — Current roof alignment versus best possible alignment for today (%).
 - `sensor.sun_roof_alignment_status` — Human-readable status for roof alignment trend.
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="55%" height="55%">
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="70%" height="70%">
 <br>
 </details>
 
@@ -157,11 +156,11 @@ Created entities include:
 You can also configure common card behavior visually:
 - Roof power options
 - Auto rotation speed
-- Auto-scale Width (auto downscale to fit narrow cards)
+- Auto-scale Width (auto downscale to fit narrow cards / devices)
 - Camera controls
 - House/roof orientation values
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual_card_configuration.png" width="55%" height="55%">
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual-card-configuration.png" width="70%" height="70%">
 <br>
 </details>
 
