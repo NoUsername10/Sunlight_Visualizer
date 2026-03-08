@@ -1,9 +1,11 @@
 # Sunlight Visualizer
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="10%" height="10%">
 
+
+
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
-[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
 [![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
+
 
 An interactive sunlight intensity visualizer for Home Assistant.
 
@@ -26,30 +28,81 @@ GIF (on macOS Safari: right click + "Play animation"):
 - Roof alignment percentage/status sensors.
 - Roof power label (optional) with invert support.
 - Localized config/options/services text (English, Swedish, Spanish).
-- Flat-roof v2 visuals: overhang, windows, door, roof panels, tree.
+- Visuals: overhang, windows, door, roof panels, tree and adaptive shadows.
 - Day/night scene with clouds, stars, moon, twilight gradients.
 - Auto rotate + manual camera controls + save/restore view.
 - Performance adaptation for slow displays.
+- Test mode (if sun is down): Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED`.
 
-## Quick Start (Card)
-Minimal:
+
+## Changelog
+See [`CHANGELOG.md`](./CHANGELOG.md).
+
+## Installation (HACS - Recommended)
+[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
+
+1. Add/install **Sunlight Visualizer** from HACS (**Integration** category).
+2. Restart Home Assistant.
+3. Go to **Settings → Devices & Services → Add Integration** and add **Sunlight Visualizer**.
+
+### Add The Card In GUI
+1. Open your dashboard.
+2. Click **Edit dashboard**.
+3. Click **+ Add card**.
+4. Select **Sunlight Visualizer**.
+5. Save.
+
+If the card is not listed in the picker, use **Manual card** and enter:
+
 ```yaml
 type: custom:sunlight-visualizer-card
 ```
-## Card Behavior
-- Double tap card: start/stop auto-rotation.
-- Side/bottom controls: manual camera rotate.
-- Rotation stops automatically after configured turn count.
-- Save button stores current camera H/V to integration entities.
-- Restore button returns to saved integration camera values.
 
-## Most Used (Start Here)
+The integration serves the card resource at:
+- `/sunlight_visualizer/sunlight-visualizer-card.js`
+
+<details>
+<summary>Manual Install (Backup)</summary><br>
+
+1. Copy `custom_components/sunlight_visualizer` into your HA config folder at:
+   `/config/custom_components/sunlight_visualizer`
+2. Restart Home Assistant.
+3. Add **Sunlight Visualizer** in **Settings → Devices & Services**.
+4. Add the card (GUI picker or manual YAML):
+
+```yaml
+type: custom:sunlight-visualizer-card
+```
+
+If needed, add card resource manually:
+- URL: `/sunlight_visualizer/sunlight-visualizer-card.js`
+- Type: `module`
+
+</details>
+
+
+
+## Geo Location Source
+- No card-side geo setup is needed.
+- `sunlight_visualizer` uses your Home Assistant home location (latitude/longitude + timezone) automatically.
+- The card reads sun/wall/roof values from integration entities, so location is auto-configured through HA.
+If your Home location is not set correctly in Home Assistant:
+1. Go to **Settings**.
+2. Open **Areas, Labels & Zones**.
+3. Open **Zones**.
+4. Edit your **Home** zone position.
+
+This ensures accurate geo data for sun calculations.
+
+
+
+## Most Used Settings (Start Here)
 <details>
 <summary>Setup options</summary><br>
 
 These are the most important settings in integration setup/options:
-- House Direction preset or custom House Angle
-- Roof Direction (`front`, `left`, `back`, `right`)
+- House Direction preset or custom House Angle (The compass angle of the front door of your house)
+- Roof Direction (`front`, `left`, `back`, `right`) Slop tilt of you ceiling.
 - Ceiling Tilt
 - Update Interval
 - Auto Rotate Speed
@@ -113,26 +166,14 @@ You can also configure common card behavior visually:
 </details>
 
 
-## Changelog
-See [`CHANGELOG.md`](./CHANGELOG.md).
 
-## Installation (HACS)
-Use one-click add:
-[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
+## Auto Binding
+By default the card auto-binds to integration entities using:
+- `sunlight_visualizer_source: sunlight_visualizer`
 
-Then:
-1. Add this repository in HACS as **Integration** (if not already added).
-2. Install **Sunlight Visualizer** from HACS.
-3. Restart Home Assistant.
-4. Add integration in **Settings → Devices & Services**.
-5. Add the card in Lovelace as `custom:sunlight-visualizer-card`.
+You can still override entities in YAML when needed.
 
-The integration serves and auto-registers the card resource at:
-- `/sunlight_visualizer/sunlight-visualizer-card.js`
 
-If manual resource registration is needed:
-- URL: `/sunlight_visualizer/sunlight-visualizer-card.js`
-- Type: `module`
 
 ## Validation
 - Current release: `0.2.3` (validated for HACS + Hassfest).
@@ -178,24 +219,6 @@ If manual resource registration is needed:
 
 </details>
 
-
-## Auto Binding
-By default the card auto-binds to integration entities using:
-- `sunlight_visualizer_source: sunlight_visualizer`
-
-You can still override entities in YAML when needed.
-
-## Geo Location Source
-- No card-side geo setup is needed.
-- `sunlight_visualizer` uses your Home Assistant home location (latitude/longitude + timezone) automatically.
-- The card reads sun/wall/roof values from integration entities, so location is auto-configured through HA.
-If your Home location is not set correctly in Home Assistant:
-1. Go to **Settings**.
-2. Open **Areas, Labels & Zones**.
-3. Open **Zones**.
-4. Edit your **Home** zone position.
-
-This ensures accurate geo data for sun calculations.
 
 ## Advanced (Full YAML Reference)
 <details>
@@ -611,6 +634,5 @@ vignetteColor: [0, 0, 0]
 </details>
 
 ## Notes
-- With `preferIntegrationSettings: true` (default), integration entities/options are the primary source for camera/orientation/power settings.
 - In Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED`.
 - Legacy/reserved keys with no active visual effect are intentionally omitted.
