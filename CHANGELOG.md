@@ -12,7 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 - Placeholder for upcoming changes.
 
-## [0.2.3] - 2026-03-08
+
+## [0.2.3] - [0.2.4] 2026-03-08
 ### Added
 - Card auto-size down by available width (`autoScaleWidth`, default `true`) with minimum width clamp at `250px`.
 - Visual editor option under Auto‑rotate: `Auto-scale Width`.
@@ -22,6 +23,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 - Bumped integration/card release version to `0.2.3`.
 - README install instructions updated for HACS-approved flow and card auto-registration notes.
+
+### Fixed
+- Config flow: improved house direction/custom angle behavior and validation handling.
+- Translation updates (EN/SV/ES) for clearer compass/front-door direction wording.
 
 ## [0.2.2] - 2026-02-15
 ### Changed
