@@ -669,7 +669,7 @@ const Xf = qf(On), jn = class jn extends be {
     const Bt = a.preferIntegrationSettings ?? !0, Pt = o.length > 0, Qt = Bt ? F || a.roofPowerEntity || "" : a.roofPowerEntity || F || "", J = Bt ? O(kt, O(a.roofPowerEnabled, !1)) : O(a.roofPowerEnabled, O(kt, !1)), tt = Bt ? O(Nt, O(a.roofPowerInvert, !1)) : O(a.roofPowerInvert, O(Nt, !1)), Et = Number((bt = (eo = (Ut = o.find(([, N]) => {
       var D;
       return ((D = N == null ? void 0 : N.attributes) == null ? void 0 : D.auto_rotate_speed) != null;
-    })) == null ? void 0 : Ut[1]) == null ? void 0 : eo.attributes) == null ? void 0 : bt.auto_rotate_speed), to = Bt && Number.isFinite(Et) ? Et : Number(a.autoRotateSpeed ?? (Number.isFinite(Et) ? Et : 10));
+    })) == null ? void 0 : Ut[1]) == null ? void 0 : eo.attributes) == null ? void 0 : bt.auto_rotate_speed), to = Bt && Number.isFinite(Et) ? Et : Number(a.autoRotateSpeed ?? (Number.isFinite(Et) ? Et : 25));
     Number(((xt = (wt = (Lt = this._hass) == null ? void 0 : Lt.states) == null ? void 0 : wt[Y]) == null ? void 0 : xt.state) ?? a.houseAngle ?? 0);
     const Tt = ["North", "NE", "East", "SE", "South", "SW", "West", "NW", "Custom"], ot = ["front", "back", "left", "right"], oo = !!Q, bo = !!q, ye = oo ? (($t = (nt = (_o = (jt = this._hass) == null ? void 0 : jt.states) == null ? void 0 : _o[Q]) == null ? void 0 : nt.attributes) == null ? void 0 : $t.options) ?? Tt : Tt, Ho = bo ? ((Uo = (_e = (Ft = (ht = this._hass) == null ? void 0 : ht.states) == null ? void 0 : Ft[q]) == null ? void 0 : _e.attributes) == null ? void 0 : Uo.options) ?? ot : ot, go = oo ? ((gs = (bs = (ms = this._hass) == null ? void 0 : ms.states) == null ? void 0 : bs[Q]) == null ? void 0 : gs.state) ?? "Custom" : a.houseDirection ?? "Custom", Go = bo ? ((ve = ($s = (ys = this._hass) == null ? void 0 : ys.states) == null ? void 0 : $s[q]) == null ? void 0 : ve.state) ?? "front" : a.roofTiltFace ?? "front", $e = !!k, rt = !!W, yo = !!V;
     return Lo`
@@ -938,7 +938,7 @@ const qn = class qn extends be {
       cardHeight: 450,
       autoScaleWidth: !0,
       autoRotateEnabledDefault: !1,
-      autoRotateSpeed: 10
+      autoRotateSpeed: 25
     };
   }
   setConfig(a) {
@@ -972,7 +972,7 @@ const qn = class qn extends be {
     this._manualRotateTimer && (clearInterval(this._manualRotateTimer), this._manualRotateTimer = null), this._manualRotateEnabled = !1, this._manualRotateAxis = null, this._manualRotateDir = 0, this._manualRotateAccumDeg = 0, this._manualRotateTargetDeg = 0, this._manualRotateLastTick = 0, this._manualRotateIntervalMs = 0, a && (this._cssRecalibrateRequested = !0), this.requestUpdate();
   }
   _startManualRotate(a, c) {
-    const l = () => typeof performance < "u" && performance.now ? performance.now() : Date.now(), o = Number(this._autoRotateSpeed || 10), w = Number(this._rotationIntervalMsFloor || this._autoRotateIntervalMs || 50), v = Math.max(1, Number(this._autoRotateTurnCount || 1));
+    const l = () => typeof performance < "u" && performance.now ? performance.now() : Date.now(), o = Number(this._autoRotateSpeed || 25), w = Number(this._rotationIntervalMsFloor || this._autoRotateIntervalMs || 50), v = Math.max(1, Number(this._autoRotateTurnCount || 1));
     this._autoRotateEnabled && this._autoRotateStop && this._autoRotateStop(), this._stopManualRotate(), this._manualRotateEnabled = !0, this._manualRotateAxis = a, this._manualRotateDir = c, this._manualRotateAccumDeg = 0, this._manualRotateTargetDeg = a === "h" ? 360 * v : 0, this._manualRotateLastTick = l(), this._manualRotateIntervalMs = w, this._manualRotateVOffsetDeg || (this._manualRotateVOffsetDeg = 0), this._manualRotateTimer = setInterval(() => {
       const P = l(), k = this._manualRotateLastTick || P, W = Math.max(0, P - k) / 1e3;
       if (this._manualRotateLastTick = P, !this._manualRotateEnabled) return;
@@ -1144,7 +1144,7 @@ const qn = class qn extends be {
       left: "#d8d2d2ff",
       bottom: "#d8d2d2ff"
     }, wh = o.autoRotateEnabledDefault ?? !1, Ys = Number(F == null ? void 0 : F.auto_rotate_speed);
-    let Ve = Number(o.autoRotateSpeed ?? 10);
+    let Ve = Number(o.autoRotateSpeed ?? 25);
     (bt && Number.isFinite(Ys) || (o.autoRotateSpeed === void 0 || o.autoRotateSpeed === null || o.autoRotateSpeed === "") && Number.isFinite(Ys)) && (Ve = Ys);
     const Mt = Number(o.autoRotateIntervalMs ?? 50), Ga = Number(o.autoRotateTapDelayMs ?? 250), xh = o.autoRotateStopOnFullTurn ?? !0, Ua = Number(o.autoRotateTurnCount ?? 1), Rh = o.autoRotateShowFps ?? !0, Mh = Number(o.autoRotateFpsWindowMs ?? 1e3), Ch = o.autoRotateAdaptiveEnabled ?? !0, $i = Number(o.autoRotateAdaptiveMaxIntervalMs ?? 1e3), kh = Number(o.autoRotateAdaptiveStepMs ?? 10), Nh = Number(o.autoRotateAdaptiveCheckMs ?? 1e3), Eh = Number(o.autoRotateAdaptiveFpsThreshold ?? 0.8), Th = Number(o.autoRotateCalibrateMs ?? 2e3), Fh = Number(o.autoRotateCalibrateFactor ?? 0.85), _i = o.cssFpsDebugEnabled ?? !1, Ah = Number(o.cssFpsWindowMs ?? 1e3), Dh = Number(o.cssFpsUiUpdateMs ?? 500), Xs = o.cssFpsAutoLimitEnabled ?? !0, Bh = Number(o.cssFpsCalibrateMs ?? 2e3), Ph = Number(o.cssFpsLimitThreshold ?? 20), zh = Number(o.cssFpsLimitFactor ?? 0.5), Lh = Number(o.cssFpsLimitMin ?? 1), Wh = Number(o.cssFpsLimitMax ?? 30), Oh = o.cssFpsLimitTextEnabled ?? !0, vi = Number(o.cssFpsRotationStartBoost ?? 2);
     this._autoRotateSpeed = Ve, this._autoRotateIntervalMs = Mt, this._autoRotateTurnCount = Ua, this._autoRotateEnabled === void 0 && (this._autoRotateEnabled = wh), this._autoRotateOffsetDeg === void 0 && (this._autoRotateOffsetDeg = 0), this._autoRotateIntervalMsDynamic === void 0 && (this._autoRotateIntervalMsDynamic = Mt), this._autoRotateFpsSamples === void 0 && (this._autoRotateFpsSamples = []), this._autoRotateFps === void 0 && (this._autoRotateFps = 0), this._autoRotateCalibrated === void 0 && (this._autoRotateCalibrated = !1), this._autoRotateAccumDeg === void 0 && (this._autoRotateAccumDeg = 0), this._autoRotateTargetDeg === void 0 && (this._autoRotateTargetDeg = 0), this._cssFps === void 0 && (this._cssFps = 0), this._cssFpsLimit === void 0 && (this._cssFpsLimit = 0), this._cssPerfLimited === void 0 && (this._cssPerfLimited = !1), this._cssFpsAutoCalibrated === void 0 && (this._cssFpsAutoCalibrated = !1), this._cssFpsMeasured === void 0 && (this._cssFpsMeasured = 0), this._cssRecalibrateRequested === void 0 && (this._cssRecalibrateRequested = !1);
