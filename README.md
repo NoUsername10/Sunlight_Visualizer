@@ -15,7 +15,7 @@ It includes:
    - Facade-Aware Blinds: Auto-close/open blinds on specific walls with the (`front/left/back/right` intensity sensors).
    - Heat-Load HVAC Prep: Pre-cool when roof or wall sunlight rises, then relax setpoint when exposure drops.
    - Solar Output Insights: Compare roof sun intensity/alignment with roof power to detect underperformance.
-   - Sunscreen Alert:☀️ “UV attack incoming” bring out the sunscreen, sun reaches the pool.
+   - Sunscreen Alert:☀️ “UV attack incoming” Go outside and bring out the sunscreen, sun reaches the pool!
 
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-small.png" width="25%" height="25%">
