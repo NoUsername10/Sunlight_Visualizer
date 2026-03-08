@@ -14,7 +14,7 @@ It includes:
    - Sunscreen Alert:☀️ “UV attack incoming” Go outside and bring the sunscreen, sun reaches the pool 😎!
    - Heat-Load HVAC Prep: Pre-cool when roof or wall sunlight rises, then relax setpoint when exposure drops.
    - Solar Output Insights: Compare roof sun intensity/alignment with roof power to detect underperformance.
-   - Control blinds and awnings automaticcly depending in the suns posiiton.
+   - Control blinds and awnings automatically depending on the sun’s position.
       <br><br>
       <details>
       <summary>Sensor information</summary><br>
