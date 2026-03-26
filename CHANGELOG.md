@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - More translations.
 - Finer precalculated sun data for sunrise and sunset.
 - Adding more calculated attributes in the sensor section.
+- Sun position lock, option to lock the suns position in the view (with rotational setting) , and make to house rotate accordingly instead.
 
 ### Added
 - Placeholder for upcoming changes.
