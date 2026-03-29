@@ -17,11 +17,10 @@ It includes:
    - Solar Output Insights: Compare roof sun intensity/alignment with roof power to detect underperformance.
    - Control blinds and awnings automatically depending on the sun’s position.
       <br><br>
-      <details>
-      <summary>Sensor information</summary><br>
-      <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="35%" height="35%">
-      </details>
-      <br>
+
+Sensor information:
+      <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="75%" height="75%">
+<br>
 
 - A Lovelace card (`custom:sunlight-visualizer-card`) that renders a 2.5D house with accurate sun, shadows, roof/wall values, optional roof power, sky effects, and camera controls.
 
@@ -42,6 +41,7 @@ GIF (on macOS Safari: right click + "Play animation"):
 - Visuals: overhang, windows, door, roof panels, tree and adaptive shadows.
 - Day/night scene with clouds, stars, moon, twilight gradients.
 - Auto rotate + manual camera controls + save/restore view.
+- Fixed sun position, azimuth. (Rotate scene) — Keep sun azimuth visually fixed and rotate the scene instead.
 - Performance adaptation for slow displays.
 - Test mode (if sun is down): Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED`.
 
@@ -115,6 +115,7 @@ These are the most important settings in integration setup/options:
 - House Direction preset or custom House Angle (The compass angle of the front door of your house)
 - Roof Direction (`front`, `left`, `back`, `right`) Slop tilt of you ceiling.
 - Ceiling Tilt
+- Fixed sun position, azimuth. (Rotate scene)
 - Update Interval
 - Auto Rotate Speed
 - Roof power settings:
@@ -135,6 +136,7 @@ In integration configuration/options you can tune:
 - Camera Rotation H / V (default view)
 - House Direction preset
 - Roof Direction
+- Fixed sun position, azimuth. (Rotate scene)
 - Update Interval
 - Auto rotate speed
 - Force Sun Fallback:
@@ -169,6 +171,7 @@ You can also configure common card behavior visually:
 - Auto rotation speed
 - Auto-scale Width (auto downscale to fit narrow cards / devices)
 - Camera controls
+- Fixed sun position, azimuth. (Rotate scene)
 - House/roof orientation values
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual-card-configuration.png" width="70%" height="70%">
@@ -186,7 +189,7 @@ You can still override entities in YAML when needed.
 
 
 ## Validation
-- Current release: `0.2.3` (validated for HACS + Hassfest).
+- Current release: `0.2.5` (validated for HACS + Hassfest).
 - HACS approved repository and installable as an Integration category repo.
 - HACS validation workflow: `.github/workflows/hacs.yaml`
 - Hassfest validation workflow: `.github/workflows/hassfest.yaml`
@@ -227,6 +230,9 @@ You can still override entities in YAML when needed.
 - `select.house_direction`
 - `select.roof_direction`
 
+### Switch entities
+- `switch.fixed_sun_azimuth_rotate_scene`
+
 </details>
 
 
@@ -246,6 +252,8 @@ siSourceValue: sunlight_visualizer
 rotationHEntity: number.house_camera_rotation_h
 rotationVEntity: number.house_camera_rotation_v
 houseAngleEntity: number.house_angle
+fixedSunRotationEnabled: false
+fixedSunAzimuthDeg: 225
 
 wallFrontPctEntity: sensor.sun_wall_intensity_front
 wallRightPctEntity: sensor.sun_wall_intensity_right

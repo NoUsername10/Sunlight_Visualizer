@@ -8,11 +8,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - More translations.
 - Finer precalculated sun data for sunrise and sunset.
 - Adding more calculated attributes in the sensor section.
-- Sun position lock, option to lock the suns position in the view (with rotational setting) , and make to house rotate accordingly instead.
+- Adding card information about sun and alignement position
+
 
 ### Added
 - Placeholder for upcoming changes.
 
+
+## [0.2.5] - 2026-03-29
+### Added
+- Fixed Sun Azimuth visual mode (sun rotation lock) with scene rotation compensation.
+- Visual editor section/label for `Fixed Sun Azimuth (sun rotation)`.
+- On-card white info text in top-left when fixed sun azimuth mode is enabled.
+
+### Changed
+- Save Camera View now batches integration-backed values (`camera_rotation_h`, `camera_rotation_v`, and `fixed_sun_azimuth`) in a single `sunlight_visualizer.set_options` call to reduce flicker.
+- Bumped integration/card release version to `0.2.5`.
 
 ## [0.2.3] - [0.2.4] 2026-03-08
 ### Added
