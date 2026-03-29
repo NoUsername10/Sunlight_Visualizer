@@ -1,11 +1,11 @@
 # Sunlight Visualizer
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="10%" height="10%">
 
-
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
-
 [![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
+[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
+
+<br>
 
 An interactive sunlight intensity visualizer for Home Assistant.
 
@@ -16,20 +16,22 @@ It includes:
    - Heat-Load HVAC Prep: Pre-cool when roof or wall sunlight rises, then relax setpoint when exposure drops.
    - Solar Output Insights: Compare roof sun intensity/alignment with roof power to detect underperformance.
    - Control blinds and awnings automatically depending on the sun’s position.
-      <br><br>
 
-Sensor information:
-      <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="75%" height="75%">
+<br>
+
+Sensor information: <br>
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="50%" height="50%">
+
 <br>
 
 - A Lovelace card (`custom:sunlight-visualizer-card`) that renders a 2.5D house with accurate sun, shadows, roof/wall values, optional roof power, sky effects, and camera controls.
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="25%" height="25%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-dawn.png" width="25%" height="25%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="25%" height="25%">
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="33%" height="33%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-dawn.png" width="33%" height="33%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="33%" height="33%">
 
 
 GIF (on macOS Safari: right click + "Play animation"):
 <br>
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="40%" height="40%">
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="50%" height="50%">
 
 
 ## Instant Overview
