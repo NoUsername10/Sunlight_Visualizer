@@ -12,6 +12,7 @@
           "roof_power_entity": "Sensor de potencia del techo (opcional)",
           "roof_power_enabled": "Activar etiqueta de potencia del techo",
           "roof_power_invert": "Invertir potencia del techo (forzar positivo)",
+          "fixed_sun_rotation_enabled": "Fixed sun position, azimuth. (Rotate scene)",
           "auto_rotate_speed": "Velocidad de auto-rotacion (grados/segundo)",
           "house_angle": "Angulo de la casa (grados, 0° = frente hacia el norte)",
           "ceiling_tilt": "Inclinacion del techo (0-90°, 0 = horizontal)",
@@ -24,6 +25,7 @@
           "roof_power_entity": "Selecciona un sensor de potencia para mostrar debajo del % del techo (W/kW)",
           "roof_power_enabled": "Mostrar valor de potencia del techo debajo del %",
           "roof_power_invert": "Invertir valores de potencia (util para sensores con valores negativos)",
+          "fixed_sun_rotation_enabled": "Keep sun azimuth visually fixed and rotate the scene instead",
           "auto_rotate_speed": "Velocidad predeterminada de auto-rotacion para la tarjeta (1-90 grados/seg)",
           "house_angle": "Angulo del frente de tu casa respecto al norte (0-359°)",
           "ceiling_tilt": "Angulo de inclinacion del techo/paneles solares (0° = plano, 90° = vertical)",
@@ -62,6 +64,7 @@
           "roof_power_entity": "Sensor de potencia del techo (opcional)",
           "roof_power_enabled": "Activar etiqueta de potencia del techo",
           "roof_power_invert": "Invertir potencia del techo (forzar positivo)",
+          "fixed_sun_rotation_enabled": "Fixed sun position, azimuth. (Rotate scene)",
           "force_sun_fallback": "Forzar sol de respaldo",
           "force_sun_azimuth": "Forzar azimut del sol",
           "force_sun_elevation": "Forzar elevacion del sol",
@@ -77,6 +80,7 @@
           "roof_power_entity": "Selecciona un sensor de potencia para mostrar debajo del % del techo (W/kW)",
           "roof_power_enabled": "Mostrar valor de potencia del techo debajo del %",
           "roof_power_invert": "Invertir valores de potencia (util para sensores con valores negativos)",
+          "fixed_sun_rotation_enabled": "Keep sun azimuth visually fixed and rotate the scene instead",
           "force_sun_fallback": "Forzar valores de sol de respaldo (pruebas)",
           "force_sun_azimuth": "Azimut a usar al forzar respaldo (0-359°)",
           "force_sun_elevation": "Elevacion a usar al forzar respaldo (-90° a 90°)",
@@ -116,6 +120,14 @@
         "camera_rotation_v": {
           "name": "Rotacion de camara V",
           "description": "Rotacion vertical de la camara en grados (0-90)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Azimut solar fijo",
+          "description": "Azimut solar fijo para el modo visual de sol fijo en la tarjeta (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Fixed sun position, azimuth. (Rotate scene)",
+          "description": "Keep sun azimuth visually fixed and rotate the scene instead"
         },
         "auto_rotate_speed": {
           "name": "Velocidad de auto-rotacion",

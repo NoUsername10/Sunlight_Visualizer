@@ -12,6 +12,7 @@
           "roof_power_entity": "Takets effektsensor (valfri)",
           "roof_power_enabled": "Aktivera takets effektvärde",
           "roof_power_invert": "Invertera effekt (tvinga positivt)",
+          "fixed_sun_rotation_enabled": "Fixed sun position, azimuth. (Rotate scene)",
           "auto_rotate_speed": "Auto-roteringshastighet (grader/sek)",
           "house_angle": "Husvinkel (grader, 0° = front mot norr)",
           "ceiling_tilt": "Taklutning (0–90°, 0 = horisontell)",
@@ -24,6 +25,7 @@
           "roof_power_entity": "Välj effektsensor som visas under takets % (W/kW)",
           "roof_power_enabled": "Visa effektvärde under takets %",
           "roof_power_invert": "Invertera effektvärden (om sensorn är negativ)",
+          "fixed_sun_rotation_enabled": "Keep sun azimuth visually fixed and rotate the scene instead",
           "auto_rotate_speed": "Standardhastighet för auto-rotation i kortet (1–90 grader/sek)",
           "house_angle": "Vinkel för husets front i förhållande till norr (0–359°)",
           "ceiling_tilt": "Lutningsvinkel för tak/solpaneler (0° = plant, 90° = vertikalt)",
@@ -62,6 +64,7 @@
           "roof_power_entity": "Takets effektsensor (valfri)",
           "roof_power_enabled": "Aktivera takets effektvärde",
           "roof_power_invert": "Invertera effekt (tvinga positivt)",
+          "fixed_sun_rotation_enabled": "Fixed sun position, azimuth. (Rotate scene)",
           "force_sun_fallback": "Tvinga sol‑fallback",
           "force_sun_azimuth": "Tvinga solazimut",
           "force_sun_elevation": "Tvinga solhöjd",
@@ -77,6 +80,7 @@
           "roof_power_entity": "Välj effektsensor som visas under takets % (W/kW)",
           "roof_power_enabled": "Visa effektvärde under takets %",
           "roof_power_invert": "Invertera effektvärden (om sensorn är negativ)",
+          "fixed_sun_rotation_enabled": "Keep sun azimuth visually fixed and rotate the scene instead",
           "force_sun_fallback": "Tvinga fallback‑solvärden (test)",
           "force_sun_azimuth": "Azimut som används vid tvingad fallback (0–359°)",
           "force_sun_elevation": "Höjd som används vid tvingad fallback (−90° till 90°)",
@@ -116,6 +120,14 @@
         "camera_rotation_v": {
           "name": "Kamerarotation V",
           "description": "Vertikal kamerarotation i grader (0-90)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Fast solazimut",
+          "description": "Fast solazimut för kortets visuella fixed-sun-läge (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Fixed sun position, azimuth. (Rotate scene)",
+          "description": "Keep sun azimuth visually fixed and rotate the scene instead"
         },
         "auto_rotate_speed": {
           "name": "Auto-roteringshastighet",
