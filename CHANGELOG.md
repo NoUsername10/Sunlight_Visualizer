@@ -6,7 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Planned
 - More translations.
-- Finer precalculated sun data for sunrise and sunset.
 - Adding more calculated attributes in the sensor section.
 - Adding card information about sun and alignement position
 
