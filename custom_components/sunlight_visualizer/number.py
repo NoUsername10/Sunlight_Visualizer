@@ -352,3 +352,4 @@ class CameraRotationVNumber(CoordinatorEntity, NumberEntity):
             CARD_SOURCE_ATTR: CARD_SOURCE_VALUE,
             "camera_rotation": "v"
         }
+

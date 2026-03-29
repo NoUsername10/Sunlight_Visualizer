@@ -36,6 +36,8 @@ from .const import (
     CONF_FORCE_SUN_AZIMUTH,
     CONF_FORCE_SUN_ELEVATION,
     CONF_AUTO_ROTATE_SPEED,
+    CONF_FIXED_SUN_AZIMUTH,
+    CONF_FIXED_SUN_ROTATION_ENABLED,
     CONF_CEILING_TILT,
     CONF_UPDATE_INTERVAL,
     CONF_ADVANCED_MODE,
@@ -46,6 +48,8 @@ from .const import (
     DEFAULT_FORCE_SUN_AZIMUTH,
     DEFAULT_FORCE_SUN_ELEVATION,
     DEFAULT_AUTO_ROTATE_SPEED,
+    DEFAULT_FIXED_SUN_AZIMUTH,
+    DEFAULT_FIXED_SUN_ROTATION_ENABLED,
     WALLS,
     DEFAULT_UPDATE_INTERVAL,
     ROOF_DIRECTIONS,
@@ -858,6 +862,22 @@ class SunWallIntensitySensor(CoordinatorEntity, SensorEntity):
                 self._config_entry.options.get(CONF_AUTO_ROTATE_SPEED)
                 if self._config_entry.options.get(CONF_AUTO_ROTATE_SPEED) is not None
                 else self._config_entry.data.get(CONF_AUTO_ROTATE_SPEED, DEFAULT_AUTO_ROTATE_SPEED)
+            ),
+            'fixed_sun_azimuth': (
+                self._config_entry.options.get(CONF_FIXED_SUN_AZIMUTH)
+                if self._config_entry.options.get(CONF_FIXED_SUN_AZIMUTH) is not None
+                else self._config_entry.data.get(
+                    CONF_FIXED_SUN_AZIMUTH,
+                    DEFAULT_FIXED_SUN_AZIMUTH,
+                )
+            ),
+            'fixed_sun_rotation_enabled': (
+                self._config_entry.options.get(CONF_FIXED_SUN_ROTATION_ENABLED)
+                if self._config_entry.options.get(CONF_FIXED_SUN_ROTATION_ENABLED) is not None
+                else self._config_entry.data.get(
+                    CONF_FIXED_SUN_ROTATION_ENABLED,
+                    DEFAULT_FIXED_SUN_ROTATION_ENABLED
+                )
             ),
             'wall': self._wall,
             'last_updated': self.coordinator.data.get('last_updated', ''),
