@@ -1,11 +1,11 @@
 # Sunlight Visualizer
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="10%" height="10%">
 
-
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
-
 [![coffee_badge](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
+[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
+
+<br>
 
 An interactive sunlight intensity visualizer for Home Assistant.
 
@@ -16,21 +16,22 @@ It includes:
    - Heat-Load HVAC Prep: Pre-cool when roof or wall sunlight rises, then relax setpoint when exposure drops.
    - Solar Output Insights: Compare roof sun intensity/alignment with roof power to detect underperformance.
    - Control blinds and awnings automatically depending on the sun’s position.
-      <br><br>
-      <details>
-      <summary>Sensor information</summary><br>
-      <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="35%" height="35%">
-      </details>
-      <br>
+
+<br>
+
+Sensor information: <br>
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="50%" height="50%">
+
+<br>
 
 - A Lovelace card (`custom:sunlight-visualizer-card`) that renders a 2.5D house with accurate sun, shadows, roof/wall values, optional roof power, sky effects, and camera controls.
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="25%" height="25%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-dawn.png" width="25%" height="25%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="25%" height="25%">
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="33%" height="33%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-dawn.png" width="33%" height="33%"> <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="33%" height="33%">
 
 
 GIF (on macOS Safari: right click + "Play animation"):
 <br>
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="40%" height="40%">
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="50%" height="50%">
 
 
 ## Instant Overview
@@ -42,6 +43,7 @@ GIF (on macOS Safari: right click + "Play animation"):
 - Visuals: overhang, windows, door, roof panels, tree and adaptive shadows.
 - Day/night scene with clouds, stars, moon, twilight gradients.
 - Auto rotate + manual camera controls + save/restore view.
+- Fixed sun position, azimuth. (Rotate scene) — Keep sun azimuth visually fixed and rotate the scene instead.
 - Performance adaptation for slow displays.
 - Test mode (if sun is down): Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED`.
 
@@ -115,6 +117,7 @@ These are the most important settings in integration setup/options:
 - House Direction preset or custom House Angle (The compass angle of the front door of your house)
 - Roof Direction (`front`, `left`, `back`, `right`) Slop tilt of you ceiling.
 - Ceiling Tilt
+- Fixed sun position, azimuth. (Rotate scene)
 - Update Interval
 - Auto Rotate Speed
 - Roof power settings:
@@ -135,6 +138,7 @@ In integration configuration/options you can tune:
 - Camera Rotation H / V (default view)
 - House Direction preset
 - Roof Direction
+- Fixed sun position, azimuth. (Rotate scene)
 - Update Interval
 - Auto rotate speed
 - Force Sun Fallback:
@@ -169,6 +173,7 @@ You can also configure common card behavior visually:
 - Auto rotation speed
 - Auto-scale Width (auto downscale to fit narrow cards / devices)
 - Camera controls
+- Fixed sun position, azimuth. (Rotate scene)
 - House/roof orientation values
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual-card-configuration.png" width="70%" height="70%">
@@ -186,7 +191,7 @@ You can still override entities in YAML when needed.
 
 
 ## Validation
-- Current release: `0.2.3` (validated for HACS + Hassfest).
+- Current release: `0.2.5` (validated for HACS + Hassfest).
 - HACS approved repository and installable as an Integration category repo.
 - HACS validation workflow: `.github/workflows/hacs.yaml`
 - Hassfest validation workflow: `.github/workflows/hassfest.yaml`
@@ -227,6 +232,9 @@ You can still override entities in YAML when needed.
 - `select.house_direction`
 - `select.roof_direction`
 
+### Switch entities
+- `switch.fixed_sun_azimuth_rotate_scene`
+
 </details>
 
 
@@ -246,6 +254,8 @@ siSourceValue: sunlight_visualizer
 rotationHEntity: number.house_camera_rotation_h
 rotationVEntity: number.house_camera_rotation_v
 houseAngleEntity: number.house_angle
+fixedSunRotationEnabled: false
+fixedSunAzimuthDeg: 225
 
 wallFrontPctEntity: sensor.sun_wall_intensity_front
 wallRightPctEntity: sensor.sun_wall_intensity_right

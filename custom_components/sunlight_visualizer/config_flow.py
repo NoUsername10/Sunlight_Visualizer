@@ -28,6 +28,7 @@ from .const import (
     CONF_FORCE_SUN_FALLBACK,
     CONF_FORCE_SUN_AZIMUTH,
     CONF_FORCE_SUN_ELEVATION,
+    CONF_FIXED_SUN_ROTATION_ENABLED,
     DIRECTIONS,
     ROOF_DIRECTIONS,
     DEFAULT_UPDATE_INTERVAL,
@@ -43,6 +44,7 @@ from .const import (
     DEFAULT_FORCE_SUN_FALLBACK,
     DEFAULT_FORCE_SUN_AZIMUTH,
     DEFAULT_FORCE_SUN_ELEVATION,
+    DEFAULT_FIXED_SUN_ROTATION_ENABLED,
 )
 
 
@@ -220,14 +222,9 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 vol.Range(min=1, max=90)
             ),
             vol.Required(
-                CONF_ROOF_POWER_ENABLED,
-                default=DEFAULT_ROOF_POWER_ENABLED,
-                description="Enable roof power label"
-            ): bool,
-            vol.Required(
-                CONF_ROOF_POWER_INVERT,
-                default=DEFAULT_ROOF_POWER_INVERT,
-                description="Invert roof power value (show positive)"
+                CONF_FIXED_SUN_ROTATION_ENABLED,
+                default=DEFAULT_FIXED_SUN_ROTATION_ENABLED,
+                description="Keep sun azimuth visually fixed and rotate the scene instead"
             ): bool,
         })
 
@@ -242,6 +239,19 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 CONF_ROOF_POWER_ENTITY,
                 description="Optional solar power sensor (W) for roof label"
             )] = roof_power_selector
+
+        schema_dict.update({
+            vol.Required(
+                CONF_ROOF_POWER_ENABLED,
+                default=DEFAULT_ROOF_POWER_ENABLED,
+                description="Enable roof power label"
+            ): bool,
+            vol.Required(
+                CONF_ROOF_POWER_INVERT,
+                default=DEFAULT_ROOF_POWER_INVERT,
+                description="Invert roof power value (show positive)"
+            ): bool,
+        })
 
         return self.async_show_form(
             step_id="user",
@@ -373,6 +383,10 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
         current_force_sun = current_config.get(CONF_FORCE_SUN_FALLBACK, DEFAULT_FORCE_SUN_FALLBACK)
         current_force_sun_az = current_config.get(CONF_FORCE_SUN_AZIMUTH, DEFAULT_FORCE_SUN_AZIMUTH)
         current_force_sun_el = current_config.get(CONF_FORCE_SUN_ELEVATION, DEFAULT_FORCE_SUN_ELEVATION)
+        current_fixed_sun_rotation_enabled = current_config.get(
+            CONF_FIXED_SUN_ROTATION_ENABLED,
+            DEFAULT_FIXED_SUN_ROTATION_ENABLED,
+        )
         
         # Get current location from config or HA
         current_latitude = current_config.get(CONF_LATITUDE, self.hass.config.latitude)
@@ -444,6 +458,26 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 vol.Range(min=1, max=90)
             ),
             vol.Required(
+                CONF_FIXED_SUN_ROTATION_ENABLED,
+                default=current_fixed_sun_rotation_enabled,
+                description="Keep sun azimuth visually fixed and rotate the scene instead"
+            ): bool,
+        })
+
+        if current_roof_power:
+            options_schema_dict[vol.Optional(
+                CONF_ROOF_POWER_ENTITY,
+                default=current_roof_power,
+                description="Optional solar power sensor (W) for roof label"
+            )] = roof_power_selector
+        else:
+            options_schema_dict[vol.Optional(
+                CONF_ROOF_POWER_ENTITY,
+                description="Optional solar power sensor (W) for roof label"
+            )] = roof_power_selector
+
+        options_schema_dict.update({
+            vol.Required(
                 CONF_ROOF_POWER_ENABLED,
                 default=current_config.get(CONF_ROOF_POWER_ENABLED, DEFAULT_ROOF_POWER_ENABLED),
                 description="Enable roof power label"
@@ -469,18 +503,6 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 description="Force Sun Elevation (degrees)"
             ): vol.All(vol.Coerce(float), vol.Range(min=-90, max=90)),
         })
-
-        if current_roof_power:
-            options_schema_dict[vol.Optional(
-                CONF_ROOF_POWER_ENTITY,
-                default=current_roof_power,
-                description="Optional solar power sensor (W) for roof label"
-            )] = roof_power_selector
-        else:
-            options_schema_dict[vol.Optional(
-                CONF_ROOF_POWER_ENTITY,
-                description="Optional solar power sensor (W) for roof label"
-            )] = roof_power_selector
 
         options_schema = vol.Schema(options_schema_dict)
 

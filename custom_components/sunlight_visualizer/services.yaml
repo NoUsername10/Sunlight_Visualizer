@@ -60,6 +60,22 @@ set_options:
           step: 1
           mode: box
 
+    fixed_sun_azimuth:
+      name: Fixed sun azimuth
+      description: Fixed sun azimuth used by card visual fixed-sun mode (0-359).
+      selector:
+        number:
+          min: 0
+          max: 359
+          step: 1
+          mode: box
+
+    fixed_sun_rotation_enabled:
+      name: Fixed sun position, azimuth. (Rotate scene)
+      description: Keep sun azimuth visually fixed and rotate the scene instead
+      selector:
+        boolean:
+
     auto_rotate_speed:
       name: Auto-rotate speed
       description: Card auto-rotation speed in degrees per second (1-90).

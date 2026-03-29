@@ -23,6 +23,8 @@ from .const import (
     CONF_CAMERA_ROT_H,
     CONF_CAMERA_ROT_V,
     CONF_AUTO_ROTATE_SPEED,
+    CONF_FIXED_SUN_AZIMUTH,
+    CONF_FIXED_SUN_ROTATION_ENABLED,
     CONF_ROOF_POWER_ENTITY,
     CONF_ROOF_POWER_ENABLED,
     CONF_ROOF_POWER_INVERT,
@@ -40,7 +42,8 @@ with open(os.path.join(os.path.dirname(__file__), 'manifest.json')) as fp:
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
     Platform.NUMBER,
-    Platform.SELECT, 
+    Platform.SELECT,
+    Platform.SWITCH,
 ]
 
 # Local resource URL for the bundled card
@@ -59,6 +62,8 @@ SERVICE_SET_OPTIONS_SCHEMA = vol.Schema(
         vol.Optional(CONF_CAMERA_ROT_H): vol.All(vol.Coerce(int), vol.Range(min=0, max=359)),
         vol.Optional(CONF_CAMERA_ROT_V): vol.All(vol.Coerce(int), vol.Range(min=0, max=90)),
         vol.Optional(CONF_AUTO_ROTATE_SPEED): vol.All(vol.Coerce(float), vol.Range(min=1, max=90)),
+        vol.Optional(CONF_FIXED_SUN_AZIMUTH): vol.All(vol.Coerce(int), vol.Range(min=0, max=359)),
+        vol.Optional(CONF_FIXED_SUN_ROTATION_ENABLED): bool,
         vol.Optional(CONF_ROOF_POWER_ENTITY): vol.Any(None, str),
         vol.Optional(CONF_ROOF_POWER_ENABLED): bool,
         vol.Optional(CONF_ROOF_POWER_INVERT): bool,
@@ -72,6 +77,8 @@ SET_OPTIONS_KEYS = {
     CONF_CAMERA_ROT_H,
     CONF_CAMERA_ROT_V,
     CONF_AUTO_ROTATE_SPEED,
+    CONF_FIXED_SUN_AZIMUTH,
+    CONF_FIXED_SUN_ROTATION_ENABLED,
     CONF_ROOF_POWER_ENTITY,
     CONF_ROOF_POWER_ENABLED,
     CONF_ROOF_POWER_INVERT,
