@@ -17,9 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [0.2.5] - 2026-03-29
 ### Added
-- Fixed Sun Azimuth visual mode (sun rotation lock) with scene rotation compensation.
+- Fixed Sun Azimuth visual mode (sun rotation lock) with scene rotation compensation, thank you @HACS-bank for the suggestion!
 - Visual editor section/label for `Fixed Sun Azimuth (sun rotation)`.
-- On-card white info text in top-left when fixed sun azimuth mode is enabled.
 
 ### Changed
 - Save Camera View now batches integration-backed values (`camera_rotation_h`, `camera_rotation_v`, and `fixed_sun_azimuth`) in a single `sunlight_visualizer.set_options` call to reduce flicker.
