@@ -7,7 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Planned
 - More translations.
 - Adding more calculated attributes in the sensor section.
-- Adding card information about sun and alignement position
+- Adding card information about sun and alignement position.
+- Add zone location selection from dropdown for the house location.
 
 
 ### Added
