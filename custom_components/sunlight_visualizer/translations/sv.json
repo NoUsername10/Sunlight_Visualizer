@@ -4,8 +4,10 @@
     "step": {
       "user": {
         "title": "Konfiguration av Sunlight Visualizer",
-        "description": "Konfigurera integrationen Sunlight Visualizer. Aktuell Home Assistant-plats: {location_name} ({latitude}, {longitude})",
+        "description": "Konfigurera integrationen Sunlight Visualizer. Aktiv plats: {location_name} ({latitude}, {longitude}) via {location_source}",
         "data": {
+          "location_source": "Platskälla",
+          "location_zone_entity": "Zon-override",
           "use_custom_angle": "Använd egen vinkel (istället för kompassriktning)",
           "direction": "Kompassriktning (Välj den riktning som din ytterdörr vetter mot)",
           "roof_direction": "Taksidans riktning (nedförsida)",
@@ -19,6 +21,8 @@
           "update_interval": "Uppdateringsintervall (minuter)"
         },
         "data_description": {
+          "location_source": "Välj Home Assistant-plats (standard) eller en anpassad zon.",
+          "location_zone_entity": "Välj en zon som override, eller välj Use Home (default). Om zonen saknas/inte är tillgänglig används Home automatiskt.",
           "use_custom_angle": "Markera för att ange exakt vinkel, avmarkera för att välja kompassriktning",
           "direction": "Välj kompassriktning (N, NE, E, osv.) den riktning som din ytterdörr vetter mot.",
           "roof_direction": "Välj vilken sida av huset taket lutar ned mot",
@@ -56,8 +60,10 @@
     "step": {
       "init": {
         "title": "Alternativ för Sunlight Visualizer",
-        "description": "Uppdatera konfigurationen för Sunlight Visualizer. Plats: {source} ({current_lat}, {current_lon})",
+        "description": "Uppdatera konfigurationen för Sunlight Visualizer. Aktiv plats: {location_name} ({current_lat}, {current_lon}) via {source}",
         "data": {
+          "location_source": "Platskälla",
+          "location_zone_entity": "Zon-override",
           "use_custom_angle": "Använd egen vinkel (istället för kompassriktning)",
           "direction": "Kompassriktning (Välj den riktning som din ytterdörr vetter mot)",
           "roof_direction": "Taksidans riktning (nedförsida)",
@@ -74,6 +80,8 @@
           "update_interval": "Uppdateringsintervall (minuter)"
         },
         "data_description": {
+          "location_source": "Välj Home Assistant-plats (standard) eller en anpassad zon.",
+          "location_zone_entity": "Välj en zon som override, eller välj Use Home (default). Om zonen saknas/inte är tillgänglig används Home automatiskt.",
           "use_custom_angle": "Markera för att ange exakt vinkel, avmarkera för att välja kompassriktning",
           "direction": "Välj kompassriktning (N, NE, E, osv.) den riktning som din ytterdörr vetter mot.",
           "roof_direction": "Välj vilken sida av huset taket lutar ned mot",
@@ -144,6 +152,19 @@
         "roof_power_invert": {
           "name": "Invertera takets effektvärde",
           "description": "Invertera effektvärdet (användbart för sensorer med negativ export)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Soltakets Inriktningsstatus",
+        "state": {
+          "at_peak": "Vid topp",
+          "approaching": "Närmar sig",
+          "declining": "Avtar",
+          "unknown": "Okänd"
         }
       }
     }
