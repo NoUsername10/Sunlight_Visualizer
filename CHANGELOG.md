@@ -22,10 +22,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Small-card `(i)` interaction mode for energy HUD below `300x300` (tap to open/close details).
 - Grid flow sensor support in the card (with sign invert), including runtime precedence over roof power flow.
 - Power-only sensor enforcement for roof/grid flow selection.
-- Utility pole + powerline rendering with bidirectional pulse flow visuals. 
-- Location selection, with resolution, supports safe fallback to Home coordinates when a selected zone is missing/invalid.
-- Added Polish translation file (`pl.json`) and aligned it with current config/options/service translation keys. thanks @Adrian-czw
+- Utility pole + powerline rendering with bidirectional pulse flow visuals.
 - Diagnostics metadata for resolved location source, selected zone entity, and active location name.
+- Location selection, with resolution, supports safe fallback to Home coordinates when a selected zone is missing/invalid. Thank you @yazck for the suggestion!
+- Added Polish translation file (`pl.json`) and aligned it with current config/options/service translation keys. Thank you @Adrian-czw!
+
 
 
 ### Changed
