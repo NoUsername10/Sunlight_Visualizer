@@ -39,13 +39,45 @@ GIF (on macOS Safari: right click + "Play animation"):
 - Surface intensity sensors for all 4 walls + roof.
 - Roof alignment percentage/status sensors.
 - Roof power label for solar power (optional) with invert value support.
-- Localized config/options/services text (English, Swedish, Spanish).
+- Grid flow sensor support (optional) with invert sign support.
+- Energy HUD for Solar / Home / Grid with adaptive small-card behavior.
+- Utility pole + powerline visualization with bidirectional pulse animation.
+- Improved sun-depth layering for utility pole/powerline elements.
+- Power-only sensor enforcement for roof/grid sensor selection.
+- Improved wall `%` label projection + anti-stretch behavior.
+- Home location by default with optional zone-based location override in integration setup/options.
+- Localized config/options/services text (English, Swedish, Spanish, Polish).
 - Visuals: overhang, windows, door, roof panels, tree and adaptive shadows.
 - Day/night scene with clouds, stars, moon, twilight gradients.
 - Auto rotate + manual camera controls + save/restore view.
 - Fixed sun position, azimuth. (Rotate scene) — Keep sun azimuth visually fixed and rotate the scene instead.
 - Performance adaptation for slow displays.
 - Test mode (if sun is down): Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED`.
+
+## Latest Updates (Unreleased)
+- Lovelace resource registration hardening:
+  - duplicate checks now normalize URLs (query/hash + legacy path equivalence),
+  - async-only static path registration path retained.
+- Roof power sensor now stays saved even when `Enable power label` is turned off in setup/options.
+- Energy HUD roof-alignment line simplified:
+  - trend arrow + whole-number `%` (no separate STATUS row).
+- Energy HUD vertical spacing/padding tuned for better readability.
+- Powerline/pole draw order improved around sun depth, and pulse path behavior restored for smooth single animation.
+
+## New In 0.2.6
+- New Energy HUD with `SOLAR`, `HOME`, and `GRID` values.
+- `GRID` direction-aware display (import/export color + arrow).
+- kW values shown with 2 decimals in HUD.
+- HUD layout tuned for stable reading (left labels, right values).
+- Small-card HUD interaction:
+  - Full HUD on normal card sizes.
+  - Below `300x300`, HUD collapses to `(i)` button.
+  - Tap `(i)` to open HUD; tap HUD to close back to `(i)`.
+- Grid flow sensor support (optional) with invert sign.
+- Runtime precedence:
+  - Valid grid flow sensor drives HUD/pulse direction.
+  - Roof flow is fallback when grid flow is unavailable.
+- Utility pole + powerline + animated pulse direction updates.
 
 
 ## Changelog
@@ -97,7 +129,9 @@ If needed, add card resource manually:
 
 ## Geo Location Source
 - No card-side geo setup is needed.
-- `sunlight_visualizer` uses your Home Assistant home location (latitude/longitude + timezone) automatically.
+- `sunlight_visualizer` uses your Home Assistant home location (latitude/longitude + timezone) automatically by default.
+- Optional: in integration setup/options, change **Location source** to **Zone** and select a `zone.*` entity.
+- If the selected zone is missing/unavailable, the integration safely falls back to Home coordinates.
 - The card reads sun/wall/roof values from integration entities, so location is auto-configured through HA.
 If your Home location is not set correctly in Home Assistant:
 1. Go to **Settings**.
@@ -114,6 +148,8 @@ This ensures accurate geo data for sun calculations.
 <summary>Setup options</summary><br>
 
 These are the most important settings in integration setup/options:
+- Location source (`Home Assistant` default or `Zone` override)
+- Zone override (`zone.*`) when location source is set to `Zone`
 - House Direction preset or custom House Angle (The compass angle of the front door of your house)
 - Roof Direction (`front`, `left`, `back`, `right`) Slop tilt of you ceiling.
 - Ceiling Tilt
@@ -133,6 +169,8 @@ These are the most important settings in integration setup/options:
 <summary>Configuration options</summary><br>
 
 In integration configuration/options you can tune:
+- Location source (`Home Assistant` default or `Zone` override)
+- Zone override (`zone.*`) when location source is set to `Zone`
 - Ceiling Tilt
 - House Angle
 - Camera Rotation H / V (default view)
@@ -141,6 +179,7 @@ In integration configuration/options you can tune:
 - Fixed sun position, azimuth. (Rotate scene)
 - Update Interval
 - Auto rotate speed
+- Roof power source + invert
 - Force Sun Fallback:
   - Enable/disable override
   - Set forced sun azimuth/elevation for testing
@@ -170,6 +209,9 @@ Created entities include:
 
 You can also configure common card behavior visually:
 - Roof power options
+- Grid flow sensor options (power sensor + invert)
+- Powerline + pulse controls
+- Energy HUD controls
 - Auto rotation speed
 - Auto-scale Width (auto downscale to fit narrow cards / devices)
 - Camera controls
@@ -191,7 +233,7 @@ You can still override entities in YAML when needed.
 
 
 ## Validation
-- Current release: `0.2.5` (validated for HACS + Hassfest).
+- Current release: `0.2.6` (validated for HACS + Hassfest).
 - HACS approved repository and installable as an Integration category repo.
 - HACS validation workflow: `.github/workflows/hacs.yaml`
 - Hassfest validation workflow: `.github/workflows/hassfest.yaml`
@@ -206,6 +248,7 @@ You can still override entities in YAML when needed.
   - `/custom_components/sunlight_visualizer/translations/en.json`
   - `/custom_components/sunlight_visualizer/translations/sv.json`
   - `/custom_components/sunlight_visualizer/translations/es.json`
+  - `/custom_components/sunlight_visualizer/translations/pl.json`
 
 ## What The Integration Creates
 
@@ -266,6 +309,14 @@ roofPctEntity: sensor.sun_roof_intensity
 roofPowerEntity: null
 roofPowerEnabled: false
 roofPowerInvert: false
+gridFlowEntity: null
+gridFlowInvert: false
+
+energyHudEnabled: true
+energyHudAutoCompact: true
+energyHudCompactAtPx: 360
+energyHudUltraCompactAtPx: 300
+energyHudOpacity: 0.45
 
 sunAzEntity: null
 sunElEntity: null
@@ -590,6 +641,32 @@ sunRayAnimDurationMin: 1.8
 sunRayAnimDurationMax: 3.0
 sunRayAnimColorA: "rgb(255,240,110)"
 sunRayAnimColorB: "rgb(255,175,35)"
+```
+</details>
+
+<details>
+<summary>Powerline / Energy HUD</summary><br>
+
+```yaml
+powerlineEnabled: true
+powerlinePulseEnabled: true
+powerlinePulseIntervalSec: 5
+powerPoleX: 2.2
+powerPoleZ: 2.2
+
+# Optional whole-house/grid flow source (power sensor only)
+gridFlowEntity: null
+gridFlowInvert: false
+
+# Energy HUD
+energyHudEnabled: true
+energyHudAutoCompact: true
+energyHudCompactAtPx: 360
+energyHudUltraCompactAtPx: 300
+energyHudOpacity: 0.45
+
+# Small-card behavior:
+# below 300x300 the HUD uses clickable (i) mode.
 ```
 </details>
 
