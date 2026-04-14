@@ -6,6 +6,7 @@ import os
 import logging
 import asyncio
 from pathlib import Path
+from urllib.parse import urlsplit
 import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -51,6 +52,11 @@ CARD_RESOURCE_URL = "/sunlight_visualizer/sunlight-visualizer-card.js"
 CARD_STATIC_PATH = "/sunlight_visualizer"
 CARD_STATIC_DIR = Path(__file__).parent / "www"
 CARD_JS_PATH = CARD_STATIC_DIR / "sunlight-visualizer-card.js"
+CARD_RESOURCE_URL_ALIASES = {
+    CARD_RESOURCE_URL,
+    "/sunlight_visualizer/www/sunlight-visualizer-card.js",
+    "/hacsfiles/sunlight_visualizer/sunlight-visualizer-card.js",
+}
 SERVICE_SET_OPTIONS = "set_options"
 
 SERVICE_SET_OPTIONS_SCHEMA = vol.Schema(
@@ -84,6 +90,25 @@ SET_OPTIONS_KEYS = {
     CONF_ROOF_POWER_INVERT,
 }
 
+def _normalize_resource_url(url: str | None) -> str | None:
+    """Normalize resource URLs so equivalent paths compare equal."""
+    if not isinstance(url, str):
+        return None
+
+    path = urlsplit(url.strip()).path
+    if not path:
+        return None
+
+    while "//" in path:
+        path = path.replace("//", "/")
+    if path != "/" and path.endswith("/"):
+        path = path.rstrip("/")
+
+    if path in CARD_RESOURCE_URL_ALIASES:
+        return CARD_RESOURCE_URL
+    return path
+
+
 async def _async_register_static_path(hass: HomeAssistant) -> bool:
     """Serve the Lovelace card JS directly from the integration (single-install)."""
     if hass.data.get(DOMAIN, {}).get("_static_registered"):
@@ -98,10 +123,6 @@ async def _async_register_static_path(hass: HomeAssistant) -> bool:
             ])
         elif hasattr(hass.http, "async_register_static_path"):
             await hass.http.async_register_static_path(
-                CARD_STATIC_PATH, str(CARD_STATIC_DIR), False
-            )
-        elif hasattr(hass.http, "register_static_path"):
-            hass.http.register_static_path(
                 CARD_STATIC_PATH, str(CARD_STATIC_DIR), False
             )
         else:
@@ -247,12 +268,13 @@ async def _async_register_card_resource(hass: HomeAssistant) -> bool:
         _LOGGER.debug("Lovelace registry not ready")
         return False
 
+    target_url = _normalize_resource_url(CARD_RESOURCE_URL)
     existing = False
     for item in registry.async_items():
         url = getattr(item, "url", None)
         if url is None and isinstance(item, dict):
             url = item.get("url")
-        if url == CARD_RESOURCE_URL:
+        if _normalize_resource_url(url) == target_url:
             existing = True
             break
 

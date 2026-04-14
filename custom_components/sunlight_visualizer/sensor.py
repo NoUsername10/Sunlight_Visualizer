@@ -8,6 +8,7 @@ from typing import Any
 
 from homeassistant.components.sensor import (
     SensorEntity,
+    SensorDeviceClass,
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -25,9 +26,12 @@ from homeassistant.util import dt as dt_util
 
 from .const import (
     DOMAIN,
+    CONF_ADVANCED_MODE,
     CONF_LATITUDE,
     CONF_LONGITUDE,
     CONF_HOUSE_ANGLE,
+    CONF_LOCATION_SOURCE,
+    CONF_LOCATION_ZONE_ENTITY,
     CONF_ROOF_DIRECTION,
     CONF_ROOF_POWER_ENTITY,
     CONF_ROOF_POWER_ENABLED,
@@ -40,9 +44,9 @@ from .const import (
     CONF_FIXED_SUN_ROTATION_ENABLED,
     CONF_CEILING_TILT,
     CONF_UPDATE_INTERVAL,
-    CONF_ADVANCED_MODE,
     DEFAULT_HOUSE_ANGLE,
     DEFAULT_CEILING_TILT,
+    DEFAULT_LOCATION_ZONE_ENTITY,
     DEFAULT_ROOF_DIRECTION,
     DEFAULT_FORCE_SUN_FALLBACK,
     DEFAULT_FORCE_SUN_AZIMUTH,
@@ -57,12 +61,26 @@ from .const import (
     FALLBACK_SUN_ELEVATION,
     CARD_SOURCE_ATTR,
     CARD_SOURCE_VALUE,
+    LOCATION_SOURCE_HOME_ASSISTANT,
+    LOCATION_SOURCE_ZONE,
 )
 
 from .sun_calculations import calculate_sun_angle, angle_to_percentage, calculate_optimal_alignment_time
 
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def _location_source_label(source: str) -> str:
+    """Return normalized location source label."""
+    if source in (
+        LOCATION_SOURCE_HOME_ASSISTANT,
+        LOCATION_SOURCE_ZONE,
+        "zone_fallback_home",
+        "legacy_custom",
+    ):
+        return source
+    return LOCATION_SOURCE_HOME_ASSISTANT
 
 
 async def async_setup_entry(
@@ -196,7 +214,9 @@ class SolarAlignmentStatusSensor(CoordinatorEntity, SensorEntity):
         self._attr_name = "Sunlight Roof Alignment Status"
         self._attr_unique_id = f"{config_entry.entry_id}_solar_alignment_status"
         self._attr_icon = "mdi:sun-clock"
-        # We're returning a string, so no state_class or native_unit_of_measurement
+        self._attr_device_class = SensorDeviceClass.ENUM
+        self._attr_options = ["at_peak", "approaching", "declining", "unknown"]
+        self._attr_translation_key = "solar_alignment_status"
     
     @property
     def device_info(self) -> dict[str, Any]:
@@ -205,22 +225,15 @@ class SolarAlignmentStatusSensor(CoordinatorEntity, SensorEntity):
     
     @property
     def native_value(self) -> str | None:
-        """Return only the status string."""
+        """Return normalized status key for translation-aware UI."""
         if self.coordinator.data is None or 'optimal_alignment' not in self.coordinator.data:
             return None
         
         opt_data = self.coordinator.data['optimal_alignment']
-        status = opt_data.get('status', 'unknown')
-        
-        # Capitalize status for display
-        if status == "at_peak":
-            return "At Peak"
-        elif status == "approaching":
-            return "Approaching"
-        elif status == "declining":
-            return "Declining"
-        else:
-            return "Unknown"
+        status = str(opt_data.get('status', 'unknown')).strip().lower()
+        if status in {"at_peak", "approaching", "declining"}:
+            return status
+        return "unknown"
     
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
@@ -389,7 +402,10 @@ class CoordinatesSensor(CoordinatorEntity, SensorEntity):
             'longitude': round(self.coordinator.longitude, 6),
             'latitude_with_direction': self._format_latitude(),
             'longitude_with_direction': self._format_longitude(),
-            'source': 'custom' if self.coordinator.advanced_mode else 'home_assistant',
+            'source': _location_source_label(self.coordinator.location_source_effective),
+            'location_source': self.coordinator.location_source,
+            'location_zone_entity': self.coordinator.location_zone_entity,
+            'location_name': self.coordinator.location_name,
             'house_angle': self.coordinator.house_angle,
             'ceiling_tilt': self.coordinator.ceiling_tilt,
             'roof_direction': self.coordinator.roof_direction,
@@ -401,7 +417,9 @@ class CoordinatesSensor(CoordinatorEntity, SensorEntity):
                 'update_interval_min': settings['update_interval_min'],
                 'latitude': settings['location']['latitude'],
                 'longitude': settings['location']['longitude'],
-                'location_source': settings['location']['source']
+                'location_source': settings['location']['source'],
+                'location_zone_entity': settings['location']['zone_entity'],
+                'location_name': settings['location']['name'],
             }
         }
     
@@ -432,15 +450,34 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         
         # Merge config data and options (options take precedence)
         merged_config = {**config_entry.data, **config_entry.options}
-        
-        # Get location - use advanced mode coordinates or HA default
+
+        # Location selection:
+        # 1) Home Assistant home (default)
+        # 2) Selected zone entity (with safe fallback to Home if missing/invalid)
+        self.location_zone_entity = merged_config.get(
+            CONF_LOCATION_ZONE_ENTITY, DEFAULT_LOCATION_ZONE_ENTITY
+        )
+        if self.location_zone_entity in ("", None):
+            self.location_zone_entity = None
+
+        self.location_source = merged_config.get(CONF_LOCATION_SOURCE)
+
+        # Keep legacy custom-lat/lon support if an old entry still uses advanced mode.
         self.advanced_mode = merged_config.get(CONF_ADVANCED_MODE, False)
-        if self.advanced_mode:
-            self.latitude = merged_config.get(CONF_LATITUDE, hass.config.latitude)
-            self.longitude = merged_config.get(CONF_LONGITUDE, hass.config.longitude)
+        if self.location_zone_entity:
+            self.location_source = LOCATION_SOURCE_ZONE
+        elif self.advanced_mode and (
+            CONF_LATITUDE in merged_config and CONF_LONGITUDE in merged_config
+        ):
+            self.location_source = "legacy_custom"
         else:
-            self.latitude = hass.config.latitude
-            self.longitude = hass.config.longitude
+            self.location_source = LOCATION_SOURCE_HOME_ASSISTANT
+
+        self.location_source_effective = LOCATION_SOURCE_HOME_ASSISTANT
+        self.location_name = hass.config.location_name or "Home"
+        self.latitude = float(hass.config.latitude)
+        self.longitude = float(hass.config.longitude)
+        self._resolve_location()
         
         self.house_angle = merged_config.get(CONF_HOUSE_ANGLE, DEFAULT_HOUSE_ANGLE)
         self.ceiling_tilt = merged_config.get(CONF_CEILING_TILT, DEFAULT_CEILING_TILT)
@@ -494,6 +531,66 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             update_interval=timedelta(minutes=self.update_interval_min),
         )
 
+    def _resolve_location(self) -> None:
+        """Resolve active location coordinates from source selection."""
+        home_name = self.hass.config.location_name or "Home"
+        home_lat = float(self.hass.config.latitude)
+        home_lon = float(self.hass.config.longitude)
+
+        self.location_source_effective = LOCATION_SOURCE_HOME_ASSISTANT
+        self.location_name = home_name
+        self.latitude = home_lat
+        self.longitude = home_lon
+
+        if self.location_source == LOCATION_SOURCE_ZONE and self.location_zone_entity:
+            zone_state = self.hass.states.get(self.location_zone_entity)
+            if zone_state is not None and zone_state.entity_id.startswith("zone."):
+                zone_lat = zone_state.attributes.get("latitude")
+                zone_lon = zone_state.attributes.get("longitude")
+                try:
+                    self.latitude = float(zone_lat)
+                    self.longitude = float(zone_lon)
+                    self.location_source_effective = LOCATION_SOURCE_ZONE
+                    self.location_name = (
+                        zone_state.attributes.get("friendly_name")
+                        or zone_state.name
+                        or self.location_zone_entity.split(".", 1)[1]
+                        .replace("_", " ")
+                        .title()
+                    )
+                    return
+                except (TypeError, ValueError):
+                    _LOGGER.debug(
+                        "Zone %s has invalid coordinates, falling back to Home location",
+                        self.location_zone_entity,
+                    )
+
+            self.location_source_effective = "zone_fallback_home"
+            return
+
+        # Legacy compatibility for older entries that stored custom coordinates.
+        if self.location_source == "legacy_custom":
+            try:
+                self.latitude = float(
+                    self.config_entry.options.get(
+                        CONF_LATITUDE,
+                        self.config_entry.data.get(CONF_LATITUDE, home_lat),
+                    )
+                )
+                self.longitude = float(
+                    self.config_entry.options.get(
+                        CONF_LONGITUDE,
+                        self.config_entry.data.get(CONF_LONGITUDE, home_lon),
+                    )
+                )
+                self.location_source_effective = "legacy_custom"
+                self.location_name = "Custom coordinates"
+            except (TypeError, ValueError):
+                self.latitude = home_lat
+                self.longitude = home_lon
+                self.location_source_effective = LOCATION_SOURCE_HOME_ASSISTANT
+                self.location_name = home_name
+
     def _get_roof_azimuth(self) -> float:
         """Return roof-facing azimuth based on house angle and roof direction preset."""
         offset = ROOF_DIRECTIONS.get(self.roof_direction, 0)
@@ -546,6 +643,25 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via library."""
         try:
+            prev_location = (
+                self.latitude,
+                self.longitude,
+                self.location_source_effective,
+                self.location_zone_entity,
+            )
+            self._resolve_location()
+            if (
+                self.latitude,
+                self.longitude,
+                self.location_source_effective,
+                self.location_zone_entity,
+            ) != prev_location:
+                # Location changed (for example selected zone removed/updated), clear caches.
+                self._optimal_cache_key = None
+                self._optimal_cache_data = None
+                self._last_calculation_result = None
+                self._last_calculation_time = None
+
             # Check cache first (prevent redundant calculations)
             now = dt_util.now()
             if (self._last_calculation_time and 
@@ -737,7 +853,10 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             "location": {
                 "latitude": round(self.latitude, 6),
                 "longitude": round(self.longitude, 6),
-                "source": "custom" if self.advanced_mode else "home_assistant"
+                "source": _location_source_label(self.location_source_effective),
+                "selected_source": self.location_source,
+                "zone_entity": self.location_zone_entity,
+                "name": self.location_name,
             },
             "angles": {
                 "house_angle": self.house_angle,
@@ -968,7 +1087,10 @@ class SunAzimuthSensor(CoordinatorEntity, SensorEntity):
             'sun_elevation': round(sun_pos['elevation'], 2),
             'latitude': self.coordinator.latitude,
             'longitude': self.coordinator.longitude,
-            'data_source': 'advanced' if self.coordinator.advanced_mode else 'ha_default',
+            'data_source': _location_source_label(self.coordinator.location_source_effective),
+            'location_source': self.coordinator.location_source,
+            'location_zone_entity': self.coordinator.location_zone_entity,
+            'location_name': self.coordinator.location_name,
             'last_updated': self.coordinator.data.get('last_updated', ''),
             'cache_hit': (
                 self.coordinator._optimal_cache_key[0] == datetime.now().date()
@@ -1178,7 +1300,10 @@ class CalculationTimeSensor(DiagnosticSensor):
         base_attrs = {
             "update_interval_min": self.coordinator.update_interval_min,
             "total_calculations": self.coordinator.calculation_count,
-            "advanced_mode": self.coordinator.advanced_mode,
+            "location_source": _location_source_label(self.coordinator.location_source_effective),
+            "location_selected_source": self.coordinator.location_source,
+            "location_zone_entity": self.coordinator.location_zone_entity,
+            "location_name": self.coordinator.location_name,
             "configuration": {
                 'house_angle': settings['angles']['house_angle'],
                 'ceiling_tilt': settings['angles']['ceiling_tilt'],
@@ -1186,7 +1311,9 @@ class CalculationTimeSensor(DiagnosticSensor):
                 'update_interval_min': settings['update_interval_min'],
                 'latitude': settings['location']['latitude'],
                 'longitude': settings['location']['longitude'],
-                'location_source': settings['location']['source']
+                'location_source': settings['location']['source'],
+                'location_zone_entity': settings['location']['zone_entity'],
+                'location_name': settings['location']['name'],
             }
         }
         
@@ -1228,6 +1355,8 @@ class DataQualitySensor(DiagnosticSensor):
                 'update_interval_min': settings['update_interval_min'],
                 'latitude': settings['location']['latitude'],
                 'longitude': settings['location']['longitude'],
-                'location_source': settings['location']['source']
+                'location_source': settings['location']['source'],
+                'location_zone_entity': settings['location']['zone_entity'],
+                'location_name': settings['location']['name'],
             }
         }
