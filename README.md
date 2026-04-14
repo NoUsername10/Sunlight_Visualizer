@@ -195,6 +195,10 @@ You can also configure common card behavior visually:
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual-card-configuration.png" width="70%" height="70%">
 <br>
+
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual-card-configuration1.png" width="70%" height="70%">
+<br>
+
 </details>
 
 
