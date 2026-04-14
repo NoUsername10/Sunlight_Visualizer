@@ -4,8 +4,10 @@
     "step": {
       "user": {
         "title": "Sunlight Visualizer Configuration",
-        "description": "Configure the Sunlight Visualizer integration. Current Home Assistant location: {location_name} ({latitude}, {longitude})",
+        "description": "Configure the Sunlight Visualizer integration. Active location: {location_name} ({latitude}, {longitude}) via {location_source}",
         "data": {
+          "location_source": "Location source",
+          "location_zone_entity": "Zone override",
           "use_custom_angle": "Use custom angle (instead of compass direction)",
           "direction": "Compass direction (Select the direction your front door is facing)",
           "roof_direction": "Roof direction (downhill side)",
@@ -19,6 +21,8 @@
           "update_interval": "Update interval (minutes)"
         },
         "data_description": {
+          "location_source": "Choose Home Assistant location (default) or a custom Zone.",
+          "location_zone_entity": "Select a Zone override, or choose Use Home (default). If missing/unavailable, Home location is used automatically.",
           "use_custom_angle": "Check to enter exact angle, uncheck to select compass direction",
           "direction": "Select compass direction (N, NE, E, etc.) the direction your front door is facing.",
           "roof_direction": "Select which side of the house the roof slopes down toward",
@@ -56,8 +60,10 @@
     "step": {
       "init": {
         "title": "Sunlight Visualizer Options",
-        "description": "Update the Sunlight Visualizer configuration. Location: {source} ({current_lat}, {current_lon})",
+        "description": "Update the Sunlight Visualizer configuration. Active location: {location_name} ({current_lat}, {current_lon}) via {source}",
         "data": {
+          "location_source": "Location source",
+          "location_zone_entity": "Zone override",
           "use_custom_angle": "Use custom angle (instead of compass direction)",
           "direction": "Compass direction (Select the direction your front door is facing)",
           "roof_direction": "Roof direction (downhill side)",
@@ -74,6 +80,8 @@
           "update_interval": "Update interval (minutes)"
         },
         "data_description": {
+          "location_source": "Choose Home Assistant location (default) or a custom Zone.",
+          "location_zone_entity": "Select a Zone override, or choose Use Home (default). If missing/unavailable, Home location is used automatically.",
           "use_custom_angle": "Check to enter exact angle, uncheck to select compass direction",
           "direction": "Select compass direction (N, NE, E, etc.) the direction your front door is facing.",
           "roof_direction": "Select which side of the house the roof slopes down toward",
@@ -144,6 +152,19 @@
         "roof_power_invert": {
           "name": "Invert roof power value",
           "description": "Invert power value (useful for negative-export sensors)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Sunlight Roof Alignment Status",
+        "state": {
+          "at_peak": "At Peak",
+          "approaching": "Approaching",
+          "declining": "Declining",
+          "unknown": "Unknown"
         }
       }
     }

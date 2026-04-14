@@ -4,8 +4,10 @@
     "step": {
       "user": {
         "title": "Configuracion de Sunlight Visualizer",
-        "description": "Configura la integracion Sunlight Visualizer. Ubicacion actual de Home Assistant: {location_name} ({latitude}, {longitude})",
+        "description": "Configura la integracion Sunlight Visualizer. Ubicacion activa: {location_name} ({latitude}, {longitude}) mediante {location_source}",
         "data": {
+          "location_source": "Origen de ubicacion",
+          "location_zone_entity": "Zona de reemplazo",
           "use_custom_angle": "Usar angulo personalizado (en lugar de direccion de brujula)",
           "direction": "Direccion de brujula (Selecciona la direccion hacia la que mira tu puerta principal)",
           "roof_direction": "Direccion del techo (lado de bajada)",
@@ -19,6 +21,8 @@
           "update_interval": "Intervalo de actualizacion (minutos)"
         },
         "data_description": {
+          "location_source": "Elige la ubicacion de Home Assistant (predeterminada) o una zona personalizada.",
+          "location_zone_entity": "Selecciona una zona de reemplazo o elige Use Home (default). Si no existe/no esta disponible, se usa Home automaticamente.",
           "use_custom_angle": "Activa para introducir un angulo exacto; desactiva para elegir direccion de brujula",
           "direction": "Selecciona direccion de brujula (N, NE, E, etc.) la direccion hacia la que mira tu puerta principal.",
           "roof_direction": "Selecciona hacia que lado de la casa baja el techo",
@@ -56,8 +60,10 @@
     "step": {
       "init": {
         "title": "Opciones de Sunlight Visualizer",
-        "description": "Actualiza la configuracion de Sunlight Visualizer. Ubicacion: {source} ({current_lat}, {current_lon})",
+        "description": "Actualiza la configuracion de Sunlight Visualizer. Ubicacion activa: {location_name} ({current_lat}, {current_lon}) mediante {source}",
         "data": {
+          "location_source": "Origen de ubicacion",
+          "location_zone_entity": "Zona de reemplazo",
           "use_custom_angle": "Usar angulo personalizado (en lugar de direccion de brujula)",
           "direction": "Direccion de brujula (Selecciona la direccion hacia la que mira tu puerta principal)",
           "roof_direction": "Direccion del techo (lado de bajada)",
@@ -74,6 +80,8 @@
           "update_interval": "Intervalo de actualizacion (minutos)"
         },
         "data_description": {
+          "location_source": "Elige la ubicacion de Home Assistant (predeterminada) o una zona personalizada.",
+          "location_zone_entity": "Selecciona una zona de reemplazo o elige Use Home (default). Si no existe/no esta disponible, se usa Home automaticamente.",
           "use_custom_angle": "Activa para introducir un angulo exacto; desactiva para elegir direccion de brujula",
           "direction": "Selecciona direccion de brujula (N, NE, E, etc.) la direccion hacia la que mira tu puerta principal.",
           "roof_direction": "Selecciona hacia que lado de la casa baja el techo",
@@ -144,6 +152,19 @@
         "roof_power_invert": {
           "name": "Invertir valor de potencia del techo",
           "description": "Invertir el valor de potencia (util para sensores de exportacion negativa)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Estado de Alineación del Techo Solar",
+        "state": {
+          "at_peak": "En pico",
+          "approaching": "Acercándose",
+          "declining": "Disminuyendo",
+          "unknown": "Desconocido"
         }
       }
     }

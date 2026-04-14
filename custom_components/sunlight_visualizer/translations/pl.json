@@ -1,0 +1,172 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konfiguracja Sunlight Visualizer",
+        "description": "Skonfiguruj integrację Sunlight Visualizer. Aktywna lokalizacja: {location_name} ({latitude}, {longitude}) przez {location_source}",
+        "data": {
+          "location_source": "Źródło lokalizacji",
+          "location_zone_entity": "Nadpisanie strefą",
+          "use_custom_angle": "Użyj własnego kąta (zamiast kierunku kompasowego)",
+          "direction": "Kierunek kompasowy (wybierz kierunek, w którym zwrócone są drzwi wejściowe)",
+          "roof_direction": "Kierunek dachu (strona spadku)",
+          "roof_power_entity": "Czujnik mocy dachu (opcjonalnie)",
+          "roof_power_enabled": "Włącz etykietę mocy dachu",
+          "roof_power_invert": "Odwróć moc dachu (wymuś wartość dodatnią)",
+          "fixed_sun_rotation_enabled": "Stała pozycja słońca, azymut. (obracaj scenę)",
+          "auto_rotate_speed": "Prędkość automatycznego obrotu (st./s)",
+          "house_angle": "Kąt domu (stopnie, 0° = front zwrócony na północ)",
+          "ceiling_tilt": "Kąt nachylenia sufitu (0-90°, 0 = poziomo)",
+          "update_interval": "Interwał aktualizacji (minuty)"
+        },
+        "data_description": {
+          "location_source": "Wybierz lokalizację Home Assistant (domyślnie) albo niestandardową strefę.",
+          "location_zone_entity": "Wybierz strefę nadpisującą albo opcję Use Home (default). Jeśli brak lub niedostępna, automatycznie użyta zostanie lokalizacja Home.",
+          "use_custom_angle": "Zaznacz, aby wprowadzić dokładny kąt, odznacz, aby wybrać kierunek kompasowy",
+          "direction": "Wybierz kierunek kompasowy (N, NE, E itd.), w którym zwrócone są drzwi wejściowe.",
+          "roof_direction": "Wybierz stronę domu, w kierunku której opada dach",
+          "roof_power_entity": "Wybierz czujnik mocy, który ma być pokazany pod % dachu (W/kW)",
+          "roof_power_enabled": "Pokaż wartość mocy dachu pod % dachu",
+          "roof_power_invert": "Odwróć wartości mocy (przydatne, gdy czujnik zwraca wartości ujemne)",
+          "fixed_sun_rotation_enabled": "Zachowaj wizualnie stały azymut słońca i zamiast tego obracaj scenę",
+          "auto_rotate_speed": "Domyślna prędkość automatycznego obrotu karty (1-90 st./s)",
+          "house_angle": "Kąt frontu domu względem północy (0-359°)",
+          "ceiling_tilt": "Kąt nachylenia dachu/paneli słonecznych (0° = płasko, 90° = pionowo)",
+          "update_interval": "Jak często przeliczać pozycję słońca (1-60 minut)"
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Szerokość geograficzna musi mieścić się w zakresie od -90 do 90 stopni",
+      "invalid_longitude": "Długość geograficzna musi mieścić się w zakresie od -180 do 180 stopni",
+      "invalid_house_angle": "Kąt domu musi mieścić się w zakresie od 0 do 360 stopni",
+      "invalid_ceiling_tilt": "Kąt nachylenia sufitu musi mieścić się w zakresie od 0 do 90 stopni",
+      "invalid_update_interval": "Interwał aktualizacji musi mieścić się w zakresie od 1 do 60 minut",
+      "invalid_auto_rotate_speed": "Prędkość automatycznego obrotu musi mieścić się w zakresie od 1 do 90 st./s",
+      "invalid_force_sun_azimuth": "Wymuszony azymut słońca musi mieścić się w zakresie od 0 do 359 stopni",
+      "invalid_force_sun_elevation": "Wymuszona elewacja słońca musi mieścić się w zakresie od -90 do 90 stopni",
+      "invalid_coordinates": "Wprowadź poprawne liczby dziesiętne dla współrzędnych",
+      "latitude_out_of_range": "Szerokość geograficzna musi mieścić się w zakresie od -90° do 90°",
+      "longitude_out_of_range": "Długość geograficzna musi mieścić się w zakresie od -180° do 180°",
+      "direction_required": "Wybierz kierunek kompasowy, gdy nie używasz własnego kąta",
+      "unknown": "Wystąpił nieoczekiwany błąd"
+    },
+    "abort": {
+      "single_instance_allowed": "Dozwolona jest tylko jedna konfiguracja Sunlight Visualizer."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje Sunlight Visualizer",
+        "description": "Zaktualizuj konfigurację Sunlight Visualizer. Aktywna lokalizacja: {location_name} ({current_lat}, {current_lon}) przez {source}",
+        "data": {
+          "location_source": "Źródło lokalizacji",
+          "location_zone_entity": "Nadpisanie strefą",
+          "use_custom_angle": "Użyj własnego kąta (zamiast kierunku kompasowego)",
+          "direction": "Kierunek kompasowy (wybierz kierunek, w którym zwrócone są drzwi wejściowe)",
+          "roof_direction": "Kierunek dachu (strona spadku)",
+          "roof_power_entity": "Czujnik mocy dachu (opcjonalnie)",
+          "roof_power_enabled": "Włącz etykietę mocy dachu",
+          "roof_power_invert": "Odwróć moc dachu (wymuś wartość dodatnią)",
+          "fixed_sun_rotation_enabled": "Stała pozycja słońca, azymut. (obracaj scenę)",
+          "force_sun_fallback": "Wymuś awaryjne dane słońca",
+          "force_sun_azimuth": "Wymuś azymut słońca",
+          "force_sun_elevation": "Wymuś elewację słońca",
+          "auto_rotate_speed": "Prędkość automatycznego obrotu (st./s)",
+          "house_angle": "Kąt domu (stopnie, 0° = front zwrócony na północ)",
+          "ceiling_tilt": "Kąt nachylenia sufitu (0-90°, 0 = poziomo)",
+          "update_interval": "Interwał aktualizacji (minuty)"
+        },
+        "data_description": {
+          "location_source": "Wybierz lokalizację Home Assistant (domyślnie) albo niestandardową strefę.",
+          "location_zone_entity": "Wybierz strefę nadpisującą albo opcję Use Home (default). Jeśli brak lub niedostępna, automatycznie użyta zostanie lokalizacja Home.",
+          "use_custom_angle": "Zaznacz, aby wprowadzić dokładny kąt, odznacz, aby wybrać kierunek kompasowy",
+          "direction": "Wybierz kierunek kompasowy (N, NE, E itd.), w którym zwrócone są drzwi wejściowe.",
+          "roof_direction": "Wybierz stronę domu, w kierunku której opada dach",
+          "roof_power_entity": "Wybierz czujnik mocy, który ma być pokazany pod % dachu (W/kW)",
+          "roof_power_enabled": "Pokaż wartość mocy dachu pod % dachu",
+          "roof_power_invert": "Odwróć wartości mocy (przydatne, gdy czujnik zwraca wartości ujemne)",
+          "fixed_sun_rotation_enabled": "Zachowaj wizualnie stały azymut słońca i zamiast tego obracaj scenę",
+          "force_sun_fallback": "Wymuś awaryjne wartości słońca (testowo)",
+          "force_sun_azimuth": "Azymut używany przy wymuszeniu awaryjnych danych (0-359°)",
+          "force_sun_elevation": "Elewacja używana przy wymuszeniu awaryjnych danych (-90° do 90°)",
+          "auto_rotate_speed": "Domyślna prędkość automatycznego obrotu karty (1-90 st./s)",
+          "house_angle": "Kąt frontu domu względem północy (0-359°)",
+          "ceiling_tilt": "Kąt nachylenia dachu/paneli słonecznych (0° = płasko, 90° = pionowo)",
+          "update_interval": "Jak często przeliczać pozycję słońca (1-60 minut)"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Ustaw opcje",
+      "description": "Zaktualizuj opcje Sunlight Visualizer dla aktywnego wpisu konfiguracji.",
+      "fields": {
+        "entry_id": {
+          "name": "ID wpisu konfiguracji",
+          "description": "Opcjonalne. Jeśli pominięte, użyty zostanie pierwszy wpis Sunlight Visualizer."
+        },
+        "house_angle": {
+          "name": "Kąt domu",
+          "description": "Kierunek przedniej ściany w stopniach (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Kąt nachylenia sufitu",
+          "description": "Kąt nachylenia dachu w stopniach (0-90)."
+        },
+        "roof_direction": {
+          "name": "Kierunek dachu",
+          "description": "Strona, w której kierunku dach opada."
+        },
+        "camera_rotation_h": {
+          "name": "Obrót kamery H",
+          "description": "Poziomy obrót kamery w stopniach (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Obrót kamery V",
+          "description": "Pionowy obrót kamery w stopniach (0-90)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Stały azymut słońca",
+          "description": "Stały azymut słońca używany przez kartę w trybie stałego słońca (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Stała pozycja słońca, azymut. (obracaj scenę)",
+          "description": "Zachowaj wizualnie stały azymut słońca i zamiast tego obracaj scenę"
+        },
+        "auto_rotate_speed": {
+          "name": "Prędkość automatycznego obrotu",
+          "description": "Prędkość automatycznego obrotu karty w stopniach na sekundę (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Czujnik mocy dachu",
+          "description": "Opcjonalny czujnik mocy wyświetlany pod procentem dachu."
+        },
+        "roof_power_enabled": {
+          "name": "Włącz etykietę mocy dachu",
+          "description": "Pokaż lub ukryj etykietę mocy dachu."
+        },
+        "roof_power_invert": {
+          "name": "Odwróć wartość mocy dachu",
+          "description": "Odwróć wartość mocy (przydatne dla czujników z ujemnym eksportem)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Status Wyrównania Dachu Słonecznego",
+        "state": {
+          "at_peak": "W szczycie",
+          "approaching": "Zbliża się",
+          "declining": "Spada",
+          "unknown": "Nieznany"
+        }
+      }
+    }
+  }
+}

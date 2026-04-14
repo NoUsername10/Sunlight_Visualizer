@@ -7,12 +7,42 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Planned
 - More translations.
 - Adding more calculated attributes in the sensor section.
-- Adding card information about sun and alignement position.
-- Add zone location selection from dropdown for the house location.
-
+- Adding card information about sun and alignement position
 
 ### Added
-- Placeholder for upcoming changes.
+
+### Changed
+
+### Fixed
+
+
+## [0.2.6] - 2026-04-13
+### Added
+- Energy HUD overlay for Solar / Home / Grid values with adaptive styling.
+- Small-card `(i)` interaction mode for energy HUD below `300x300` (tap to open/close details).
+- Grid flow sensor support in the card (with sign invert), including runtime precedence over roof power flow.
+- Power-only sensor enforcement for roof/grid flow selection.
+- Utility pole + powerline rendering with bidirectional pulse flow visuals.
+- Diagnostics metadata for resolved location source, selected zone entity, and active location name.
+- Location selection, with resolution, supports safe fallback to Home coordinates when a selected zone is missing/invalid. Thank you @yazck for the suggestion!
+- Added Polish translation file (`pl.json`) and aligned it with current config/options/service translation keys. Thank you @Adrian-czw!
+
+
+
+### Changed
+- Bumped integration/card release version to `0.2.6`.
+- Improved wall `%` label projection using roof-style affine mapping.
+
+
+### Fixed
+- Entity picker fallback behavior in visual editor power selectors.
+- Multiple card visual issues for powerline/pole/cable layering, pulse direction, and occlusion.
+- Wall percent-label projection consistency and anti-stretch behavior.
+- Lovelace resource auto-registration hardening:
+  - URL normalization before duplicate checks (query/hash and legacy-equivalent path handling)
+  - async-only static path registration path retained (`async_register_static_paths` / `async_register_static_path`)
+- Roof power sensor persistence in setup/options:
+  - selected roof power sensor is no longer cleared when `Enable power label` is disabled.
 
 
 ## [0.2.5] - 2026-03-29
