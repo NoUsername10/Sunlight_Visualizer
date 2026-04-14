@@ -25,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Utility pole + powerline rendering with bidirectional pulse flow visuals.
 - Diagnostics metadata for resolved location source, selected zone entity, and active location name.
 - Location selection, with resolution, supports safe fallback to Home coordinates when a selected zone is missing/invalid. Thank you @yazck for the suggestion!
-- Added Polish translation file (`pl.json`) and aligned it with current config/options/service translation keys. Thank you @Adrian-czw!
+- Added Polish translation file (`pl.json`) and aligned it with current config/options/service translation keys. Thank you @Adrian-czw fot the translation!
 
 
 
