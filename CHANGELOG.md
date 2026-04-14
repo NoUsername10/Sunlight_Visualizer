@@ -9,33 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Adding more calculated attributes in the sensor section.
 - Adding card information about sun and alignement position
 
-
 ### Added
-- Integration location-source selector:
-  - `Home Assistant` (default)
-  - `Zone` override (`zone.*`)
-- Zone dropdown added in both initial setup and options flow.
-- Diagnostics metadata for resolved location source, selected zone entity, and active location name.
-- Added Polish translation file (`pl.json`) and aligned it with current config/options/service translation keys.
 
 ### Changed
-- Location resolution now supports safe fallback to Home coordinates when a selected zone is missing/invalid.
-- Simplified location UI to a single Zone dropdown (`Use Home (default)` or selected `zone.*`) to avoid double selectors.
-- README updated with new location-source/zone override behavior.
-- Roof alignment HUD now shows trend arrow + whole-number percentage (no STATUS row):
-  - `↑` when approaching optimal
-  - `↓` at/after optimal
-- Energy HUD spacing refined for balanced top/bottom padding and clearer row separation.
 
 ### Fixed
-- Lovelace resource auto-registration hardening:
-  - URL normalization before duplicate checks (query/hash and legacy-equivalent path handling)
-  - async-only static path registration path retained (`async_register_static_paths` / `async_register_static_path`)
-- Roof power sensor persistence in setup/options:
-  - selected roof power sensor is no longer cleared when `Enable power label` is disabled.
-- Powerline/sun depth ordering:
-  - pole/cable/wall-box now split around sun depth so behind-sun segments render behind the sun.
-  - pulse rendering restored to a single smooth animation path while keeping cable/pole occlusion.
+
 
 ## [0.2.6] - 2026-04-13
 ### Added
@@ -43,24 +22,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Small-card `(i)` interaction mode for energy HUD below `300x300` (tap to open/close details).
 - Grid flow sensor support in the card (with sign invert), including runtime precedence over roof power flow.
 - Power-only sensor enforcement for roof/grid flow selection.
-- Utility pole + powerline rendering with bidirectional pulse flow visuals.
-- Improved wall `%` label projection using roof-style affine mapping.
+- Utility pole + powerline rendering with bidirectional pulse flow visuals. 
+- Location selection, with resolution, supports safe fallback to Home coordinates when a selected zone is missing/invalid.
+- Added Polish translation file (`pl.json`) and aligned it with current config/options/service translation keys. thanks @Adrian-czw
+- Diagnostics metadata for resolved location source, selected zone entity, and active location name.
+
 
 ### Changed
-- HUD formatting updated for stable alignment:
-  - left-aligned prefixes
-  - right-aligned values
-  - tighter spacing for fixed-width readability
-- HUD value formatting updated to two decimals for kW values.
-- HUD behavior simplified: full panel above `300x300`, icon mode below.
-- Home-load display logic refined using solar + signed grid flow.
 - Bumped integration/card release version to `0.2.6`.
+- Improved wall `%` label projection using roof-style affine mapping.
+
 
 ### Fixed
 - Entity picker fallback behavior in visual editor power selectors.
 - Multiple card visual issues for powerline/pole/cable layering, pulse direction, and occlusion.
 - Wall percent-label projection consistency and anti-stretch behavior.
-- Energy HUD small-size interaction consistency (same expanded panel size as regular HUD).
+- Lovelace resource auto-registration hardening:
+  - URL normalization before duplicate checks (query/hash and legacy-equivalent path handling)
+  - async-only static path registration path retained (`async_register_static_paths` / `async_register_static_path`)
+- Roof power sensor persistence in setup/options:
+  - selected roof power sensor is no longer cleared when `Enable power label` is disabled.
 
 
 ## [0.2.5] - 2026-03-29
