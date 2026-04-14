@@ -54,31 +54,6 @@ GIF (on macOS Safari: right click + "Play animation"):
 - Performance adaptation for slow displays.
 - Test mode (if sun is down): Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED`.
 
-## Latest Updates (Unreleased)
-- Lovelace resource registration hardening:
-  - duplicate checks now normalize URLs (query/hash + legacy path equivalence),
-  - async-only static path registration path retained.
-- Roof power sensor now stays saved even when `Enable power label` is turned off in setup/options.
-- Energy HUD roof-alignment line simplified:
-  - trend arrow + whole-number `%` (no separate STATUS row).
-- Energy HUD vertical spacing/padding tuned for better readability.
-- Powerline/pole draw order improved around sun depth, and pulse path behavior restored for smooth single animation.
-
-## New In 0.2.6
-- New Energy HUD with `SOLAR`, `HOME`, and `GRID` values.
-- `GRID` direction-aware display (import/export color + arrow).
-- kW values shown with 2 decimals in HUD.
-- HUD layout tuned for stable reading (left labels, right values).
-- Small-card HUD interaction:
-  - Full HUD on normal card sizes.
-  - Below `300x300`, HUD collapses to `(i)` button.
-  - Tap `(i)` to open HUD; tap HUD to close back to `(i)`.
-- Grid flow sensor support (optional) with invert sign.
-- Runtime precedence:
-  - Valid grid flow sensor drives HUD/pulse direction.
-  - Roof flow is fallback when grid flow is unavailable.
-- Utility pole + powerline + animated pulse direction updates.
-
 
 ## Changelog
 See [`CHANGELOG.md`](./CHANGELOG.md).
