@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img">
+
+<style>
+  .bg { fill: #17202b; }
+  .panel { fill: #233041; stroke: rgba(255,255,255,.14); stroke-width: 2; }
+  .panel2 { fill: #1d2938; stroke: rgba(255,255,255,.10); stroke-width: 2; }
+  .title { fill: #f4f7fb; font: 800 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .subtitle { fill: #b8c3d0; font: 500 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .h { fill: #f4f7fb; font: 800 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .body { fill: #b8c3d0; font: 500 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .small { fill: #b8c3d0; font: 500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .label { fill: #f4f7fb; font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .value { fill: #f4f7fb; font: 800 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .yellow { fill: #ffd43b; }
+  .blue { fill: #65b7ff; }
+  .green { fill: #8bd17c; }
+  .orange { fill: #ff9f43; }
+  .red { fill: #ff6b6b; }
+  .stroke-yellow { stroke: #ffd43b; }
+  .stroke-blue { stroke: #65b7ff; }
+  .stroke-green { stroke: #8bd17c; }
+  .stroke-orange { stroke: #ff9f43; }
+  .stroke-muted { stroke: #b8c3d0; }
+  .stroke-line { stroke: #405066; }
+  text { dominant-baseline: middle; }
+</style>
+
+<rect class="bg" width="900" height="500"/>
+<text class="title" x="52" y="54">Wall Sun Alignment = direction</text>
+<text class="subtitle" x="52" y="86">Geometry only. It tells if a wall is aligned with the sun, not how strong the weather is.</text>
+<rect class="panel" x="52" y="125" width="380" height="305" rx="24"/>
+<text class="h" x="82" y="160">High value</text>
+<text class="body" x="82" y="190">Wall faces the sun.</text>
+<line x1="145.0" y1="260.7" x2="145.0" y2="238.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="167.0" y1="270.0" x2="183.0" y2="254.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="176.3" y1="292.0" x2="199.0" y2="292.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="167.0" y1="314.0" x2="183.0" y2="330.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="145.0" y1="323.3" x2="145.0" y2="346.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="123.0" y1="314.0" x2="107.0" y2="330.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="113.7" y1="292.0" x2="91.0" y2="292.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="123.0" y1="270.0" x2="107.0" y2="254.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<circle cx="145" cy="292" r="24" fill="#ffd43b"/><circle cx="145" cy="292" r="13.919999999999998" fill="#fff06a" opacity=".9"/>
+<polygon points="251,256 311.0,200 371,256" fill="#eef2f6" stroke="#17202b" stroke-width="4"/><rect x="265" y="256" width="92" height="92" rx="4" fill="#d7dbe0" stroke="#17202b" stroke-width="4"/><rect x="316.52" y="286.6" width="23.0" height="20.24" fill="#9ed8f5" opacity=".75" stroke="#fff" stroke-width="5"/><rect x="281.56" y="279.24" width="20.24" height="48.760000000000005" fill="#596270" stroke="#fff" stroke-width="5"/>
+<path d="M178 292 C215 284 235 278 262 270" fill="none" stroke="#ffd43b" stroke-width="8" stroke-linecap="round"/>
+<text class="value yellow" x="84" y="390">98 %</text>
+<rect class="panel" x="468" y="125" width="380" height="305" rx="24"/>
+<text class="h" x="498" y="160">Zero value</text>
+<text class="body" x="498" y="190">Wall points away from the sun.</text>
+<line x1="762.0" y1="260.7" x2="762.0" y2="238.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="784.0" y1="270.0" x2="800.0" y2="254.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="793.3" y1="292.0" x2="816.0" y2="292.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="784.0" y1="314.0" x2="800.0" y2="330.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="762.0" y1="323.3" x2="762.0" y2="346.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="740.0" y1="314.0" x2="724.0" y2="330.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="730.7" y1="292.0" x2="708.0" y2="292.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="740.0" y1="270.0" x2="724.0" y2="254.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<circle cx="762" cy="292" r="24" fill="#ffd43b"/><circle cx="762" cy="292" r="13.919999999999998" fill="#fff06a" opacity=".9"/>
+<polygon points="526,256 586.0,200 646,256" fill="#eef2f6" stroke="#17202b" stroke-width="4"/><rect x="540" y="256" width="92" height="92" rx="4" fill="#d7dbe0" stroke="#17202b" stroke-width="4"/><rect x="591.52" y="286.6" width="23.0" height="20.24" fill="#9ed8f5" opacity=".75" stroke="#fff" stroke-width="5"/><rect x="556.56" y="279.24" width="20.24" height="48.760000000000005" fill="#596270" stroke="#fff" stroke-width="5"/>
+<path d="M728 292 C695 295 670 300 635 310" fill="none" stroke="#ffd43b" stroke-width="8" stroke-linecap="round" opacity=".25"/>
+<text class="value" x="500" y="390">0 %</text>
+<text class="small" x="52" y="462">Good for: knowing which wall is sun-facing. Not enough alone for blind automation.</text>
+
+</svg>

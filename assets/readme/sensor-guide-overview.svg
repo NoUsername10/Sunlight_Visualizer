@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img">
+
+<style>
+  .bg { fill: #17202b; }
+  .panel { fill: #233041; stroke: rgba(255,255,255,.14); stroke-width: 2; }
+  .panel2 { fill: #1d2938; stroke: rgba(255,255,255,.10); stroke-width: 2; }
+  .title { fill: #f4f7fb; font: 800 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .subtitle { fill: #b8c3d0; font: 500 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .h { fill: #f4f7fb; font: 800 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .body { fill: #b8c3d0; font: 500 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .small { fill: #b8c3d0; font: 500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .label { fill: #f4f7fb; font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .value { fill: #f4f7fb; font: 800 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .yellow { fill: #ffd43b; }
+  .blue { fill: #65b7ff; }
+  .green { fill: #8bd17c; }
+  .orange { fill: #ff9f43; }
+  .red { fill: #ff6b6b; }
+  .stroke-yellow { stroke: #ffd43b; }
+  .stroke-blue { stroke: #65b7ff; }
+  .stroke-green { stroke: #8bd17c; }
+  .stroke-orange { stroke: #ff9f43; }
+  .stroke-muted { stroke: #b8c3d0; }
+  .stroke-line { stroke: #405066; }
+  text { dominant-baseline: middle; }
+</style>
+
+<rect class="bg" width="900" height="500"/>
+<text class="title" x="52" y="54">Sensor Cheat Sheet</text>
+<text class="subtitle" x="52" y="86">Use the right sensor for the question you are asking.</text>
+<rect class="panel" x="52" y="118" width="796" height="62" rx="18"/><circle cx="86" cy="149" r="10" fill="#ffd43b"/><text class="h" x="112" y="142">Wall Sun Alignment (%)</text><text class="body" x="112" y="165">Direction only: is this wall aligned with the sun?</text><rect class="panel" x="52" y="200" width="796" height="62" rx="18"/><circle cx="86" cy="231" r="10" fill="#65b7ff"/><text class="h" x="112" y="224">Wall Sun Angle (°)</text><text class="body" x="112" y="247">How low the sun enters through this wall/window.</text><rect class="panel" x="52" y="282" width="796" height="62" rx="18"/><circle cx="86" cy="313" r="10" fill="#8bd17c"/><text class="h" x="112" y="306">Shading Demand (%)</text><text class="body" x="112" y="329">Best numeric value for blinds and awnings.</text><rect class="panel" x="52" y="364" width="796" height="62" rx="18"/><circle cx="86" cy="395" r="10" fill="#ff9f43"/><text class="h" x="112" y="388">Shading Status</text><text class="body" x="112" y="411">Simple dashboard text: no sun, useful, recommended.</text>
+<rect class="panel2" x="52" y="455" width="796" height="26" rx="13"/>
+<text class="small" x="72" y="468">Without Open-Meteo: use Sun Alignment + Sun Angle. With Open-Meteo: use Shading Demand / Status.</text>
+
+</svg>

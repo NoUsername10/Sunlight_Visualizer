@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img">
+
+<style>
+  .bg { fill: #17202b; }
+  .panel { fill: #233041; stroke: rgba(255,255,255,.14); stroke-width: 2; }
+  .panel2 { fill: #1d2938; stroke: rgba(255,255,255,.10); stroke-width: 2; }
+  .title { fill: #f4f7fb; font: 800 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .subtitle { fill: #b8c3d0; font: 500 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .h { fill: #f4f7fb; font: 800 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .body { fill: #b8c3d0; font: 500 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .small { fill: #b8c3d0; font: 500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .label { fill: #f4f7fb; font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .value { fill: #f4f7fb; font: 800 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .yellow { fill: #ffd43b; }
+  .blue { fill: #65b7ff; }
+  .green { fill: #8bd17c; }
+  .orange { fill: #ff9f43; }
+  .red { fill: #ff6b6b; }
+  .stroke-yellow { stroke: #ffd43b; }
+  .stroke-blue { stroke: #65b7ff; }
+  .stroke-green { stroke: #8bd17c; }
+  .stroke-orange { stroke: #ff9f43; }
+  .stroke-muted { stroke: #b8c3d0; }
+  .stroke-line { stroke: #405066; }
+  text { dominant-baseline: middle; }
+</style>
+
+<rect class="bg" width="900" height="500"/>
+<text class="title" x="52" y="54">Shading Demand = automation value</text>
+<text class="subtitle" x="52" y="86">A practical number for blinds and awnings when Open-Meteo is enabled.</text>
+<rect class="panel" x="64" y="140" width="210" height="86" rx="20"/>
+<text class="h" x="92" y="170">Direct sun</text>
+<text class="body" x="92" y="198">W/m² on this wall</text>
+<rect class="panel" x="64" y="258" width="210" height="86" rx="20"/>
+<text class="h" x="92" y="288">Sun Angle</text>
+<text class="body" x="92" y="316">low vs high sun</text>
+<rect class="panel" x="330" y="199" width="220" height="86" rx="20"/>
+<text class="h" x="358" y="229">Comfort curve</text>
+<text class="body" x="358" y="257">reduces sunset/noon noise</text>
+<path d="M275 183 L328 226" stroke="#405066" stroke-width="6" stroke-linecap="round"/>
+<path d="M275 301 L328 256" stroke="#405066" stroke-width="6" stroke-linecap="round"/>
+<path d="M552 242 L632 242" stroke="#8bd17c" stroke-width="8" stroke-linecap="round" marker-end="url(#arrow)"/>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#8bd17c"/></marker></defs>
+<rect class="panel" x="636" y="140" width="200" height="204" rx="22"/>
+<text class="h green" x="666" y="178">Demand %</text>
+<text class="body" x="666" y="215">0% no direct sun</text>
+<text class="body" x="666" y="248">40% shade useful</text>
+<text class="body" x="666" y="281">80% recommended</text>
+<text class="small" x="52" y="430">Use this first for automations. It avoids diffuse light creating false blind demand.</text>
+
+</svg>

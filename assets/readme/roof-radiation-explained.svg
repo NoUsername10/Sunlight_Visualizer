@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img">
+
+<style>
+  .bg { fill: #17202b; }
+  .panel { fill: #233041; stroke: rgba(255,255,255,.14); stroke-width: 2; }
+  .panel2 { fill: #1d2938; stroke: rgba(255,255,255,.10); stroke-width: 2; }
+  .title { fill: #f4f7fb; font: 800 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .subtitle { fill: #b8c3d0; font: 500 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .h { fill: #f4f7fb; font: 800 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .body { fill: #b8c3d0; font: 500 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .small { fill: #b8c3d0; font: 500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .label { fill: #f4f7fb; font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .value { fill: #f4f7fb; font: 800 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .yellow { fill: #ffd43b; }
+  .blue { fill: #65b7ff; }
+  .green { fill: #8bd17c; }
+  .orange { fill: #ff9f43; }
+  .red { fill: #ff6b6b; }
+  .stroke-yellow { stroke: #ffd43b; }
+  .stroke-blue { stroke: #65b7ff; }
+  .stroke-green { stroke: #8bd17c; }
+  .stroke-orange { stroke: #ff9f43; }
+  .stroke-muted { stroke: #b8c3d0; }
+  .stroke-line { stroke: #405066; }
+  text { dominant-baseline: middle; }
+</style>
+
+<rect class="bg" width="900" height="500"/>
+<text class="title" x="52" y="54">Roof: alignment vs radiation</text>
+<text class="subtitle" x="52" y="86">One is geometry. One includes the forecast radiation for today.</text>
+<rect class="panel" x="52" y="130" width="380" height="285" rx="24"/>
+<text class="h" x="82" y="165">Roof Alignment</text>
+<text class="body" x="82" y="195">Is the sun direction ideal for the roof?</text>
+<line x1="145.0" y1="268.7" x2="145.0" y2="246.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="167.0" y1="278.0" x2="183.0" y2="262.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="176.3" y1="300.0" x2="199.0" y2="300.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="167.0" y1="322.0" x2="183.0" y2="338.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="145.0" y1="331.3" x2="145.0" y2="354.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="123.0" y1="322.0" x2="107.0" y2="338.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="113.7" y1="300.0" x2="91.0" y2="300.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<line x1="123.0" y1="278.0" x2="107.0" y2="262.0" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+<circle cx="145" cy="300" r="22" fill="#ffd43b"/><circle cx="145" cy="300" r="12.76" fill="#fff06a" opacity=".9"/>
+<polygon points="245,320 365,270 405,295 285,345" fill="#dfe5ec" stroke="#17202b" stroke-width="4"/>
+<path d="M180 292 L250 318" stroke="#ffd43b" stroke-width="8" stroke-linecap="round"/>
+<text class="value yellow" x="82" y="370">96 %</text>
+<rect class="panel" x="468" y="130" width="380" height="285" rx="24"/>
+<text class="h" x="498" y="165">Roof Radiation %</text>
+<text class="body" x="498" y="195">How close are we to today’s forecast peak?</text>
+<polygon points="612,320 732,270 772,295 652,345" fill="#dfe5ec" stroke="#17202b" stroke-width="4"/>
+<rect x="640" y="298" width="36" height="18" fill="#183a75" stroke="#9fb6df" stroke-width="2" transform="rotate(-23 640 298)"/>
+<rect x="681" y="281" width="36" height="18" fill="#183a75" stroke="#9fb6df" stroke-width="2" transform="rotate(-23 681 281)"/>
+<path d="M540 292 L612 318" stroke="#ffd43b" stroke-width="8" stroke-linecap="round" opacity=".45"/>
+<path d="M540 248 C610 220 690 220 765 250" fill="none" stroke="#65b7ff" stroke-width="7" stroke-linecap="round" opacity=".75"/>
+<text class="value blue" x="498" y="370">55 %</text>
+<text class="small" x="52" y="458">Roof Radiation is usually better for solar production context. Alignment is still useful for direction/geometry.</text>
+
+</svg>
