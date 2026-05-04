@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Adding more calculated attributes in the sensor section.
 - Adding card information about sun and alignement position.
 - Turn on /off frame limit feature.
+- Add multi location function, for multiple sites / houses.
 
 ### Added
 
