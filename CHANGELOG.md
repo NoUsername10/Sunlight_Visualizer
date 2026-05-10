@@ -7,9 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Planned
 - More translations.
 - Adding more calculated attributes in the sensor section.
-- Adding card information about sun and alignement position.
-- Turn on /off frame limit feature.
-- Add multi location function, for multiple sites / houses.
+- Adding card information about sun and alignement position
 
 ### Added
 
@@ -17,6 +15,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+
+## [0.3.0] - 2026-05-09
+### Added
+- Open-Meteo radiation support (opt-in) with 15-minute forecast data, daytime 15-minute refresh, hourly night refresh, retry handling, API status diagnostics, and same-day cache fallback.
+- Wall radiation sensors for total radiation, direct radiation, shading demand, and shading status for Front/Right/Back/Left walls.
+- Roof radiation and roof radiation percentage sensors using roof direction, roof tilt, and today’s forecast radiation peak.
+- Always-on Wall Sun Angle sensors for Front/Right/Back/Left walls to help blind/awning automations understand low sun entry angle without weather data.
+- Zone-based location override in setup/options while keeping Home as the default location.
+- Energy HUD improvements with Solar / Home / Grid / optional CAR values, roof-alignment sub-row, compact `(i)` mode, night auto-collapse behavior, and clearer value alignment.
+- Surface `%` source selectors for wall and roof labels, including automatic wall Shading Demand when Open-Meteo sensors are available.
+- Optional car charger power sensor with HUD `CAR` row and Three.js EV charger pulse.
+- EV car visual selector with SVG car, Smart car, and Mini SUV options, plus `evCarScale` and automatic SVG fallback when WebGL is unavailable.
+- Polish translation and updated English, Swedish, Spanish, and Polish translation strings for new setup/options controls.
+
+### Changed
+- Bumped integration/card release version to `0.3.0`.
+- Renamed wall/roof geometric sensor friendly names from `Sunlight` to `Sun Alignment` while keeping original entity IDs stable.
+- Renamed Open-Meteo wall radiation entities to surface-first names such as `front_wall_radiation_total` and `front_wall_radiation_direct`.
+- Moved raw Open-Meteo API radiation sensors into the Diagnostic category.
+- Updated default `floorWallLabelOffset` to `0.85` and default `evCarScale` to `1.25`.
+- Improved README documentation for sensors, radiation values, card YAML, EV visuals, and automation guidance.
+
+### Fixed
+- WebGL fallback stability so successful WebGL car rendering no longer falls back to SVG after repeated support checks.
+- SVG and WebGL EV car grounding, scaling, placement, selector behavior, and house/pole/tree/sun occlusion edge cases.
+- SVG fallback car rendering artifacts, including roof/sides disappearing, tire visibility, and house-edge draw-order leakage.
+- Grid powerline visibility through house roof/walls with segment-aware SVG clipping and pass-aware overlay layering above WebGL cars.
+- Grid power pulse persistence so visible cable segments keep pulsing even when other cable segments are hidden behind the house.
+- Car charger pulse timing and color behavior (`3s` travel, `2s` wait; yellow on export, blue otherwise).
+- Wall shading demand now uses direct wall radiation only, so diffuse/reflected light does not create false shading demand on non-facing walls.
+- Open-Meteo entity cleanup option when disabling radiation support, removing only Meteo/radiation entities when requested.
+- Lovelace resource auto-registration de-duplication and async static-path registration hardening.
+- Roof power sensor persistence in setup/options when the roof power label toggle is disabled.
 
 ## [0.2.6] - 2026-04-13
 ### Added
@@ -27,7 +58,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Utility pole + powerline rendering with bidirectional pulse flow visuals.
 - Diagnostics metadata for resolved location source, selected zone entity, and active location name.
 - Location selection, with resolution, supports safe fallback to Home coordinates when a selected zone is missing/invalid. Thank you @yazck for the suggestion!
-- Added Polish translation file (`pl.json`) and aligned it with current config/options/service translation keys. Thank you @Adrian-czw fot the translation!
+- Added Polish translation file (`pl.json`) and aligned it with current config/options/service translation keys. Thank you @Adrian-czw!
 
 
 

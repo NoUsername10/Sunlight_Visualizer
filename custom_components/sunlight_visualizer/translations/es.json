@@ -18,7 +18,8 @@
           "auto_rotate_speed": "Velocidad de auto-rotacion (grados/segundo)",
           "house_angle": "Angulo de la casa (grados, 0° = frente hacia el norte)",
           "ceiling_tilt": "Inclinacion del techo (0-90°, 0 = horizontal)",
-          "update_interval": "Intervalo de actualizacion (minutos)"
+          "update_interval": "Intervalo de actualizacion (minutos)",
+          "radiation_enabled": "Activar sensores de radiacion de Open-Meteo"
         },
         "data_description": {
           "location_source": "Elige la ubicacion de Home Assistant (predeterminada) o una zona personalizada.",
@@ -33,7 +34,8 @@
           "auto_rotate_speed": "Velocidad predeterminada de auto-rotacion para la tarjeta (1-90 grados/seg)",
           "house_angle": "Angulo del frente de tu casa respecto al norte (0-359°)",
           "ceiling_tilt": "Angulo de inclinacion del techo/paneles solares (0° = plano, 90° = vertical)",
-          "update_interval": "Con que frecuencia se recalcula la posicion del sol (1-60 minutos)"
+          "update_interval": "Con que frecuencia se recalcula la posicion del sol (1-60 minutos)",
+          "radiation_enabled": "Obtiene radiacion prevista de Open-Meteo con resolucion de 15 minutos cada 15 minutos mientras el sol esta sobre el horizonte y cada hora cuando esta bajo el horizonte. Anade sensores de radiacion para paredes y techo. Desactivado por defecto porque usa una API externa."
         }
       }
     },
@@ -77,7 +79,9 @@
           "auto_rotate_speed": "Velocidad de auto-rotacion (grados/segundo)",
           "house_angle": "Angulo de la casa (grados, 0° = frente hacia el norte)",
           "ceiling_tilt": "Inclinacion del techo (0-90°, 0 = horizontal)",
-          "update_interval": "Intervalo de actualizacion (minutos)"
+          "update_interval": "Intervalo de actualizacion (minutos)",
+          "radiation_enabled": "Activar sensores de radiacion de Open-Meteo",
+          "remove_radiation_entities_on_disable": "Eliminar sensores de Open-Meteo al desactivar"
         },
         "data_description": {
           "location_source": "Elige la ubicacion de Home Assistant (predeterminada) o una zona personalizada.",
@@ -95,7 +99,9 @@
           "auto_rotate_speed": "Velocidad predeterminada de auto-rotacion para la tarjeta (1-90 grados/seg)",
           "house_angle": "Angulo del frente de tu casa respecto al norte (0-359°)",
           "ceiling_tilt": "Angulo de inclinacion del techo/paneles solares (0° = plano, 90° = vertical)",
-          "update_interval": "Con que frecuencia se recalcula la posicion del sol (1-60 minutos)"
+          "update_interval": "Con que frecuencia se recalcula la posicion del sol (1-60 minutos)",
+          "radiation_enabled": "Obtiene radiacion prevista de Open-Meteo con resolucion de 15 minutos cada 15 minutos mientras el sol esta sobre el horizonte y cada hora cuando esta bajo el horizonte. Anade sensores de radiacion para paredes y techo. Desactivado por defecto porque usa una API externa.",
+          "remove_radiation_entities_on_disable": "Al desactivar la radiación de Open-Meteo, elimina solo las entidades de Open-Meteo/radiación de Home Assistant. Los sensores normales de luz solar permanecen."
         }
       }
     }

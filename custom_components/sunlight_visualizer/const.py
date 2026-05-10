@@ -25,10 +25,13 @@ CONF_FORCE_SUN_AZIMUTH = "force_sun_azimuth"
 CONF_FORCE_SUN_ELEVATION = "force_sun_elevation"
 CONF_FIXED_SUN_AZIMUTH = "fixed_sun_azimuth"
 CONF_FIXED_SUN_ROTATION_ENABLED = "fixed_sun_rotation_enabled"
+CONF_RADIATION_ENABLED = "radiation_enabled"
+CONF_REMOVE_RADIATION_ENTITIES_ON_DISABLE = "remove_radiation_entities_on_disable"
 
 # Marker used by the SVG house card to auto-bind sensors from this integration
 CARD_SOURCE_ATTR = "sunlight_visualizer_source"
 CARD_SOURCE_VALUE = "sunlight_visualizer"
+RADIATION_CLEANUP_MARKER_PREFIX = "_cleanup_radiation_entities_"
 
 
 # Fallback sun position if HA data is unavailable
@@ -57,6 +60,7 @@ DEFAULT_FORCE_SUN_AZIMUTH = FALLBACK_SUN_AZIMUTH
 DEFAULT_FORCE_SUN_ELEVATION = FALLBACK_SUN_ELEVATION
 DEFAULT_FIXED_SUN_AZIMUTH = 225
 DEFAULT_FIXED_SUN_ROTATION_ENABLED = False
+DEFAULT_RADIATION_ENABLED = False
 
 # Wall types
 WALLS = ["front", "left", "back", "right", "ceiling"]

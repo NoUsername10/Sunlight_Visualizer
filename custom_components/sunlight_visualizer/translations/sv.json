@@ -18,7 +18,8 @@
           "auto_rotate_speed": "Auto-roteringshastighet (grader/sek)",
           "house_angle": "Husvinkel (grader, 0° = front mot norr)",
           "ceiling_tilt": "Taklutning (0–90°, 0 = horisontell)",
-          "update_interval": "Uppdateringsintervall (minuter)"
+          "update_interval": "Uppdateringsintervall (minuter)",
+          "radiation_enabled": "Aktivera Open-Meteo-stralningssensorer"
         },
         "data_description": {
           "location_source": "Välj Home Assistant-plats (standard) eller en anpassad zon.",
@@ -33,7 +34,8 @@
           "auto_rotate_speed": "Standardhastighet för auto-rotation i kortet (1–90 grader/sek)",
           "house_angle": "Vinkel för husets front i förhållande till norr (0–359°)",
           "ceiling_tilt": "Lutningsvinkel för tak/solpaneler (0° = plant, 90° = vertikalt)",
-          "update_interval": "Hur ofta solens position beräknas om (1–60 minuter)"
+          "update_interval": "Hur ofta solens position beräknas om (1–60 minuter)",
+          "radiation_enabled": "Hamta 15-minuters prognostiserad solstralning fran Open-Meteo var 15:e minut nar solen ar uppe och varje timme nar solen ar nere. Lagger till stralningssensorer for vaggar och tak. Avstangt som standard eftersom en extern API-tjanst anvands."
         }
       }
     },
@@ -77,7 +79,9 @@
           "auto_rotate_speed": "Auto-roteringshastighet (grader/sek)",
           "house_angle": "Husvinkel (grader, 0° = front mot norr)",
           "ceiling_tilt": "Taklutning (0–90°, 0 = horisontell)",
-          "update_interval": "Uppdateringsintervall (minuter)"
+          "update_interval": "Uppdateringsintervall (minuter)",
+          "radiation_enabled": "Aktivera Open-Meteo-stralningssensorer",
+          "remove_radiation_entities_on_disable": "Ta bort Open-Meteo-sensorer vid avstängning"
         },
         "data_description": {
           "location_source": "Välj Home Assistant-plats (standard) eller en anpassad zon.",
@@ -95,7 +99,9 @@
           "auto_rotate_speed": "Standardhastighet för auto-rotation i kortet (1–90 grader/sek)",
           "house_angle": "Vinkel för husets front i förhållande till norr (0–359°)",
           "ceiling_tilt": "Lutningsvinkel för tak/solpaneler (0° = plant, 90° = vertikalt)",
-          "update_interval": "Hur ofta solens position beräknas om (1–60 minuter)"
+          "update_interval": "Hur ofta solens position beräknas om (1–60 minuter)",
+          "radiation_enabled": "Hamta 15-minuters prognostiserad solstralning fran Open-Meteo var 15:e minut nar solen ar uppe och varje timme nar solen ar nere. Lagger till stralningssensorer for vaggar och tak. Avstangt som standard eftersom en extern API-tjanst anvands.",
+          "remove_radiation_entities_on_disable": "När Open-Meteo-strålning stängs av tas endast Open-Meteo-/strålningsentiteterna bort från Home Assistant. Vanliga solljussensorer finns kvar."
         }
       }
     }
