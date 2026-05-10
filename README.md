@@ -36,24 +36,25 @@ GIF (on macOS Safari: right click + "Play animation"):
 
 ## Instant Overview
 - Real-time sun physics from azimuth/elevation + house angle + roof tilt.
-- Surface intensity sensors for all 4 walls + roof.
-- Roof alignment percentage/status sensors.
+- Geometric sun-alignment sensors for all 4 walls + roof.
+- Wall Sun Angle sensors for blind/awning logic without weather data.
+- Optional Open-Meteo radiation support with 15-minute forecast data, retry handling, same-day cache fallback, and diagnostic status.
+- Optional wall/roof radiation sensors: total radiation, direct radiation, shading demand/status, roof radiation percentage.
+- Home location by default with optional single-dropdown `zone.*` location override and safe Home fallback.
 - Roof power label for solar power (optional) with invert value support.
-- Grid flow sensor support (optional) with invert sign support.
-- Energy HUD for Solar / Home / Grid with adaptive small-card behavior.
-- Utility pole + powerline visualization with bidirectional pulse animation.
-- Improved sun-depth layering for utility pole/powerline elements.
-- Power-only sensor enforcement for roof/grid sensor selection.
+- Grid flow sensor support (optional) with invert sign support and bidirectional SVG power pulse.
+- Energy HUD for Solar / Home / Grid / optional CAR values, with roof-alignment sub-info and small-card `(i)` mode.
+- Surface `%` source selectors for wall labels and roof labels, including Open-Meteo shading/radiation values when available.
+- Optional EV visuals: SVG fallback car, WebGL Smart car, WebGL Mini SUV, `evCarScale`, and automatic SVG fallback if WebGL is unavailable.
+- Optional car charger power sensor with HUD `CAR` row and WebGL charger pulse.
+- Utility pole + powerline visualization with segment-aware house occlusion and persistent pulse animation.
 - Improved wall `%` label projection + anti-stretch behavior.
-- Home location by default with optional zone-based location override in integration setup/options.
-- Localized config/options/services text (English, Swedish, Spanish, Polish).
-- Visuals: overhang, windows, door, roof panels, tree and adaptive shadows.
-- Day/night scene with clouds, stars, moon, twilight gradients.
+- Visuals: overhang, windows, door, roof panels, tree, EV car, adaptive shadows, sky, clouds, moon and stars.
 - Auto rotate + manual camera controls + save/restore view.
-- Fixed sun position, azimuth. (Rotate scene) — Keep sun azimuth visually fixed and rotate the scene instead.
+- Fixed sun position, azimuth. (Rotate scene) — keep sun azimuth visually fixed and rotate the scene instead.
 - Performance adaptation for slow displays.
+- Localized config/options/services text (English, Swedish, Spanish, Polish).
 - Test mode (if sun is down): Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED`.
-
 
 ## Changelog
 See [`CHANGELOG.md`](./CHANGELOG.md).
@@ -104,10 +105,12 @@ If needed, add card resource manually:
 
 ## Geo Location Source
 - No card-side geo setup is needed.
-- `sunlight_visualizer` uses your Home Assistant home location (latitude/longitude + timezone) automatically by default.
-- Optional: in integration setup/options, change **Location source** to **Zone** and select a `zone.*` entity.
+- `sunlight_visualizer` uses your Home Assistant Home location (latitude/longitude + timezone) automatically by default.
+- Optional: in integration setup/options, choose a `zone.*` entity from the Zone override dropdown.
+- The first dropdown option is `Use Home (default)`.
 - If the selected zone is missing/unavailable, the integration safely falls back to Home coordinates.
-- The card reads sun/wall/roof values from integration entities, so location is auto-configured through HA.
+- The card reads sun/wall/roof values from integration entities, so location is auto-configured through Home Assistant.
+
 If your Home location is not set correctly in Home Assistant:
 1. Go to **Settings**.
 2. Open **Areas, Labels & Zones**.
@@ -116,18 +119,14 @@ If your Home location is not set correctly in Home Assistant:
 
 This ensures accurate geo data for sun calculations.
 
-
-
 ## Most Used Settings (Start Here)
 <details>
 <summary>Setup options</summary><br>
 
 These are the most important settings in integration setup/options:
-- Location source (`Home Assistant` default or `Zone` override)
-- Zone override (`zone.*`) when location source is set to `Zone`
-- House Direction preset or custom House Angle (The compass angle of the front door of your house)
-- Roof Direction (`front`, `left`, `back`, `right`) Slop tilt of you ceiling.
-- Ceiling Tilt
+- Zone override (`Use Home (default)` or a `zone.*` entity)
+- House Direction preset or custom House Angle (the compass angle of the front door of your house)
+- Roof Direction (`front`, `left`, `back`, `right`) and Ceiling Tilt
 - Fixed sun position, azimuth. (Rotate scene)
 - Update Interval
 - Auto Rotate Speed
@@ -135,6 +134,8 @@ These are the most important settings in integration setup/options:
   - Enable roof power label
   - Select roof power sensor
   - Invert value if your power sensor reports negative production
+- Open-Meteo radiation sensors (optional, disabled by default)
+- Remove Open-Meteo sensors when disabling (shown when Open-Meteo is currently enabled)
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/setup-options.png" width="70%" height="70%">
 <br>
@@ -144,8 +145,7 @@ These are the most important settings in integration setup/options:
 <summary>Configuration options</summary><br>
 
 In integration configuration/options you can tune:
-- Location source (`Home Assistant` default or `Zone` override)
-- Zone override (`zone.*`) when location source is set to `Zone`
+- Zone override (`Use Home (default)` or a `zone.*` entity)
 - Ceiling Tilt
 - House Angle
 - Camera Rotation H / V (default view)
@@ -155,6 +155,9 @@ In integration configuration/options you can tune:
 - Update Interval
 - Auto rotate speed
 - Roof power source + invert
+- Open-Meteo radiation support:
+  - Enable/disable forecast radiation sensors
+  - Optional cleanup of Open-Meteo/radiation entities when disabling
 - Force Sun Fallback:
   - Enable/disable override
   - Set forced sun azimuth/elevation for testing
@@ -164,29 +167,82 @@ In integration configuration/options you can tune:
 </details>
 
 <details>
-<summary>Sunlight sensors</summary><br>
+<summary>Sunlight and radiation sensors</summary><br>
 
-Created entities include:
-- `sensor.sun_wall_intensity_front` — Sunlight intensity on front wall (%).
-- `sensor.sun_wall_intensity_left` — Sunlight intensity on left wall (%).
-- `sensor.sun_wall_intensity_back` — Sunlight intensity on back wall (%).
-- `sensor.sun_wall_intensity_right` — Sunlight intensity on right wall (%).
-- `sensor.sun_roof_intensity` — Sunlight intensity on the roof surface (%).
-- `sensor.sun_roof_alignment_percentage` — Current roof alignment versus best possible alignment for today (%).
-- `sensor.sun_roof_alignment_status` — Human-readable status for roof alignment trend.
+Core sensors are always created:
+- `sensor.front_wall_sunlight`, `sensor.left_wall_sunlight`, `sensor.back_wall_sunlight`, `sensor.right_wall_sunlight` — friendly names are `Front/Left/Back/Right Wall Sun Alignment`. These are geometric wall-facing percentages.
+- `sensor.front_wall_sun_angle`, `sensor.left_wall_sun_angle`, `sensor.back_wall_sun_angle`, `sensor.right_wall_sun_angle` — vertical window-entry angle (°). A higher value means lower sun and deeper light entering the room. Returns `0°` when the wall is not lit.
+- `sensor.roof_sunlight` — friendly name `Roof Sun Alignment`, the geometric roof-facing percentage.
+- `sensor.roof_sunlight_alignment_percentage` — current roof alignment versus best possible alignment for today (%).
+- `sensor.roof_sunlight_alignment_status` — human-readable status for roof alignment trend.
+- `sensor.sun_azimuth`, `sensor.sun_elevation`, `sensor.sun_coordinates` — diagnostic sun/location data.
+
+For blinds and awnings without Open-Meteo, a good starting point is to combine wall sun alignment and wall sun angle, for example: close when wall sun alignment is above `20%` and wall sun angle is above `45°`.
+
+When Open-Meteo radiation is enabled, extra sensors are added:
+- `sensor.left_wall_radiation_total`, `sensor.right_wall_radiation_total`, `sensor.front_wall_radiation_total`, `sensor.back_wall_radiation_total` — total estimated wall radiation (`direct + diffuse + reflected`).
+- `sensor.left_wall_radiation_direct`, `sensor.right_wall_radiation_direct`, `sensor.front_wall_radiation_direct`, `sensor.back_wall_radiation_direct` — direct beam radiation hitting each wall.
+- `sensor.left_wall_shading_demand`, `sensor.right_wall_shading_demand`, `sensor.front_wall_shading_demand`, `sensor.back_wall_shading_demand` — automation-friendly direct-sun demand percentage.
+- `sensor.left_wall_shading_status`, `sensor.right_wall_shading_status`, `sensor.front_wall_shading_status`, `sensor.back_wall_shading_status` — dashboard-friendly text guidance such as `No direct sun`, `Shade useful`, or `Strong low sun`.
+- `sensor.roof_radiation` — forecast-adjusted radiation hitting the roof (`W/m²`).
+- `sensor.roof_radiation_percentage` — roof radiation relative to today’s forecast roof peak (`%`).
+- `sensor.open_meteo_shortwave_radiation`, `sensor.open_meteo_direct_radiation`, `sensor.open_meteo_diffuse_radiation`, `sensor.open_meteo_direct_normal_irradiance` — raw Open-Meteo diagnostic values.
+- `sensor.open_meteo_radiation_status` — diagnostic text sensor showing `OK`, `Stale cache`, `API error`, or `No data`. Attributes include latest successful update time, minutes since success, API status, fetch attempts, and next fetch due.
+
+Open-Meteo fetches a `15-minute` radiation forecast for the local calendar day (`96` points from `00:00` to `23:45`). The integration refreshes that data every `15 minutes` while the sun is above the horizon and every `60 minutes` when the sun is down. Each fetch uses retry hardening and keeps using the latest successful same-day forecast cache when possible.
+
+Example for one west-facing wall on a sunny day:
+
+| Day state | Wall Sun Alignment | Wall Sun Angle | Radiation Direct | Radiation Total | Shading Demand | Shading Status | What it means |
+|---|---:|---:|---:|---:|---:|---|---|
+| Morning, wall points away | `0%` | `0°` | `0 W/m²` | `80 W/m²` | `0%` | `No direct sun` | Bright sky may exist, but this wall has no direct sun. |
+| Midday, sun high | `35%` | `25°` | `180 W/m²` | `360 W/m²` | `18%` | `Mild sun` | The wall is partly aligned, but high sun enters less deeply. |
+| Afternoon, strong direct sun | `95%` | `50°` | `620 W/m²` | `760 W/m²` | `78%` | `Shade recommended` | Best time for blinds/awning automation on this wall. |
+| Late evening, low weak sun | `70%` | `82°` | `45 W/m²` | `95 W/m²` | `12%` | `Low need` | Low sun angle, but weak direct radiation, so demand stays low. |
+
+How to read the values together:
+- `Wall Sun Alignment` tells you if the wall is geometrically facing the sun.
+- `Wall Sun Angle` tells you whether the light enters low/deep through windows.
+- `Radiation Direct` tells you how much direct sun is actually hitting that wall.
+- `Radiation Total` also includes diffuse sky light and reflected light, so it can be non-zero on walls without direct sun.
+- `Shading Demand` combines direct sun with the comfort curve and is the best numeric automation value.
+- `Shading Status` is the dashboard-friendly text version of shading demand.
 
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors.png" width="70%" height="70%">
 <br>
 </details>
 
 <details>
+<summary>Sensor visual guide</summary><br>
+
+These diagrams explain what the main sensor groups mean and which values are best for dashboards or automations.
+
+<img src="assets/readme/sensor-guide-overview.svg" width="100%">
+<br><br>
+
+<img src="assets/readme/wall-sunlight-explained.svg" width="49%">
+<img src="assets/readme/wall-sun-angle-explained.svg" width="49%">
+<br><br>
+
+<img src="assets/readme/radiation-types-explained.svg" width="49%">
+<img src="assets/readme/shading-demand-explained.svg" width="49%">
+<br><br>
+
+<img src="assets/readme/roof-radiation-explained.svg" width="100%">
+<br>
+</details>
+
+<details>
 <summary>Visual card configuration</summary><br>
 
-You can also configure common card behavior visually:
+You can configure common card behavior visually:
 - Roof power options
 - Grid flow sensor options (power sensor + invert)
+- Car charger sensor (power), used for HUD `CAR` and EV charging pulse
 - Powerline + pulse controls
-- Energy HUD controls
+- EV car toggle and EV car visual selector (`SVG car`, `Smart car`, `Mini SUV`)
+- Surface `%` label source selectors for walls and roof
+- Energy HUD controls, including optional roof-alignment details
 - Auto rotation speed
 - Auto-scale Width (auto downscale to fit narrow cards / devices)
 - Camera controls
@@ -201,18 +257,27 @@ You can also configure common card behavior visually:
 
 </details>
 
-
-
 ## Auto Binding
 By default the card auto-binds to integration entities using:
 - `sunlight_visualizer_source: sunlight_visualizer`
 
 You can still override entities in YAML when needed.
 
+### Surface % label source
 
+The card can choose which percentage is painted on the house surfaces:
+
+- `wallPercentSource: auto` (default) — walls use `Shading Demand` when Open-Meteo radiation sensors are available, otherwise `Sun Alignment`.
+- `wallPercentSource: sun_alignment` — walls always show geometric wall sun alignment.
+- `wallPercentSource: shading_demand` — walls show direct-sun shading demand when available, with a safe fallback to sun alignment.
+- `roofPercentSource: roof_sun_alignment` (default) — roof shows the geometric roof sun alignment.
+- `roofPercentSource: roof_radiation_percentage` — roof shows forecast-adjusted radiation relative to today’s roof peak.
+- `roofPercentSource: roof_sunlight_alignment_percentage` — roof shows the optimal-alignment timing percentage.
+
+Legacy YAML overrides such as `wallFrontPctEntity` and `roofPctEntity` still work when these source selectors are not set.
 
 ## Validation
-- Current release: `0.2.6` (validated for HACS + Hassfest).
+- Current release: `0.3.0` (validated for HACS + Hassfest).
 - HACS approved repository and installable as an Integration category repo.
 - HACS validation workflow: `.github/workflows/hacs.yaml`
 - Hassfest validation workflow: `.github/workflows/hassfest.yaml`
@@ -232,16 +297,24 @@ You can still override entities in YAML when needed.
 ## What The Integration Creates
 
 <details>
-<summary>Sensors, Numbers, Enteties</summary><br>
+<summary>Sensors, Numbers, Entities</summary><br>
 
-### Sensors
-- `sensor.sun_wall_intensity_front` — Front wall sunlight intensity (%).
-- `sensor.sun_wall_intensity_left` — Left wall sunlight intensity (%).
-- `sensor.sun_wall_intensity_back` — Back wall sunlight intensity (%).
-- `sensor.sun_wall_intensity_right` — Right wall sunlight intensity (%).
-- `sensor.sun_roof_intensity` — Roof sunlight intensity (%).
-- `sensor.sun_roof_alignment_percentage` — Roof alignment percentage vs today's best available alignment.
-- `sensor.sun_roof_alignment_status` — Alignment trend/status text.
+### Always-on sensors
+- `sensor.front_wall_sunlight`, `sensor.left_wall_sunlight`, `sensor.back_wall_sunlight`, `sensor.right_wall_sunlight` — wall sun alignment (%). Entity IDs stay stable from earlier releases.
+- `sensor.front_wall_sun_angle`, `sensor.left_wall_sun_angle`, `sensor.back_wall_sun_angle`, `sensor.right_wall_sun_angle` — wall sun-entry angle (°).
+- `sensor.roof_sunlight` — roof sun alignment (%). Entity ID stays stable from earlier releases.
+- `sensor.roof_sunlight_alignment_percentage` — roof optimal-alignment timing percentage (%).
+- `sensor.roof_sunlight_alignment_status` — roof alignment trend/status text.
+- `sensor.sun_azimuth`, `sensor.sun_elevation`, `sensor.sun_coordinates` — diagnostic sun/location values.
+
+### Open-Meteo sensors (only when enabled)
+- `sensor.open_meteo_radiation_status` — diagnostic API/cache status.
+- `sensor.open_meteo_shortwave_radiation`, `sensor.open_meteo_direct_radiation`, `sensor.open_meteo_diffuse_radiation`, `sensor.open_meteo_direct_normal_irradiance` — raw diagnostic Open-Meteo values.
+- `sensor.front_wall_radiation_total`, `sensor.right_wall_radiation_total`, `sensor.back_wall_radiation_total`, `sensor.left_wall_radiation_total` — total wall radiation (`W/m²`).
+- `sensor.front_wall_radiation_direct`, `sensor.right_wall_radiation_direct`, `sensor.back_wall_radiation_direct`, `sensor.left_wall_radiation_direct` — direct wall radiation (`W/m²`).
+- `sensor.front_wall_shading_demand`, `sensor.right_wall_shading_demand`, `sensor.back_wall_shading_demand`, `sensor.left_wall_shading_demand` — wall shading demand (%).
+- `sensor.front_wall_shading_status`, `sensor.right_wall_shading_status`, `sensor.back_wall_shading_status`, `sensor.left_wall_shading_status` — wall shading status text.
+- `sensor.roof_radiation`, `sensor.roof_radiation_percentage` — roof forecast radiation and percentage of today’s roof peak.
 
 ### Number entities
 - `number.house_angle`
@@ -249,6 +322,9 @@ You can still override entities in YAML when needed.
 - `number.update_interval`
 - `number.house_camera_rotation_h`
 - `number.house_camera_rotation_v`
+- `number.auto_rotate_speed`
+- `number.force_sun_azimuth`
+- `number.force_sun_elevation`
 
 ### Select entities
 - `select.house_direction`
@@ -256,9 +332,9 @@ You can still override entities in YAML when needed.
 
 ### Switch entities
 - `switch.fixed_sun_azimuth_rotate_scene`
+- `switch.force_sun_fallback`
 
 </details>
-
 
 ## Advanced (Full YAML Reference)
 <details>
@@ -279,23 +355,34 @@ houseAngleEntity: number.house_angle
 fixedSunRotationEnabled: false
 fixedSunAzimuthDeg: 225
 
-wallFrontPctEntity: sensor.sun_wall_intensity_front
-wallRightPctEntity: sensor.sun_wall_intensity_right
-wallBackPctEntity: sensor.sun_wall_intensity_back
-wallLeftPctEntity: sensor.sun_wall_intensity_left
-roofPctEntity: sensor.sun_roof_intensity
+# Legacy manual overrides. Normally leave these unset and use auto-binding/source selectors.
+wallFrontPctEntity: sensor.front_wall_sunlight
+wallRightPctEntity: sensor.right_wall_sunlight
+wallBackPctEntity: sensor.back_wall_sunlight
+wallLeftPctEntity: sensor.left_wall_sunlight
+roofPctEntity: sensor.roof_sunlight
+
+# Percentage painted on wall and roof surfaces
+wallPercentSource: auto # auto | sun_alignment | shading_demand
+roofPercentSource: roof_sun_alignment # roof_sun_alignment | roof_radiation_percentage | roof_sunlight_alignment_percentage
 
 roofPowerEntity: null
 roofPowerEnabled: false
 roofPowerInvert: false
 gridFlowEntity: null
 gridFlowInvert: false
+carChargerEntity: null
 
 energyHudEnabled: true
 energyHudAutoCompact: true
+energyHudRoofAlignmentEnabled: true
 energyHudCompactAtPx: 360
 energyHudUltraCompactAtPx: 300
 energyHudOpacity: 0.45
+
+miniEvCarEnabled: true
+evCarType: mini_suv # svg | smart | mini_suv
+evCarScale: 1.25
 
 sunAzEntity: null
 sunElEntity: null
@@ -473,7 +560,7 @@ floorPointerShadowOffset: 2.9
 
 ```yaml
 surfaceLabelEnabled: true
-surfaceLabelSize: 12
+surfaceLabelSize: 25
 surfaceLabelScaleBoost: 1.5
 surfaceLabelScaleMin: 0.6
 surfaceLabelScaleMax: 1.6
@@ -485,13 +572,15 @@ surfaceLabelOffset: 0.03
 wallPctVisibleThreshold: -0.215
 wallPctAreaThreshold: 120
 wallPctVerticalPos: 0.66
+wallLabelAspectCompensation: 0.7
+wallLabelAspectCompensationMax: 1.05
 
 roofPctLabelScale: 1.18
 roofPowerLabelScale: 0.70
 roofPowerLabelColor: "rgba(255,255,255,0.9)"
 
 floorWallLabelSize: 12
-floorWallLabelOffset: 0.55
+floorWallLabelOffset: 0.85
 floorWallLabelScaleBoost: 1.2
 floorWallLabelScaleMin: 0.5
 floorWallLabelScaleMax: 1.8
@@ -624,7 +713,7 @@ sunRayAnimColorB: "rgb(255,175,35)"
 </details>
 
 <details>
-<summary>Powerline / Energy HUD</summary><br>
+<summary>Powerline / Energy HUD / EV</summary><br>
 
 ```yaml
 powerlineEnabled: true
@@ -637,15 +726,25 @@ powerPoleZ: 2.2
 gridFlowEntity: null
 gridFlowInvert: false
 
+# Optional EV charger source (power sensor only)
+carChargerEntity: null
+
 # Energy HUD
 energyHudEnabled: true
 energyHudAutoCompact: true
+energyHudRoofAlignmentEnabled: true
 energyHudCompactAtPx: 360
 energyHudUltraCompactAtPx: 300
 energyHudOpacity: 0.45
 
+# EV car visual
+miniEvCarEnabled: true
+evCarType: mini_suv # svg | smart | mini_suv
+evCarScale: 1.25
+
 # Small-card behavior:
 # below 300x300 the HUD uses clickable (i) mode.
+# At night the HUD can collapse automatically to avoid moon overlap.
 ```
 </details>
 
