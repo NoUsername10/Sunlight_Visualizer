@@ -6,32 +6,18 @@
 
 **See where the sun hits, understand why, and use the values in automations.**
 
-Sunlight Visualizer turns your house into a little sun-aware dashboard: walls light up, the roof tells its solar story, power flows through the scene, and Home Assistant gets sensors you can actually use for blinds, awnings, HVAC, solar checks, and “why is this room suddenly a toaster?” moments.
+Sunlight Visualizer turns your home into a sun-aware dashboard: useful sensors for automations, and a playful 2.5D house that shows the sun, shadows, power flow, roof production, and optional EV charging at a glance.
 
 > **Need the full guide?** This README is the quick visual front page. The complete setup guide, sensor explanations, automation examples, and troubleshooting live in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki).
 
-**Release focus:** `0.3.0` adds Open-Meteo radiation sensors, wall sun-angle sensors, Energy HUD improvements, surface `%` selectors, WebGL EV car choices with SVG fallback, zone location selection, stronger resource registration, and many visual/occlusion fixes.
+## What You Get
+<p>
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-default.png" width="30%" alt="Default Sunlight Visualizer sensors">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_1.png" width="30%" alt="Open-Meteo wall radiation sensors">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_3.png" width="30%" alt="Open-Meteo roof radiation sensors">
+</p>
 
-## Instant Overview
-It includes:
-
-- **A custom integration** (`sunlight_visualizer`) that calculates wall/roof sun values for automations.
-- **A Lovelace card** (`custom:sunlight-visualizer-card`) that shows the sun, house, roof, shadows, power flow, Energy HUD, and optional EV charging visuals.
-- **Useful sensors first, fancy visuals second** — though the visuals are very much invited to the party.
-
-Things you can do with it:
-
-- **Sunscreen Alert:** “UV attack incoming” — the sun reaches the pool, go outside and bring the sunscreen.
-- **Blind and awning control:** close only when the right wall has direct sun and the sun angle is low enough to matter.
-- **Heat-load HVAC prep:** pre-cool when roof or wall exposure rises, relax when exposure drops.
-- **Solar output insights:** compare roof sun/radiation with roof power to spot underperformance.
-
-| Quick view | What you get |
-| --- | --- |
-| **Default setup** | Wall/Roof Sun Alignment + Wall Sun Angle. No external API needed. |
-| **Open-Meteo mode** | Wall Radiation Direct/Total, Shading Demand/Status, Roof Radiation, and Roof Radiation Percentage. |
-| **Energy HUD** | `SOLAR`, `HOME`, `GRID`, optional `CAR`, plus grid and EV charger pulses. |
-| **Visual card** | Sun, shadows, moon, roof panels, powerline, EV cars, WebGL fallback, camera controls. |
+**Sensors first:** start simple with wall/roof sun alignment and wall sun angle, then optionally add Open-Meteo radiation, shading demand, shading status, and roof radiation.
 
 <p>
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="32%" alt="Sunlight Visualizer day scene">
@@ -39,7 +25,7 @@ Things you can do with it:
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="32%" alt="Sunlight Visualizer night scene">
 </p>
 
-Day, dawn, and night modes make the card useful at a glance: sunlight, shadows, moonlight, clouds, stars, and HUD values all adapt to the current scene.
+**Then the house:** sun, shadows, moon, roof panels, Energy HUD, grid power, EV charger pulse, tree, powerline, and camera controls in one compact Lovelace card.
 
 <p>
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="60%" alt="Sunlight Visualizer rotating card preview">
@@ -47,7 +33,31 @@ Day, dawn, and night modes make the card useful at a glance: sunlight, shadows, 
 
 Rotate the house manually, auto-rotate it, or save the view that best explains your installation.
 
-### Feature Highlights
+## Use It For
+- **Sunscreen Alert:** “UV attack incoming” — the sun reaches the pool, go outside and bring the sunscreen.
+- **Blind and awning control:** close only when the right wall has direct sun and the sun angle is low enough to matter.
+- **Heat-load HVAC prep:** pre-cool when roof or wall exposure rises, relax when exposure drops.
+- **Solar output insights:** compare roof sun/radiation with roof power to spot underperformance.
+
+## Quick Highlights
+<table>
+  <tr>
+    <td><strong>Default setup</strong><br>Wall/Roof Sun Alignment + Wall Sun Angle. No external API needed.</td>
+    <td><strong>Open-Meteo</strong><br>Radiation Direct/Total, Shading Demand/Status, Roof Radiation.</td>
+  </tr>
+  <tr>
+    <td><strong>Energy HUD</strong><br><code>SOLAR</code>, <code>HOME</code>, <code>GRID</code>, optional <code>CAR</code>, plus power pulses.</td>
+    <td><strong>Visual card</strong><br>Sun, shadows, moon, EV cars, powerline, WebGL fallback, camera controls.</td>
+  </tr>
+</table>
+
+**Release focus:** `0.3.0` adds Open-Meteo radiation sensors, wall sun-angle sensors, Energy HUD improvements, surface `%` selectors, WebGL EV car choices with SVG fallback, zone location selection, stronger resource registration, and many visual/occlusion fixes.
+
+<details>
+<summary>Full feature highlights</summary><br>
+
+- **A custom integration** (`sunlight_visualizer`) that calculates wall/roof sun values for automations.
+- **A Lovelace card** (`custom:sunlight-visualizer-card`) that shows the sun, house, roof, shadows, power flow, Energy HUD, and optional EV charging visuals.
 - **Wall and roof sun alignment:** geometric `%` values showing which surfaces face the sun.
 - **Wall Sun Angle:** always-on `°` values for how low/deep sunlight enters a lit wall or window.
 - **Open-Meteo radiation:** optional direct/total radiation, shading demand/status, and roof radiation using 15-minute forecast data.
@@ -56,6 +66,8 @@ Rotate the house manually, auto-rotate it, or save the view that best explains y
 - **EV visuals:** choose `Mini SUV`, `Smart car`, or `SVG car`; WebGL cars fall back to SVG when WebGL is unavailable.
 - **Power visuals:** bidirectional grid pulse and EV charger pulse with improved occlusion and draw order.
 - **Localized:** English, Swedish, Spanish, and Polish.
+
+</details>
 
 ## Installation
 ### HACS - Recommended
