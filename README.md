@@ -2,27 +2,36 @@
 <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="90" alt="Sunlight Visualizer icon">
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
-[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open a repository inside HACS." />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
+[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open Sunlight Visualizer in HACS." />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
 
 **See where the sun hits, understand why, and use the values in automations.**
 
-Sunlight Visualizer is a Home Assistant integration and Lovelace card that turns sun position, house direction, roof tilt, optional weather-radiation forecasts, and power sensors into useful sensors plus a playful 2.5D house view.
+Sunlight Visualizer turns your house into a little sun-aware dashboard: walls light up, the roof tells its solar story, power flows through the scene, and Home Assistant gets sensors you can actually use for blinds, awnings, HVAC, solar checks, and “why is this room suddenly a toaster?” moments.
 
-> **Need the full guide?** The README is the quick visual front page. The complete setup guide, examples, and troubleshooting live in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki).
+> **Need the full guide?** This README is the quick visual front page. The complete setup guide, sensor explanations, automation examples, and troubleshooting live in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki).
 
 **Release focus:** `0.3.0` adds Open-Meteo radiation sensors, wall sun-angle sensors, Energy HUD improvements, surface `%` selectors, WebGL EV car choices with SVG fallback, zone location selection, stronger resource registration, and many visual/occlusion fixes.
 
 ## Instant Overview
-- **Wall and roof sun alignment:** geometric `%` values showing which surfaces face the sun.
-- **Wall Sun Angle:** always-on `°` values for how low/deep sunlight enters a lit wall or window.
-- **Open-Meteo radiation:** optional direct/total radiation, shading demand/status, and roof radiation using 15-minute forecast data.
-- **Location selection:** Home by default, or choose a `zone.*` override in setup/options.
-- **Visual card:** animated sun, moon, clouds, roof panels, windows, door, tree, power pole, power cable, Energy HUD, and camera controls.
-- **Energy HUD:** `SOLAR`, `HOME`, `GRID`, optional `CAR`, roof-alignment details, auto-compact mode, and night auto-collapse behavior.
-- **EV visuals:** choose `Mini SUV`, `Smart car`, or `SVG car`; WebGL cars fall back to SVG when WebGL is unavailable.
-- **Power visuals:** bidirectional grid pulse and EV charger pulse with improved occlusion and draw order.
-- **Surface `%` selectors:** choose what wall and roof labels show: geometric alignment, shading demand, roof radiation percentage, or roof optimal-alignment percentage.
-- **Localized:** English, Swedish, Spanish, and Polish.
+It includes:
+
+- **A custom integration** (`sunlight_visualizer`) that calculates wall/roof sun values for automations.
+- **A Lovelace card** (`custom:sunlight-visualizer-card`) that shows the sun, house, roof, shadows, power flow, Energy HUD, and optional EV charging visuals.
+- **Useful sensors first, fancy visuals second** — though the visuals are very much invited to the party.
+
+Things you can do with it:
+
+- **Sunscreen Alert:** “UV attack incoming” — the sun reaches the pool, go outside and bring the sunscreen.
+- **Blind and awning control:** close only when the right wall has direct sun and the sun angle is low enough to matter.
+- **Heat-load HVAC prep:** pre-cool when roof or wall exposure rises, relax when exposure drops.
+- **Solar output insights:** compare roof sun/radiation with roof power to spot underperformance.
+
+| Quick view | What you get |
+| --- | --- |
+| **Default setup** | Wall/Roof Sun Alignment + Wall Sun Angle. No external API needed. |
+| **Open-Meteo mode** | Wall Radiation Direct/Total, Shading Demand/Status, Roof Radiation, and Roof Radiation Percentage. |
+| **Energy HUD** | `SOLAR`, `HOME`, `GRID`, optional `CAR`, plus grid and EV charger pulses. |
+| **Visual card** | Sun, shadows, moon, roof panels, powerline, EV cars, WebGL fallback, camera controls. |
 
 <p>
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="32%" alt="Sunlight Visualizer day scene">
@@ -38,29 +47,39 @@ Day, dawn, and night modes make the card useful at a glance: sunlight, shadows, 
 
 Rotate the house manually, auto-rotate it, or save the view that best explains your installation.
 
+### Feature Highlights
+- **Wall and roof sun alignment:** geometric `%` values showing which surfaces face the sun.
+- **Wall Sun Angle:** always-on `°` values for how low/deep sunlight enters a lit wall or window.
+- **Open-Meteo radiation:** optional direct/total radiation, shading demand/status, and roof radiation using 15-minute forecast data.
+- **Location selection:** Home by default, or choose a `zone.*` override in setup/options.
+- **Surface `%` selectors:** choose whether labels show geometric alignment, shading demand, roof radiation percentage, or roof optimal-alignment percentage.
+- **EV visuals:** choose `Mini SUV`, `Smart car`, or `SVG car`; WebGL cars fall back to SVG when WebGL is unavailable.
+- **Power visuals:** bidirectional grid pulse and EV charger pulse with improved occlusion and draw order.
+- **Localized:** English, Swedish, Spanish, and Polish.
+
 ## Installation
 ### HACS - Recommended
 1. Open HACS.
-2. Add this repository as a custom integration repository.
+2. Search for **Sunlight Visualizer**.
 3. Install **Sunlight Visualizer**.
 4. Restart Home Assistant.
 5. Add the integration from **Settings → Devices & services → Add integration → Sunlight Visualizer**.
 6. Add the card from the Lovelace card picker.
 
-The integration registers the card resource automatically. In `0.3.0` the resource URL may include a cache-busting version query such as:
+For normal HACS installs, the integration registers the Lovelace card resource automatically. You should not need to add a card resource manually.
 
-```text
-/sunlight_visualizer/sunlight-visualizer-card.js?v=0.3.0
-```
+<details>
+<summary>Manual / non-HACS install backup</summary><br>
 
-That query string is intentional. It helps Home Assistant browsers load the new card bundle after updates.
-
-### Manual Install Backup
 If you do not use HACS, copy `custom_components/sunlight_visualizer` into your Home Assistant `custom_components` folder, restart Home Assistant, then add the Lovelace resource manually as a JavaScript module:
 
 ```text
 /sunlight_visualizer/sunlight-visualizer-card.js?v=0.3.0
 ```
+
+The `?v=0.3.0` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
+
+</details>
 
 ## Basic Setup
 <p>
