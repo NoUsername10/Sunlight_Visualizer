@@ -6,16 +6,24 @@
 
 **See where the sun hits, understand why, and use the values in automations.**
 
-Sunlight Visualizer turns your home into a sun-aware dashboard: useful sensors for automations, and a playful 2.5D house that shows the sun, shadows, power flow, roof production, and optional EV charging at a glance.
+Sunlight Visualizer turns your home into a sun-aware dashboard: useful sensors for automations, and a 2.5D house that shows the sun, shadows, power flow, roof production, and optional EV charging at a glance.
 
 > **Need the full guide?** This README is the quick visual front page. The complete setup guide, sensor explanations, automation examples, and troubleshooting live in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki).
 
 ## What You Get
+### Basic sensors (Without Open Meteo enabled)
 <p>
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-default.png" width="30%" alt="Default Sunlight Visualizer sensors">
+</p>
+
+
+### Extended sensors (With Open Meteo enabled)
+<p>
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_1.png" width="30%" alt="Open-Meteo wall radiation sensors">
+    <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_2.png" width="30%" alt="Open-Meteo roof radiation sensors">
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_3.png" width="30%" alt="Open-Meteo roof radiation sensors">
 </p>
+
 
 **Sensors first:** start simple with wall/roof sun alignment and wall sun angle, then optionally add Open-Meteo radiation, shading demand, shading status, and roof radiation.
 
@@ -25,9 +33,17 @@ Sunlight Visualizer turns your home into a sun-aware dashboard: useful sensors f
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="32%" alt="Sunlight Visualizer night scene">
 </p>
 
+## EV Car Choices
+<p>
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/car-suv.png" width="20%" alt="Mini SUV EV car">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/car-smart.png" width="20%" alt="Smart car EV car">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/car-svg.png" width="20%" alt="SVG EV car fallback">
+</p>
+
 **Then the house:** sun, shadows, moon, roof panels, Energy HUD, grid power, EV charger pulse, tree, powerline, and camera controls in one compact Lovelace card.
 
 <p>
+  (Animated GIF, right click and select "Play Animation" if it does not autostart)
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="60%" alt="Sunlight Visualizer rotating card preview">
 </p>
 
@@ -198,15 +214,6 @@ The card can show three EV styles:
 - **SVG car:** lightweight fallback and manual option.
 
 If WebGL is unavailable or fails, the card automatically falls back to the SVG car. `Show mini EV car` still controls whether EV visuals appear at all.
-
-Current EV YAML defaults:
-
-```yaml
-miniEvCarEnabled: true
-evCarType: mini_suv # svg | smart | mini_suv
-evCarScale: 1.25
-carChargerEntity: null
-```
 
 When a valid car charger power sensor is selected, the HUD can show `CAR`, and the charger cable pulse animates toward the car while charging.
 
