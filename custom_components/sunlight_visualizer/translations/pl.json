@@ -18,7 +18,8 @@
           "auto_rotate_speed": "Prędkość automatycznego obrotu (st./s)",
           "house_angle": "Kąt domu (stopnie, 0° = front zwrócony na północ)",
           "ceiling_tilt": "Kąt nachylenia sufitu (0-90°, 0 = poziomo)",
-          "update_interval": "Interwał aktualizacji (minuty)"
+          "update_interval": "Interwał aktualizacji (minuty)",
+          "radiation_enabled": "Włącz czujniki promieniowania Open-Meteo"
         },
         "data_description": {
           "location_source": "Wybierz lokalizację Home Assistant (domyślnie) albo niestandardową strefę.",
@@ -33,7 +34,8 @@
           "auto_rotate_speed": "Domyślna prędkość automatycznego obrotu karty (1-90 st./s)",
           "house_angle": "Kąt frontu domu względem północy (0-359°)",
           "ceiling_tilt": "Kąt nachylenia dachu/paneli słonecznych (0° = płasko, 90° = pionowo)",
-          "update_interval": "Jak często przeliczać pozycję słońca (1-60 minut)"
+          "update_interval": "Jak często przeliczać pozycję słońca (1-60 minut)",
+          "radiation_enabled": "Pobiera 15-minutową prognozę promieniowania z Open-Meteo co 15 minut, gdy słońce jest nad horyzontem, i co godzinę, gdy jest poniżej horyzontu. Dodaje czujniki promieniowania dla ścian i dachu. Domyślnie wyłączone, ponieważ korzysta z zewnętrznego API."
         }
       }
     },
@@ -77,7 +79,9 @@
           "auto_rotate_speed": "Prędkość automatycznego obrotu (st./s)",
           "house_angle": "Kąt domu (stopnie, 0° = front zwrócony na północ)",
           "ceiling_tilt": "Kąt nachylenia sufitu (0-90°, 0 = poziomo)",
-          "update_interval": "Interwał aktualizacji (minuty)"
+          "update_interval": "Interwał aktualizacji (minuty)",
+          "radiation_enabled": "Włącz czujniki promieniowania Open-Meteo",
+          "remove_radiation_entities_on_disable": "Usuń czujniki Open-Meteo podczas wyłączania"
         },
         "data_description": {
           "location_source": "Wybierz lokalizację Home Assistant (domyślnie) albo niestandardową strefę.",
@@ -95,7 +99,9 @@
           "auto_rotate_speed": "Domyślna prędkość automatycznego obrotu karty (1-90 st./s)",
           "house_angle": "Kąt frontu domu względem północy (0-359°)",
           "ceiling_tilt": "Kąt nachylenia dachu/paneli słonecznych (0° = płasko, 90° = pionowo)",
-          "update_interval": "Jak często przeliczać pozycję słońca (1-60 minut)"
+          "update_interval": "Jak często przeliczać pozycję słońca (1-60 minut)",
+          "radiation_enabled": "Pobiera 15-minutową prognozę promieniowania z Open-Meteo co 15 minut, gdy słońce jest nad horyzontem, i co godzinę, gdy jest poniżej horyzontu. Dodaje czujniki promieniowania dla ścian i dachu. Domyślnie wyłączone, ponieważ korzysta z zewnętrznego API.",
+          "remove_radiation_entities_on_disable": "Po wyłączeniu promieniowania Open-Meteo usuwa z Home Assistant tylko encje Open-Meteo/promieniowania. Zwykłe czujniki nasłonecznienia pozostają."
         }
       }
     }
