@@ -28,6 +28,8 @@ from .const import (
     CONF_ROOF_POWER_ENABLED,
     CONF_ROOF_POWER_ENTITY,
     CONF_ROOF_POWER_INVERT,
+    CONF_RADIATION_ENABLED,
+    CONF_REMOVE_RADIATION_ENTITIES_ON_DISABLE,
     CONF_UPDATE_INTERVAL,
     CONF_USE_CUSTOM_ANGLE,
     DEFAULT_AUTO_ROTATE_SPEED,
@@ -43,6 +45,7 @@ from .const import (
     DEFAULT_ROOF_POWER_ENABLED,
     DEFAULT_ROOF_POWER_ENTITY,
     DEFAULT_ROOF_POWER_INVERT,
+    DEFAULT_RADIATION_ENABLED,
     DEFAULT_UPDATE_INTERVAL,
     DIRECTIONS,
     DOMAIN,
@@ -51,6 +54,7 @@ from .const import (
     MAX_UPDATE_INTERVAL,
     MIN_UPDATE_INTERVAL,
     ROOF_DIRECTIONS,
+    RADIATION_CLEANUP_MARKER_PREFIX,
 )
 
 ZONE_HOME_OPTION = "__use_home_default__"
@@ -230,7 +234,6 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             _apply_location_selection(self.hass, user_input)
-
             use_custom_angle = user_input.get(CONF_USE_CUSTOM_ANGLE, False)
 
             if not use_custom_angle:
@@ -353,6 +356,10 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 CONF_FIXED_SUN_ROTATION_ENABLED,
                 default=DEFAULT_FIXED_SUN_ROTATION_ENABLED,
             ): bool,
+            vol.Required(
+                CONF_RADIATION_ENABLED,
+                default=DEFAULT_RADIATION_ENABLED,
+            ): bool,
         }
 
         if DEFAULT_ROOF_POWER_ENTITY:
@@ -420,9 +427,19 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
     ) -> FlowResult:
         """Manage integration options."""
         errors: dict[str, str] = {}
+        current_config = {**self.config_entry.data, **self.config_entry.options}
+        was_radiation_enabled = bool(
+            current_config.get(CONF_RADIATION_ENABLED, DEFAULT_RADIATION_ENABLED)
+        )
 
         if user_input is not None:
             _apply_location_selection(self.hass, user_input)
+            remove_radiation_entities_on_disable = bool(
+                user_input.pop(CONF_REMOVE_RADIATION_ENTITIES_ON_DISABLE, True)
+            )
+            requested_radiation_enabled = bool(
+                user_input.get(CONF_RADIATION_ENABLED, DEFAULT_RADIATION_ENABLED)
+            )
 
             use_custom_angle = user_input.get(CONF_USE_CUSTOM_ANGLE, False)
             if not use_custom_angle:
@@ -480,9 +497,17 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 errors[CONF_AUTO_ROTATE_SPEED] = "invalid_auto_rotate_speed"
 
             if not errors:
+                cleanup_key = f"{RADIATION_CLEANUP_MARKER_PREFIX}{self.config_entry.entry_id}"
+                domain_data = self.hass.data.setdefault(DOMAIN, {})
+                if (
+                    was_radiation_enabled
+                    and not requested_radiation_enabled
+                    and remove_radiation_entities_on_disable
+                ):
+                    domain_data[cleanup_key] = True
+                else:
+                    domain_data.pop(cleanup_key, None)
                 return self.async_create_entry(title="", data=user_input)
-
-        current_config = {**self.config_entry.data, **self.config_entry.options}
 
         current_house_angle = current_config.get(CONF_HOUSE_ANGLE, DEFAULT_HOUSE_ANGLE)
         use_custom_angle = True
@@ -518,6 +543,9 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
         current_fixed_sun_rotation_enabled = current_config.get(
             CONF_FIXED_SUN_ROTATION_ENABLED,
             DEFAULT_FIXED_SUN_ROTATION_ENABLED,
+        )
+        current_radiation_enabled = current_config.get(
+            CONF_RADIATION_ENABLED, DEFAULT_RADIATION_ENABLED
         )
         current_location_source = current_config.get(
             CONF_LOCATION_SOURCE, DEFAULT_LOCATION_SOURCE
@@ -605,7 +633,19 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 CONF_FIXED_SUN_ROTATION_ENABLED,
                 default=current_fixed_sun_rotation_enabled,
             ): bool,
+            vol.Required(
+                CONF_RADIATION_ENABLED,
+                default=current_radiation_enabled,
+            ): bool,
         }
+
+        if current_radiation_enabled:
+            options_schema_dict[
+                vol.Optional(
+                    CONF_REMOVE_RADIATION_ENTITIES_ON_DISABLE,
+                    default=True,
+                )
+            ] = bool
 
         if current_roof_power:
             options_schema_dict[
