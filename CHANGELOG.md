@@ -5,8 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Planned
+- Full 3D scenen house! 
 - More translations.
-- Adding more calculated attributes in the sensor section.
 - Adding card information about sun and alignement position.
 - Adding placement of power pole and tree positions.
 
@@ -15,6 +15,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 ### Fixed
+
+## [0.3.1] - 2026-05-24
+### Added
+
+### Changed
+
+### Fixed
+- Animation of power flow would fail during FPS limiting. (Thank you @rruki for telling me)
+- Warning about thread safety in HA (Thank you @HACS-bank for telling me)
 
 
 ## [0.3.0] - 2026-05-09
