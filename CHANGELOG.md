@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Planned
-- Full 3D scenen house! 
+- Full 3D scene house and other fun stuff! 
 - More translations.
 - Adding card information about sun and alignement position.
 - Adding placement of power pole and tree positions.
