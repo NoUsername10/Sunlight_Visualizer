@@ -17,7 +17,7 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE, EntityCategory
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_track_point_in_time
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -932,6 +932,7 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         if target_time < minimum_target:
             target_time = minimum_target
 
+        @callback
         def _request_refresh(_now: datetime) -> None:
             self._radiation_refresh_unsub = None
             self.hass.async_create_task(self.async_request_refresh())
