@@ -15,5 +15,5 @@
   "integration_type": "service",
   "iot_class": "calculated",
   "issue_tracker": "https://github.com/NoUsername10/Sunlight_Visualizer/issues",
-  "version": "0.3.0"
+  "version": "0.3.1"
 }
