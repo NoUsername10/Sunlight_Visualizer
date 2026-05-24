@@ -471,7 +471,7 @@ cssFpsAutoLimitEnabled: true
 </details>
 
 ## Validation / Localization / Notes
-- Current release: `0.3.0`.
+- Current release: `0.3.1`.
 - HACS-friendly resource registration is handled by the integration.
 - HACS/Hassfest validation is expected for release checks.
 - Supported translations: English, Swedish, Spanish, and Polish.
