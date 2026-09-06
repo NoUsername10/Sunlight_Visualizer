@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - More translations.
 - Adding card information about sun and alignement position.
 - Adding placement of power pole and tree positions.
+- Ability to disable wall information
 
 ### Added
 
