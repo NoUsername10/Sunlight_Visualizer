@@ -24,12 +24,15 @@ from .const import (
     CONF_ROOF_DIRECTION,
     CONF_CAMERA_ROT_H,
     CONF_CAMERA_ROT_V,
+    CONF_CAMERA_ZOOM,
     CONF_AUTO_ROTATE_SPEED,
     CONF_FIXED_SUN_AZIMUTH,
     CONF_FIXED_SUN_ROTATION_ENABLED,
     CONF_ROOF_POWER_ENTITY,
     CONF_ROOF_POWER_ENABLED,
     CONF_ROOF_POWER_INVERT,
+    MIN_CAMERA_ZOOM,
+    MAX_CAMERA_ZOOM,
     RADIATION_CLEANUP_MARKER_PREFIX,
 )
 
@@ -44,17 +47,25 @@ with open(os.path.join(os.path.dirname(__file__), 'manifest.json')) as fp:
 # Update PLATFORMS list:
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
+    Platform.WEATHER,
     Platform.NUMBER,
     Platform.SELECT,
     Platform.SWITCH,
 ]
 
-# Local resource URL for the bundled card
-CARD_RESOURCE_URL = "/sunlight_visualizer/sunlight-visualizer-card.js"
+# Local resource URL for the bundled card.
+#
+# The version query is intentional: Home Assistant/browser module caching can keep
+# an older card editor alive after a HACS update. Bumping this URL makes Lovelace
+# import the freshly rebuilt bundle for the current integration version.
+CARD_RESOURCE_PATH = "/sunlight_visualizer/sunlight-visualizer-card.js"
+CARD_RESOURCE_URL = f"{CARD_RESOURCE_PATH}?v={VERSION}"
 CARD_STATIC_PATH = "/sunlight_visualizer"
 CARD_STATIC_DIR = Path(__file__).parent / "www"
 CARD_JS_PATH = CARD_STATIC_DIR / "sunlight-visualizer-card.js"
+CARD_MODEL_PATH = CARD_STATIC_DIR / "models" / "experimental-house.glb"
 CARD_RESOURCE_URL_ALIASES = {
+    CARD_RESOURCE_PATH,
     CARD_RESOURCE_URL,
     "/sunlight_visualizer/www/sunlight-visualizer-card.js",
     "/hacsfiles/sunlight_visualizer/sunlight-visualizer-card.js",
@@ -69,6 +80,9 @@ SERVICE_SET_OPTIONS_SCHEMA = vol.Schema(
         vol.Optional(CONF_ROOF_DIRECTION): vol.In(["front", "back", "left", "right"]),
         vol.Optional(CONF_CAMERA_ROT_H): vol.All(vol.Coerce(int), vol.Range(min=0, max=359)),
         vol.Optional(CONF_CAMERA_ROT_V): vol.All(vol.Coerce(int), vol.Range(min=0, max=90)),
+        vol.Optional(CONF_CAMERA_ZOOM): vol.All(
+            vol.Coerce(float), vol.Range(min=MIN_CAMERA_ZOOM, max=MAX_CAMERA_ZOOM)
+        ),
         vol.Optional(CONF_AUTO_ROTATE_SPEED): vol.All(vol.Coerce(float), vol.Range(min=1, max=90)),
         vol.Optional(CONF_FIXED_SUN_AZIMUTH): vol.All(vol.Coerce(int), vol.Range(min=0, max=359)),
         vol.Optional(CONF_FIXED_SUN_ROTATION_ENABLED): bool,
@@ -212,6 +226,7 @@ SET_OPTIONS_KEYS = {
     CONF_ROOF_DIRECTION,
     CONF_CAMERA_ROT_H,
     CONF_CAMERA_ROT_V,
+    CONF_CAMERA_ZOOM,
     CONF_AUTO_ROTATE_SPEED,
     CONF_FIXED_SUN_AZIMUTH,
     CONF_FIXED_SUN_ROTATION_ENABLED,
@@ -235,25 +250,74 @@ def _normalize_resource_url(url: str | None) -> str | None:
         path = path.rstrip("/")
 
     if path in CARD_RESOURCE_URL_ALIASES:
-        return CARD_RESOURCE_URL
+        return CARD_RESOURCE_PATH
     return path
 
 
+def _resource_item_value(item, key: str):
+    """Read a Lovelace resource registry item value across HA storage shapes."""
+    value = getattr(item, key, None)
+    if value is None and isinstance(item, dict):
+        value = item.get(key)
+    return value
+
+
+async def _async_update_card_resource_url(registry, item) -> bool:
+    """Update an existing equivalent resource to the current versioned URL."""
+    current_url = _resource_item_value(item, "url")
+    if current_url == CARD_RESOURCE_URL:
+        return True
+
+    item_id = _resource_item_value(item, "id")
+    update_item = getattr(registry, "async_update_item", None)
+    if not item_id or update_item is None:
+        _LOGGER.debug(
+            "Existing Lovelace resource %s is equivalent but cannot be updated; "
+            "manual resource/cache refresh may be needed",
+            current_url,
+        )
+        return False
+
+    payload_type = _resource_item_value(item, "res_type") or _resource_item_value(item, "type") or "module"
+    payloads = (
+        {"res_type": payload_type, "url": CARD_RESOURCE_URL},
+        {"type": payload_type, "url": CARD_RESOURCE_URL},
+    )
+    for payload in payloads:
+        try:
+            await update_item(item_id, payload)
+            _LOGGER.info(
+                "Updated Lovelace resource from %s to %s",
+                current_url,
+                CARD_RESOURCE_URL,
+            )
+            return True
+        except Exception as err:  # pragma: no cover - HA version compatibility
+            _LOGGER.debug("Failed Lovelace resource update with %s: %s", payload, err)
+    return False
+
+
 async def _async_register_static_path(hass: HomeAssistant) -> bool:
-    """Serve the Lovelace card JS directly from the integration (single-install)."""
+    """Serve the bundled card and model assets directly from the integration."""
     if hass.data.get(DOMAIN, {}).get("_static_registered"):
         return True
     try:
         if not CARD_JS_PATH.exists():
             raise RuntimeError(f"Card JS not found at {CARD_JS_PATH}")
+        if not CARD_MODEL_PATH.exists():
+            _LOGGER.error(
+                "Bundled 3D model not found at %s. The installed package is "
+                "incomplete; 3D mode will fall back to 2.5D",
+                CARD_MODEL_PATH,
+            )
 
         if hasattr(hass.http, "async_register_static_paths"):
             await hass.http.async_register_static_paths([
-                StaticPathConfig(CARD_STATIC_PATH, str(CARD_STATIC_DIR), False)
+                StaticPathConfig(CARD_STATIC_PATH, str(CARD_STATIC_DIR), True)
             ])
         elif hasattr(hass.http, "async_register_static_path"):
             await hass.http.async_register_static_path(
-                CARD_STATIC_PATH, str(CARD_STATIC_DIR), False
+                CARD_STATIC_PATH, str(CARD_STATIC_DIR), True
             )
         else:
             raise RuntimeError("No static path registration method found")
@@ -261,7 +325,7 @@ async def _async_register_static_path(hass: HomeAssistant) -> bool:
         hass.data.setdefault(DOMAIN, {})["_static_registered"] = True
         return True
     except Exception as err:  # pragma: no cover - best effort
-        _LOGGER.warning("Failed to register static path for card JS: %s", err)
+        _LOGGER.warning("Failed to register static path for card assets: %s", err)
         return False
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -401,18 +465,12 @@ async def _async_register_card_resource(hass: HomeAssistant) -> bool:
         return False
 
     target_url = _normalize_resource_url(CARD_RESOURCE_URL)
-    existing = False
     for item in registry.async_items():
-        url = getattr(item, "url", None)
-        if url is None and isinstance(item, dict):
-            url = item.get("url")
+        url = _resource_item_value(item, "url")
         if _normalize_resource_url(url) == target_url:
-            existing = True
-            break
-
-    if existing:
-        hass.data.setdefault(DOMAIN, {})["_resource_registered"] = True
-        return True
+            await _async_update_card_resource_url(registry, item)
+            hass.data.setdefault(DOMAIN, {})["_resource_registered"] = True
+            return True
 
     try:
         await registry.async_create_item({"res_type": "module", "url": CARD_RESOURCE_URL})
@@ -465,8 +523,12 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         if not has_active_entries:
             if hass.services.has_service(DOMAIN, SERVICE_SET_OPTIONS):
                 hass.services.async_remove(DOMAIN, SERVICE_SET_OPTIONS)
-            domain_data.pop("_static_registered", None)
             domain_data.pop("_resource_registered", None)
+
+            # Home Assistant static routes live for the lifetime of the HTTP
+            # application and cannot be unloaded with a config entry. Keep the
+            # marker for that same lifetime so an entry reload never attempts
+            # to register the existing route a second time.
 
         if not domain_data:
             hass.data.pop(DOMAIN, None)

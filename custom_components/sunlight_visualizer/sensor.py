@@ -9,6 +9,8 @@ import math
 from typing import Any
 
 from aiohttp import ClientError, ClientTimeout
+from astral.sun import azimuth as astral_azimuth
+from astral.sun import elevation as astral_elevation
 
 from homeassistant.components.sensor import (
     SensorEntity,
@@ -36,6 +38,7 @@ from .const import (
     CONF_LATITUDE,
     CONF_LONGITUDE,
     CONF_HOUSE_ANGLE,
+    CONF_USE_CUSTOM_ANGLE,
     CONF_LOCATION_SOURCE,
     CONF_LOCATION_ZONE_ENTITY,
     CONF_ROOF_DIRECTION,
@@ -43,12 +46,14 @@ from .const import (
     CONF_ROOF_POWER_ENABLED,
     CONF_ROOF_POWER_INVERT,
     CONF_RADIATION_ENABLED,
+    CONF_WEATHER_VISUALS_ENABLED,
     CONF_FORCE_SUN_FALLBACK,
     CONF_FORCE_SUN_AZIMUTH,
     CONF_FORCE_SUN_ELEVATION,
     CONF_AUTO_ROTATE_SPEED,
     CONF_FIXED_SUN_AZIMUTH,
     CONF_FIXED_SUN_ROTATION_ENABLED,
+    CONF_CAMERA_ZOOM,
     CONF_CEILING_TILT,
     CONF_UPDATE_INTERVAL,
     DEFAULT_HOUSE_ANGLE,
@@ -61,10 +66,13 @@ from .const import (
     DEFAULT_AUTO_ROTATE_SPEED,
     DEFAULT_FIXED_SUN_AZIMUTH,
     DEFAULT_FIXED_SUN_ROTATION_ENABLED,
+    DEFAULT_CAMERA_ZOOM,
     DEFAULT_RADIATION_ENABLED,
+    DEFAULT_WEATHER_VISUALS_ENABLED,
     WALLS,
     DEFAULT_UPDATE_INTERVAL,
     ROOF_DIRECTIONS,
+    DIRECTIONS,
     FALLBACK_SUN_AZIMUTH,
     FALLBACK_SUN_ELEVATION,
     CARD_SOURCE_ATTR,
@@ -87,6 +95,22 @@ RADIATION_FIELDS = (
     "direct_radiation",
     "diffuse_radiation",
     "direct_normal_irradiance",
+)
+WEATHER_CURRENT_FIELDS = (
+    "temperature_2m",
+    "apparent_temperature",
+    "relative_humidity_2m",
+    "weather_code",
+    "cloud_cover",
+    "precipitation",
+    "rain",
+    "showers",
+    "snowfall",
+    "wind_speed_10m",
+    "wind_direction_10m",
+    "wind_gusts_10m",
+    "visibility",
+    "is_day",
 )
 RADIATION_FORECAST_KEY = "minutely_15"
 RADIATION_FORECAST_FALLBACK_KEY = "hourly"
@@ -392,6 +416,11 @@ class SolarAlignmentPercentageSensor(CoordinatorEntity, SensorEntity):
             'time_to_50%': opt_data.get('time_to_50%', 'N/A'),
             'time_to_75%': opt_data.get('time_to_75%', 'N/A'),
             'time_to_90%': opt_data.get('time_to_90%', 'N/A'),
+            'forecast_4h': (
+                self.coordinator.data.get("surface_forecast", {})
+                .get("ceiling", {})
+                .get("sunlight_alignment_percentage", [])
+            ),
             'last_updated': self.coordinator.data.get('last_updated', '')
         }
     
@@ -681,6 +710,12 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         self._resolve_location()
         
         self.house_angle = merged_config.get(CONF_HOUSE_ANGLE, DEFAULT_HOUSE_ANGLE)
+        self.use_custom_angle = bool(
+            merged_config.get(
+                CONF_USE_CUSTOM_ANGLE,
+                self.house_angle not in DIRECTIONS.values(),
+            )
+        )
         self.ceiling_tilt = merged_config.get(CONF_CEILING_TILT, DEFAULT_CEILING_TILT)
         self.roof_direction = merged_config.get(CONF_ROOF_DIRECTION, DEFAULT_ROOF_DIRECTION)
         self.force_sun_fallback = merged_config.get(CONF_FORCE_SUN_FALLBACK, DEFAULT_FORCE_SUN_FALLBACK)
@@ -688,6 +723,12 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         self.force_sun_elevation = float(merged_config.get(CONF_FORCE_SUN_ELEVATION, DEFAULT_FORCE_SUN_ELEVATION))
         self.radiation_enabled = bool(
             merged_config.get(CONF_RADIATION_ENABLED, DEFAULT_RADIATION_ENABLED)
+        )
+        self.weather_visuals_enabled = bool(
+            merged_config.get(
+                CONF_WEATHER_VISUALS_ENABLED,
+                DEFAULT_WEATHER_VISUALS_ENABLED,
+            )
         )
         
         # Get update interval
@@ -697,15 +738,24 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         
         # Timezone and astral helpers
         self._tz = dt_util.get_time_zone(hass.config.time_zone)
-        self._astral_location = None
+        self._astral_observer = None
         try:
-            astral_location = sun_helper.get_astral_location(hass)
-            # Older HA returns (location, elevation)
-            if isinstance(astral_location, tuple):
-                astral_location = astral_location[0]
-            self._astral_location = astral_location
+            get_astral_observer = getattr(sun_helper, "get_astral_observer", None)
+            if get_astral_observer is not None:
+                self._astral_observer = get_astral_observer(hass)
+            else:
+                # HA 2026.1 predates get_astral_observer. Construct the same
+                # Astral value directly rather than calling the later-deprecated
+                # deprecated location compatibility API.
+                from astral import Observer
+
+                self._astral_observer = Observer(
+                    latitude=hass.config.latitude,
+                    longitude=hass.config.longitude,
+                    elevation=hass.config.elevation,
+                )
         except Exception as err:
-            _LOGGER.warning("Unable to load astral location: %s", err)
+            _LOGGER.warning("Unable to load Astral observer: %s", err)
 
         self._fallback_sun = {
             "azimuth": FALLBACK_SUN_AZIMUTH,
@@ -846,12 +896,12 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
 
     def _astral_sun_for_time(self, target_time: datetime) -> dict[str, float] | None:
         """Return sun position using Astral for a specific time."""
-        if self._astral_location is None:
+        if self._astral_observer is None:
             return None
         try:
             return {
-                "azimuth": float(self._astral_location.solar_azimuth(target_time)),
-                "elevation": float(self._astral_location.solar_elevation(target_time)),
+                "azimuth": float(astral_azimuth(self._astral_observer, target_time)),
+                "elevation": float(astral_elevation(self._astral_observer, target_time)),
             }
         except Exception as err:
             _LOGGER.debug("Astral position failed: %s", err)
@@ -886,6 +936,8 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
 
     def _radiation_fetch_interval_for_sun(self, sun_elevation: float) -> timedelta:
         """Return Open-Meteo refresh interval based on whether the sun is up."""
+        if self.weather_visuals_enabled:
+            return RADIATION_FETCH_INTERVAL_DAYLIGHT
         return (
             RADIATION_FETCH_INTERVAL_DAYLIGHT
             if _safe_float(sun_elevation) > 0
@@ -923,7 +975,10 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
     ) -> None:
         """Schedule a coordinator refresh for the next Open-Meteo fetch window."""
         self._cancel_radiation_refresh_timer()
-        if not self.radiation_enabled or self._radiation_last_fetch is None:
+        if (
+            not (self.radiation_enabled or self.weather_visuals_enabled)
+            or self._radiation_last_fetch is None
+        ):
             return
 
         fetch_interval = self._radiation_fetch_interval_for_sun(sun_elevation)
@@ -969,34 +1024,49 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         if not isinstance(payload, dict) or not payload:
             raise UpdateFailed("Open-Meteo response was empty or malformed")
 
-        series_name, forecast = self._radiation_payload_series(payload)
-        if not isinstance(forecast, dict) or not forecast:
-            raise UpdateFailed("Open-Meteo response did not include 15-minute radiation data")
+        if self.radiation_enabled:
+            series_name, forecast = self._radiation_payload_series(payload)
+            if not isinstance(forecast, dict) or not forecast:
+                raise UpdateFailed("Open-Meteo response did not include 15-minute radiation data")
 
-        times = forecast.get("time")
-        if not isinstance(times, list) or not times:
-            raise UpdateFailed(f"Open-Meteo {series_name} time data was missing or empty")
+            times = forecast.get("time")
+            if not isinstance(times, list) or not times:
+                raise UpdateFailed(f"Open-Meteo {series_name} time data was missing or empty")
 
-        expected_len = len(times)
-        for field in RADIATION_FIELDS:
-            series = forecast.get(field)
-            if not isinstance(series, list):
-                raise UpdateFailed(f"Open-Meteo {series_name} radiation field missing: {field}")
-            if len(series) != expected_len:
-                raise UpdateFailed(
-                    f"Open-Meteo {series_name} radiation field length mismatch for {field}: "
-                    f"expected {expected_len}, got {len(series)}"
-                )
+            expected_len = len(times)
+            for field in RADIATION_FIELDS:
+                series = forecast.get(field)
+                if not isinstance(series, list):
+                    raise UpdateFailed(
+                        f"Open-Meteo {series_name} radiation field missing: {field}"
+                    )
+                if len(series) != expected_len:
+                    raise UpdateFailed(
+                        f"Open-Meteo {series_name} radiation field length mismatch for {field}: "
+                        f"expected {expected_len}, got {len(series)}"
+                    )
 
         current = payload.get("current")
-        if current is not None:
+        if self.radiation_enabled or self.weather_visuals_enabled:
             if not isinstance(current, dict):
-                raise UpdateFailed("Open-Meteo current radiation data was malformed")
+                raise UpdateFailed("Open-Meteo current data was missing or malformed")
+
+        if self.radiation_enabled:
             missing_current = [field for field in RADIATION_FIELDS if field not in current]
             if missing_current:
                 raise UpdateFailed(
                     "Open-Meteo current radiation fields missing: "
                     + ", ".join(missing_current)
+                )
+
+        if self.weather_visuals_enabled:
+            missing_weather = [
+                field for field in WEATHER_CURRENT_FIELDS if field not in current
+            ]
+            if missing_weather:
+                raise UpdateFailed(
+                    "Open-Meteo current weather fields missing: "
+                    + ", ".join(missing_weather)
                 )
 
     async def _async_fetch_radiation_payload(self, params: dict[str, Any]) -> dict[str, Any]:
@@ -1045,11 +1115,21 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                         continue
                     raise UpdateFailed(last_error)
 
-                self._validate_radiation_payload(payload)
+                try:
+                    self._validate_radiation_payload(payload)
+                except UpdateFailed as err:
+                    # A structurally incomplete 200 response can be transient too.
+                    last_error = str(err)
+                    self._radiation_last_error = last_error
+                    if attempt < len(OPEN_METEO_RETRY_DELAYS):
+                        continue
+                    raise
+
                 self._radiation_last_error = None
                 return payload
 
             except UpdateFailed:
+                # Permanent HTTP failures and the final validation failure reach here.
                 raise
             except (ClientError, TimeoutError, asyncio.TimeoutError) as err:
                 last_error = f"Open-Meteo transient fetch error: {err or type(err).__name__}"
@@ -1079,13 +1159,26 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             return "open_meteo_cached"
 
         self._radiation_last_fetch = now
-        params = {
+        current_fields: list[str] = []
+        if self.radiation_enabled:
+            current_fields.extend(RADIATION_FIELDS)
+        if self.weather_visuals_enabled:
+            current_fields.extend(WEATHER_CURRENT_FIELDS)
+
+        params: dict[str, Any] = {
             "latitude": round(self.latitude, 6),
             "longitude": round(self.longitude, 6),
-            "minutely_15": ",".join(RADIATION_FIELDS),
+            "current": ",".join(dict.fromkeys(current_fields)),
             "timezone": "auto",
-            "forecast_days": 1,
         }
+        if self.radiation_enabled:
+            params.update({
+                "minutely_15": ",".join(RADIATION_FIELDS),
+                # Always refresh the complete local calendar day. `forecast_minutely_15`
+                # starts at the current interval and would discard the morning rows.
+                "start_minutely_15": f"{target_day.isoformat()}T00:00",
+                "end_minutely_15": f"{target_day.isoformat()}T23:45",
+            })
 
         try:
             payload = await self._async_fetch_radiation_payload(params)
@@ -1098,7 +1191,7 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             return "open_meteo"
         except Exception as err:  # noqa: BLE001 - network/cache failure should not break core sensors
             self._radiation_last_error = str(err)
-            _LOGGER.warning("Open-Meteo radiation fetch failed: %s", err)
+            _LOGGER.warning("Open-Meteo fetch failed: %s", err)
             if (
                 self._radiation_cache_data is not None
                 and self._radiation_cache_key == cache_key
@@ -1195,6 +1288,60 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             fallback=self._fallback_sun,
         )
 
+    def _surface_alignment_forecast(
+        self,
+        now: datetime,
+        surface_azimuths: dict[str, float],
+        optimal_data: dict[str, Any],
+    ) -> dict[str, dict[str, list[dict[str, Any]]]]:
+        """Return factual Astral/forced-sun alignment values for the next four hours."""
+        forecast: dict[str, dict[str, list[dict[str, Any]]]] = {
+            surface: {"sun_alignment": []} for surface in WALLS
+        }
+        forecast["ceiling"]["sunlight_alignment_percentage"] = []
+        max_roof_intensity = _safe_float(optimal_data.get("max_intensity_today"))
+
+        for step in range(17):
+            target_time = now + timedelta(minutes=15 * step)
+            if self.force_sun_fallback:
+                row_sun = {
+                    "azimuth": float(self.force_sun_azimuth),
+                    "elevation": float(self.force_sun_elevation),
+                }
+            else:
+                row_sun = calculate_sun_angle(
+                    target_time,
+                    solar_position_fn=self._astral_sun_for_time,
+                    tz=self._tz,
+                    fallback=self._fallback_sun,
+                )
+            if row_sun is None:
+                continue
+
+            timestamp = target_time.isoformat()
+            for surface in WALLS:
+                value = angle_to_percentage(
+                    row_sun["azimuth"],
+                    surface_azimuths[surface],
+                    surface,
+                    row_sun["elevation"],
+                    self.ceiling_tilt if surface == "ceiling" else 0,
+                )
+                forecast[surface]["sun_alignment"].append(
+                    {"time": timestamp, "value": round(_safe_float(value), 1)}
+                )
+                if surface == "ceiling":
+                    optimal_percentage = (
+                        _clamp(_safe_float(value) / max_roof_intensity * 100, 0.0, 100.0)
+                        if max_roof_intensity > 0
+                        else 0.0
+                    )
+                    forecast["ceiling"]["sunlight_alignment_percentage"].append(
+                        {"time": timestamp, "value": round(optimal_percentage, 1)}
+                    )
+
+        return forecast
+
     async def _async_calculate_radiation(
         self,
         now: datetime,
@@ -1210,7 +1357,6 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         )
         sun_elevation = _safe_float(sun_data.get("elevation"))
         fetch_metadata = self._radiation_fetch_metadata(now, sun_elevation)
-        self._schedule_next_radiation_refresh(now, sun_elevation)
         data_age_minutes = None
         if self._radiation_last_success is not None:
             data_age_minutes = round((now - self._radiation_last_success).total_seconds() / 60, 1)
@@ -1258,7 +1404,13 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             },
         }
 
-        hourly_rows = self._hourly_radiation_rows(now.date())
+        daily_rows = self._hourly_radiation_rows(now.date())
+        forecast_end = now + timedelta(hours=4)
+        future_rows = [
+            row
+            for row in self._hourly_radiation_rows()
+            if now <= row["timestamp"] <= forecast_end
+        ]
         surfaces: dict[str, dict[str, Any]] = {}
         for surface, definition in surface_defs.items():
             current = self._surface_radiation_components(
@@ -1273,7 +1425,7 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             peak_time = None
             max_direct_radiation = 0.0
             peak_direct_time = None
-            for row in hourly_rows:
+            for row in daily_rows:
                 row_sun = self._surface_sun_position_for_row(row)
                 if row_sun is None:
                     continue
@@ -1314,6 +1466,49 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             if peak_direct_time is not None:
                 minutes_to_peak_direct = round((peak_direct_time - now).total_seconds() / 60, 1)
 
+            radiation_percentage_forecast: list[dict[str, Any]] = []
+            shading_demand_forecast: list[dict[str, Any]] = []
+            for row in future_rows:
+                row_sun = self._surface_sun_position_for_row(row)
+                if row_sun is None:
+                    continue
+                row_components = self._surface_radiation_components(
+                    row,
+                    row_sun["azimuth"],
+                    row_sun["elevation"],
+                    definition["azimuth"],
+                    definition["tilt"],
+                )
+                row_radiation_percentage = (
+                    _clamp(row_components["radiation"] / max_radiation * 100, 0.0, 100.0)
+                    if max_radiation > 0
+                    else 0.0
+                )
+                radiation_percentage_forecast.append({
+                    "time": row["timestamp"].isoformat(),
+                    "value": round(row_radiation_percentage, 1),
+                })
+                if definition["kind"] == "wall":
+                    row_direct_percentage = (
+                        _clamp(
+                            row_components["direct_component"] / max_direct_radiation * 100,
+                            0.0,
+                            100.0,
+                        )
+                        if max_direct_radiation > 0
+                        else 0.0
+                    )
+                    elevation_factor = _interp_curve(
+                        float(row_sun["elevation"]), ELEVATION_COMFORT_CURVE
+                    )
+                    shading_demand_forecast.append({
+                        "time": row["timestamp"].isoformat(),
+                        "value": round(
+                            _clamp(row_direct_percentage * elevation_factor, 0.0, 100.0),
+                            1,
+                        ),
+                    })
+
             surfaces[surface] = {
                 "radiation": round(current["radiation"], 1),
                 "radiation_percentage": round(radiation_percentage, 1),
@@ -1332,6 +1527,10 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                 "diffuse_component": round(current["diffuse_component"], 1),
                 "reflected_component": round(current["reflected_component"], 1),
                 "incidence_factor": round(current["incidence_factor"], 3),
+                "forecast_4h": {
+                    "radiation_percentage": radiation_percentage_forecast,
+                    "shading_demand": shading_demand_forecast,
+                },
             }
 
         return {
@@ -1355,6 +1554,105 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                 "name": self.location_name,
             },
             "ground_albedo": GROUND_ALBEDO,
+        }
+
+    async def _async_calculate_weather(
+        self,
+        now: datetime,
+        sun_data: dict[str, float],
+    ) -> dict[str, Any]:
+        """Return normalized current weather for optional 3D visuals."""
+        if not self.weather_visuals_enabled:
+            return {"enabled": False, "available": False, "source": "disabled"}
+
+        source = await self._async_ensure_radiation_cache(
+            now,
+            _safe_float(sun_data.get("elevation")),
+        )
+        data_age_minutes = None
+        if self._radiation_last_success is not None:
+            data_age_minutes = round(
+                (now - self._radiation_last_success).total_seconds() / 60,
+                1,
+            )
+
+        current = (
+            self._radiation_cache_data.get("current")
+            if isinstance(self._radiation_cache_data, dict)
+            else None
+        )
+        if source == "unavailable" or not isinstance(current, dict):
+            return {
+                "enabled": True,
+                "available": False,
+                "source": source,
+                "last_fetch": (
+                    self._radiation_last_fetch.isoformat()
+                    if self._radiation_last_fetch
+                    else None
+                ),
+                "last_success": (
+                    self._radiation_last_success.isoformat()
+                    if self._radiation_last_success
+                    else None
+                ),
+                "data_age_minutes": data_age_minutes,
+                "last_error": self._radiation_last_error,
+                "last_status": self._radiation_last_status,
+                "fetch_attempts": self._radiation_fetch_attempts,
+            }
+
+        weather_code = round(_safe_float(current.get("weather_code")))
+        is_day = round(_safe_float(current.get("is_day"))) == 1
+        return {
+            "enabled": True,
+            "available": True,
+            "source": source,
+            "temperature": round(_safe_float(current.get("temperature_2m")), 1),
+            "apparent_temperature": round(
+                _safe_float(current.get("apparent_temperature")),
+                1,
+            ),
+            "humidity": round(_safe_float(current.get("relative_humidity_2m")), 1),
+            "weather_code": weather_code,
+            "cloud_cover": round(_safe_float(current.get("cloud_cover")), 1),
+            "precipitation": round(_safe_float(current.get("precipitation")), 2),
+            "rain": round(_safe_float(current.get("rain")), 2),
+            "showers": round(_safe_float(current.get("showers")), 2),
+            "snowfall": round(_safe_float(current.get("snowfall")), 2),
+            "wind_speed": round(_safe_float(current.get("wind_speed_10m")), 1),
+            "wind_direction": round(
+                _safe_float(current.get("wind_direction_10m")),
+                1,
+            ),
+            "wind_gust": round(_safe_float(current.get("wind_gusts_10m")), 1),
+            "visibility_km": round(_safe_float(current.get("visibility")) / 1000, 1),
+            "is_day": is_day,
+            "last_fetch": (
+                self._radiation_last_fetch.isoformat()
+                if self._radiation_last_fetch
+                else None
+            ),
+            "last_success": (
+                self._radiation_last_success.isoformat()
+                if self._radiation_last_success
+                else None
+            ),
+            "data_age_minutes": data_age_minutes,
+            "last_error": self._radiation_last_error,
+            "last_status": self._radiation_last_status,
+            "fetch_attempts": self._radiation_fetch_attempts,
+            "api_timezone": (
+                str(self._radiation_response_tz)
+                if self._radiation_response_tz
+                else None
+            ),
+            "location": {
+                "latitude": round(self.latitude, 6),
+                "longitude": round(self.longitude, 6),
+                "source": _location_source_label(self.location_source_effective),
+                "name": self.location_name,
+            },
         }
 
     async def _async_update_data(self):
@@ -1532,6 +1830,15 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             radiation_data = await self._async_calculate_radiation(
                 now, sun_data, surface_azimuths
             )
+            weather_data = await self._async_calculate_weather(now, sun_data)
+            if self.radiation_enabled or self.weather_visuals_enabled:
+                self._schedule_next_radiation_refresh(
+                    now,
+                    _safe_float(sun_data.get("elevation")),
+                )
+            surface_forecast = self._surface_alignment_forecast(
+                now, surface_azimuths, optimal_data
+            )
             
             # Update statistics
             self.calculation_count += 1
@@ -1542,7 +1849,9 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                 'sun_position': sun_data,
                 'wall_intensities': wall_data,
                 'optimal_alignment': optimal_data,
+                'surface_forecast': surface_forecast,
                 'radiation': radiation_data,
+                'weather': weather_data,
                 'last_updated': now.isoformat(),
                 'statistics': {
                     'calculation_count': self.calculation_count,
@@ -1589,6 +1898,7 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             "update_interval_min": self.update_interval_min,
             "advanced_mode": self.advanced_mode,
             "radiation_enabled": self.radiation_enabled,
+            "weather_visuals_enabled": self.weather_visuals_enabled,
         }
     
     @property
@@ -1722,9 +2032,17 @@ class SunWallIntensitySensor(CoordinatorEntity, SensorEntity):
                     DEFAULT_FIXED_SUN_ROTATION_ENABLED
                 )
             ),
+            'camera_zoom': float(
+                self._config_entry.options.get(CONF_CAMERA_ZOOM, DEFAULT_CAMERA_ZOOM)
+            ),
             'wall': self._wall,
             'last_updated': self.coordinator.data.get('last_updated', ''),
-            'calculation_count': self.coordinator.calculation_count
+            'calculation_count': self.coordinator.calculation_count,
+            'forecast_4h': (
+                self.coordinator.data.get("surface_forecast", {})
+                .get(self._wall, {})
+                .get("sun_alignment", [])
+            ),
         }
 
     @property
@@ -2112,6 +2430,9 @@ class WallShadingDemandSensor(RadiationSensorBase):
             {"elevation": elevation, "factor": factor}
             for elevation, factor in ELEVATION_COMFORT_CURVE
         ]
+        attrs["forecast_4h"] = (
+            surface.get("forecast_4h", {}).get("shading_demand", [])
+        )
         return attrs
 
 
@@ -2254,6 +2575,9 @@ class RoofRadiationPercentageSensor(RadiationSensorBase):
             "roof_azimuth": surface.get("surface_azimuth"),
             "roof_tilt": self.coordinator.ceiling_tilt,
             "roof_direction": self.coordinator.roof_direction,
+            "forecast_4h": (
+                surface.get("forecast_4h", {}).get("radiation_percentage", [])
+            ),
         })
         return attrs
 

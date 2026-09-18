@@ -137,7 +137,10 @@ def calculate_optimal_alignment_time(
         if date is None:
             date = datetime.now(tz).date()
 
-        lat = latitude if latitude is not None else 0.0
+        # `latitude` remains part of the public call signature for compatibility.
+        # The search itself covers the complete local day; below-horizon samples
+        # naturally evaluate to zero in `angle_to_percentage`.
+        _ = latitude
 
         def get_sun_data(target_time):
             sun_data = calculate_sun_angle(
@@ -167,26 +170,15 @@ def calculate_optimal_alignment_time(
         intensity_by_hour = {}
         all_calculations = []
 
-        base_hour_start = 6
-        base_hour_end = 18
-        if abs(lat) > 50:
-            base_hour_start = 4
-            base_hour_end = 20
-        if abs(lat) > 70:
-            base_hour_start = 0
-            base_hour_end = 24
-
-        start_time = datetime.combine(date, time(base_hour_start, 0), tzinfo=tz)
-        if base_hour_end == 24:
-            end_time = datetime.combine(date + timedelta(days=1), time(0, 0), tzinfo=tz)
-        else:
-            end_time = datetime.combine(date, time(base_hour_end, 0), tzinfo=tz)
+        start_time = datetime.combine(date, time(0, 0), tzinfo=tz)
+        end_time = datetime.combine(date + timedelta(days=1), time(0, 0), tzinfo=tz)
+        search_end = end_time - timedelta(minutes=1)
 
         current_time = start_time
         calculations_made = 0
-        max_possible_calculations = ((base_hour_end - base_hour_start) * 2) + 1
+        max_possible_calculations = 48
 
-        while current_time <= end_time and calculations_made < max_possible_calculations:
+        while current_time < end_time and calculations_made < max_possible_calculations:
             intensity = calculate_intensity_at_time(current_time)
             calculations_made += 1
 
@@ -269,7 +261,7 @@ def calculate_optimal_alignment_time(
 
         # Stage 2: REFINED SEARCH - 5-minute intervals around best point ±1 hour
         refine1_start = max(optimal_time - timedelta(hours=1), start_time)
-        refine1_end = min(optimal_time + timedelta(hours=1), end_time)
+        refine1_end = min(optimal_time + timedelta(hours=1), search_end)
 
         best_refined1_intensity = max_intensity
         best_refined1_time = optimal_time
@@ -304,7 +296,7 @@ def calculate_optimal_alignment_time(
 
         # Stage 3: PRECISION SEARCH - 1-minute intervals around best point ±30 minutes
         refine2_start = max(best_refined1_time - timedelta(minutes=30), start_time)
-        refine2_end = min(best_refined1_time + timedelta(minutes=30), end_time)
+        refine2_end = min(best_refined1_time + timedelta(minutes=30), search_end)
 
         best_refined2_intensity = best_refined1_intensity
         best_refined2_time = best_refined1_time

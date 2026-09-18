@@ -19,6 +19,7 @@ CONF_ROOF_POWER_ENABLED = "roof_power_enabled"
 CONF_ROOF_POWER_INVERT = "roof_power_invert"
 CONF_CAMERA_ROT_H = "camera_rotation_h"
 CONF_CAMERA_ROT_V = "camera_rotation_v"
+CONF_CAMERA_ZOOM = "camera_zoom"
 CONF_AUTO_ROTATE_SPEED = "auto_rotate_speed"
 CONF_FORCE_SUN_FALLBACK = "force_sun_fallback"
 CONF_FORCE_SUN_AZIMUTH = "force_sun_azimuth"
@@ -26,6 +27,7 @@ CONF_FORCE_SUN_ELEVATION = "force_sun_elevation"
 CONF_FIXED_SUN_AZIMUTH = "fixed_sun_azimuth"
 CONF_FIXED_SUN_ROTATION_ENABLED = "fixed_sun_rotation_enabled"
 CONF_RADIATION_ENABLED = "radiation_enabled"
+CONF_WEATHER_VISUALS_ENABLED = "weather_visuals_enabled"
 CONF_REMOVE_RADIATION_ENTITIES_ON_DISABLE = "remove_radiation_entities_on_disable"
 
 # Marker used by the SVG house card to auto-bind sensors from this integration
@@ -54,6 +56,9 @@ DEFAULT_ROOF_POWER_ENABLED = False
 DEFAULT_ROOF_POWER_INVERT = False
 DEFAULT_CAMERA_ROT_H = 225
 DEFAULT_CAMERA_ROT_V = 35
+DEFAULT_CAMERA_ZOOM = 1.5
+MIN_CAMERA_ZOOM = 1.15
+MAX_CAMERA_ZOOM = 4.5
 DEFAULT_AUTO_ROTATE_SPEED = 25
 DEFAULT_FORCE_SUN_FALLBACK = False
 DEFAULT_FORCE_SUN_AZIMUTH = FALLBACK_SUN_AZIMUTH
@@ -61,6 +66,7 @@ DEFAULT_FORCE_SUN_ELEVATION = FALLBACK_SUN_ELEVATION
 DEFAULT_FIXED_SUN_AZIMUTH = 225
 DEFAULT_FIXED_SUN_ROTATION_ENABLED = False
 DEFAULT_RADIATION_ENABLED = False
+DEFAULT_WEATHER_VISUALS_ENABLED = False
 
 # Wall types
 WALLS = ["front", "left", "back", "right", "ceiling"]

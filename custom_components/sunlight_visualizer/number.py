@@ -1,9 +1,5 @@
 """Number platform for Sunlight Visualizer settings."""
 from __future__ import annotations
-from datetime import timedelta
-
-import logging
-
 from homeassistant.components.number import NumberEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EntityCategory
@@ -14,6 +10,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import (
     DOMAIN,
     CONF_HOUSE_ANGLE,
+    CONF_USE_CUSTOM_ANGLE,
     CONF_CEILING_TILT,
     CONF_UPDATE_INTERVAL,
     CONF_CAMERA_ROT_H,
@@ -25,8 +22,6 @@ from .const import (
     CARD_SOURCE_ATTR,
     CARD_SOURCE_VALUE,
 )
-
-_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
@@ -83,21 +78,21 @@ class HouseAngleNumber(CoordinatorEntity, NumberEntity):
         return self.coordinator.last_update_success is not False
     
     async def async_set_native_value(self, value: float):
-        """Update the house angle."""
-        # Use the coordinator's update_settings method
-        self.coordinator.update_settings(house_angle=int(value))
-    
-        # Update config entry OPTIONS
+        """Persist the house angle; the config-entry listener reloads once."""
+        new_value = int(value)
+        if (
+            int(self.coordinator.house_angle) == new_value
+            and self.coordinator.use_custom_angle
+        ):
+            return
         self.hass.config_entries.async_update_entry(
             self._config_entry,
-            options={**self._config_entry.options, CONF_HOUSE_ANGLE: int(value)}
+            options={
+                **self._config_entry.options,
+                CONF_HOUSE_ANGLE: new_value,
+                CONF_USE_CUSTOM_ANGLE: True,
+            },
         )
-    
-        # Force coordinator to refresh calculations
-        await self.coordinator.async_request_refresh()
-        
-        # Update our own state
-        self.async_write_ha_state()
     
     @property
     def extra_state_attributes(self):
@@ -148,21 +143,14 @@ class CeilingTiltNumber(CoordinatorEntity, NumberEntity):
         return self.coordinator.last_update_success is not False
     
     async def async_set_native_value(self, value: float):
-        """Update the ceiling tilt."""
-        # Use the coordinator's update_settings method
-        self.coordinator.update_settings(ceiling_tilt=int(value))
-    
-        # Update config entry OPTIONS
+        """Persist the ceiling tilt; the config-entry listener reloads once."""
+        new_value = int(value)
+        if int(self.coordinator.ceiling_tilt) == new_value:
+            return
         self.hass.config_entries.async_update_entry(
             self._config_entry,
-            options={**self._config_entry.options, CONF_CEILING_TILT: int(value)}
+            options={**self._config_entry.options, CONF_CEILING_TILT: new_value},
         )
-    
-        # Force coordinator to refresh calculations
-        await self.coordinator.async_request_refresh()
-        
-        # Update our own state
-        self.async_write_ha_state()
     
     @property
     def extra_state_attributes(self):
@@ -213,21 +201,14 @@ class UpdateIntervalNumber(CoordinatorEntity, NumberEntity):
         return self.coordinator.last_update_success is not False
     
     async def async_set_native_value(self, value: float):
-        """Update the update interval."""
-        # Use the coordinator's update_settings method
-        self.coordinator.update_settings(update_interval_min=int(value))
-    
-        # Update config entry OPTIONS
+        """Persist the update interval; the config-entry listener reloads once."""
+        new_value = int(value)
+        if int(self.coordinator.update_interval_min) == new_value:
+            return
         self.hass.config_entries.async_update_entry(
             self._config_entry,
-            options={**self._config_entry.options, CONF_UPDATE_INTERVAL: int(value)}
+            options={**self._config_entry.options, CONF_UPDATE_INTERVAL: new_value},
         )
-    
-        # Request refresh
-        await self.coordinator.async_request_refresh()
-  
-        # Update our own state
-        self.async_write_ha_state()
     
     @property
     def extra_state_attributes(self):
@@ -277,12 +258,14 @@ class CameraRotationHNumber(CoordinatorEntity, NumberEntity):
         return self.coordinator.last_update_success is not False
 
     async def async_set_native_value(self, value: float):
-        """Update the camera horizontal rotation."""
+        """Persist horizontal rotation; the config-entry listener reloads once."""
+        new_value = int(value)
+        if int(self.native_value or 0) == new_value:
+            return
         self.hass.config_entries.async_update_entry(
             self._config_entry,
-            options={**self._config_entry.options, CONF_CAMERA_ROT_H: int(value)}
+            options={**self._config_entry.options, CONF_CAMERA_ROT_H: new_value},
         )
-        self.async_write_ha_state()
 
     @property
     def extra_state_attributes(self):
@@ -333,12 +316,14 @@ class CameraRotationVNumber(CoordinatorEntity, NumberEntity):
         return self.coordinator.last_update_success is not False
 
     async def async_set_native_value(self, value: float):
-        """Update the camera vertical rotation."""
+        """Persist vertical rotation; the config-entry listener reloads once."""
+        new_value = int(value)
+        if int(self.native_value or 0) == new_value:
+            return
         self.hass.config_entries.async_update_entry(
             self._config_entry,
-            options={**self._config_entry.options, CONF_CAMERA_ROT_V: int(value)}
+            options={**self._config_entry.options, CONF_CAMERA_ROT_V: new_value},
         )
-        self.async_write_ha_state()
 
     @property
     def extra_state_attributes(self):
@@ -352,4 +337,3 @@ class CameraRotationVNumber(CoordinatorEntity, NumberEntity):
             CARD_SOURCE_ATTR: CARD_SOURCE_VALUE,
             "camera_rotation": "v"
         }
-
