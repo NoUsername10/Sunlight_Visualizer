@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurazione di Sunlight Visualizer",
+        "description": "Configura l'integrazione Sunlight Visualizer. Posizione attiva: {location_name} ({latitude}, {longitude}) tramite {location_source}",
+        "data": {
+          "location_source": "Origine della posizione",
+          "location_zone_entity": "Zona alternativa",
+          "use_custom_angle": "Usa un angolo personalizzato (invece della direzione della bussola)",
+          "direction": "Direzione della bussola (seleziona la direzione verso cui è rivolta la porta d'ingresso)",
+          "roof_direction": "Direzione del tetto (lato più basso)",
+          "roof_power_entity": "Sensore di potenza del tetto (facoltativo)",
+          "roof_power_enabled": "Attiva l'etichetta della potenza del tetto",
+          "roof_power_invert": "Inverti la potenza del tetto (forza un valore positivo)",
+          "fixed_sun_rotation_enabled": "Posizione fissa del sole, azimut (ruota la scena)",
+          "auto_rotate_speed": "Velocità di rotazione automatica (deg/sec)",
+          "house_angle": "Angolo della casa (gradi, 0° = facciata rivolta a nord)",
+          "ceiling_tilt": "Angolo di inclinazione del soffitto (0-90°, 0 = orizzontale)",
+          "update_interval": "Intervallo di aggiornamento (minuti)",
+          "radiation_enabled": "Attiva i sensori di radiazione di Open-Meteo",
+          "weather_visuals_enabled": "Attiva gli effetti meteo 3D"
+        },
+        "data_description": {
+          "location_source": "Scegli la posizione di Home Assistant (predefinita) o una zona personalizzata.",
+          "location_zone_entity": "Seleziona una zona alternativa oppure scegli Usa casa (predefinita). Se la zona non esiste o non è disponibile, verrà usata automaticamente la posizione di casa.",
+          "use_custom_angle": "Seleziona per inserire un angolo esatto; deseleziona per scegliere una direzione della bussola",
+          "direction": "Seleziona la direzione della bussola (N, NE, E ecc.) verso cui è rivolta la porta d'ingresso.",
+          "roof_direction": "Seleziona il lato della casa verso cui scende la falda del tetto",
+          "roof_power_entity": "Seleziona un sensore di potenza da mostrare sotto la percentuale del tetto (W/kW)",
+          "roof_power_enabled": "Mostra il valore della potenza del tetto sotto la percentuale del tetto",
+          "roof_power_invert": "Inverti i valori di potenza (utile se il sensore restituisce valori negativi)",
+          "fixed_sun_rotation_enabled": "Mantieni visivamente fisso l'azimut del sole e ruota la scena",
+          "auto_rotate_speed": "Velocità predefinita di rotazione automatica della scheda (1-90 deg/sec)",
+          "house_angle": "Angolo della facciata della casa rispetto al nord (0-359°)",
+          "ceiling_tilt": "Angolo di inclinazione del soffitto/pannelli solari (0° = piano, 90° = verticale)",
+          "update_interval": "Frequenza di ricalcolo della posizione del sole (1-60 minuti)",
+          "radiation_enabled": "Recupera da Open-Meteo le previsioni di radiazione a intervalli di 15 minuti, ogni 15 minuti quando il sole è sopra l'orizzonte e ogni ora quando è sotto. Aggiunge sensori di radiazione per pareti e tetto. L'opzione è disattivata per impostazione predefinita perché usa un'API esterna.",
+          "weather_visuals_enabled": "Recupera da Open-Meteo le condizioni meteo attuali per visualizzare facoltativamente, solo in 3D, nuvole, precipitazioni, vento, nebbia e fulmini all'orizzonte. Il motore di rendering 2.5D non viene mai modificato."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "La latitudine deve essere compresa tra -90 e 90 gradi",
+      "invalid_longitude": "La longitudine deve essere compresa tra -180 e 180 gradi",
+      "invalid_house_angle": "L'angolo della casa deve essere compreso tra 0 e 360 gradi",
+      "invalid_ceiling_tilt": "L'inclinazione del soffitto deve essere compresa tra 0 e 90 gradi",
+      "invalid_update_interval": "L'intervallo di aggiornamento deve essere compreso tra 1 e 60 minuti",
+      "invalid_auto_rotate_speed": "La velocità di rotazione automatica deve essere compresa tra 1 e 90 deg/sec",
+      "invalid_force_sun_azimuth": "L'azimut forzato del sole deve essere compreso tra 0 e 359 gradi",
+      "invalid_force_sun_elevation": "L'elevazione forzata del sole deve essere compresa tra -90 e 90 gradi",
+      "invalid_coordinates": "Inserisci numeri decimali validi per le coordinate",
+      "latitude_out_of_range": "La latitudine deve essere compresa tra -90° e 90°",
+      "longitude_out_of_range": "La longitudine deve essere compresa tra -180° e 180°",
+      "direction_required": "Seleziona una direzione della bussola quando non usi un angolo personalizzato",
+      "unknown": "Si è verificato un errore imprevisto"
+    },
+    "abort": {
+      "single_instance_allowed": "È consentita una sola configurazione di Sunlight Visualizer."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni di Sunlight Visualizer",
+        "description": "Aggiorna la configurazione di Sunlight Visualizer. Posizione attiva: {location_name} ({current_lat}, {current_lon}) tramite {source}",
+        "data": {
+          "location_source": "Origine della posizione",
+          "location_zone_entity": "Zona alternativa",
+          "use_custom_angle": "Usa un angolo personalizzato (invece della direzione della bussola)",
+          "direction": "Direzione della bussola (seleziona la direzione verso cui è rivolta la porta d'ingresso)",
+          "roof_direction": "Direzione del tetto (lato più basso)",
+          "roof_power_entity": "Sensore di potenza del tetto (facoltativo)",
+          "roof_power_enabled": "Attiva l'etichetta della potenza del tetto",
+          "roof_power_invert": "Inverti la potenza del tetto (forza un valore positivo)",
+          "fixed_sun_rotation_enabled": "Posizione fissa del sole, azimut (ruota la scena)",
+          "force_sun_fallback": "Forza valori solari alternativi",
+          "force_sun_azimuth": "Forza l'azimut del sole",
+          "force_sun_elevation": "Forza l'elevazione del sole",
+          "auto_rotate_speed": "Velocità di rotazione automatica (deg/sec)",
+          "house_angle": "Angolo della casa (gradi, 0° = facciata rivolta a nord)",
+          "ceiling_tilt": "Angolo di inclinazione del soffitto (0-90°, 0 = orizzontale)",
+          "update_interval": "Intervallo di aggiornamento (minuti)",
+          "radiation_enabled": "Attiva i sensori di radiazione di Open-Meteo",
+          "remove_radiation_entities_on_disable": "Rimuovi i sensori di Open-Meteo alla disattivazione",
+          "weather_visuals_enabled": "Attiva gli effetti meteo 3D"
+        },
+        "data_description": {
+          "location_source": "Scegli la posizione di Home Assistant (predefinita) o una zona personalizzata.",
+          "location_zone_entity": "Seleziona una zona alternativa oppure scegli Usa casa (predefinita). Se la zona non esiste o non è disponibile, verrà usata automaticamente la posizione di casa.",
+          "use_custom_angle": "Seleziona per inserire un angolo esatto; deseleziona per scegliere una direzione della bussola",
+          "direction": "Seleziona la direzione della bussola (N, NE, E ecc.) verso cui è rivolta la porta d'ingresso.",
+          "roof_direction": "Seleziona il lato della casa verso cui scende la falda del tetto",
+          "roof_power_entity": "Seleziona un sensore di potenza da mostrare sotto la percentuale del tetto (W/kW)",
+          "roof_power_enabled": "Mostra il valore della potenza del tetto sotto la percentuale del tetto",
+          "roof_power_invert": "Inverti i valori di potenza (utile se il sensore restituisce valori negativi)",
+          "fixed_sun_rotation_enabled": "Mantieni visivamente fisso l'azimut del sole e ruota la scena",
+          "force_sun_fallback": "Forza valori solari alternativi (test)",
+          "force_sun_azimuth": "Azimut da usare quando si forzano valori alternativi (0-359°)",
+          "force_sun_elevation": "Elevazione da usare quando si forzano valori alternativi (-90° a 90°)",
+          "auto_rotate_speed": "Velocità predefinita di rotazione automatica della scheda (1-90 deg/sec)",
+          "house_angle": "Angolo della facciata della casa rispetto al nord (0-359°)",
+          "ceiling_tilt": "Angolo di inclinazione del soffitto/pannelli solari (0° = piano, 90° = verticale)",
+          "update_interval": "Frequenza di ricalcolo della posizione del sole (1-60 minuti)",
+          "radiation_enabled": "Recupera da Open-Meteo le previsioni di radiazione a intervalli di 15 minuti, ogni 15 minuti quando il sole è sopra l'orizzonte e ogni ora quando è sotto. Aggiunge sensori di radiazione per pareti e tetto. L'opzione è disattivata per impostazione predefinita perché usa un'API esterna.",
+          "remove_radiation_entities_on_disable": "Quando disattivi la radiazione di Open-Meteo, rimuovi solo le entità Open-Meteo/radiazione da Home Assistant. I normali sensori di luce solare rimangono.",
+          "weather_visuals_enabled": "Recupera da Open-Meteo le condizioni meteo attuali per visualizzare facoltativamente, solo in 3D, nuvole, precipitazioni, vento, nebbia e fulmini all'orizzonte. Il motore di rendering 2.5D non viene mai modificato."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Imposta opzioni",
+      "description": "Aggiorna le opzioni di Sunlight Visualizer per la voce di configurazione attiva.",
+      "fields": {
+        "entry_id": {
+          "name": "ID della voce di configurazione",
+          "description": "Facoltativo. Se omesso, viene usata la prima voce di Sunlight Visualizer."
+        },
+        "house_angle": {
+          "name": "Angolo della casa",
+          "description": "Direzione della parete anteriore in gradi (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Inclinazione del soffitto",
+          "description": "Angolo di inclinazione del tetto in gradi (0-90)."
+        },
+        "roof_direction": {
+          "name": "Direzione del tetto",
+          "description": "Lato verso cui scende la falda del tetto."
+        },
+        "camera_rotation_h": {
+          "name": "Rotazione H della fotocamera",
+          "description": "Rotazione orizzontale della fotocamera in gradi (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Rotazione V della fotocamera",
+          "description": "Rotazione verticale della fotocamera in gradi (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Zoom della fotocamera",
+          "description": "Livello di zoom salvato della fotocamera GLB (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Azimut fisso del sole",
+          "description": "Azimut fisso del sole usato dalla modalità visiva a sole fisso della scheda (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Posizione fissa del sole, azimut (ruota la scena)",
+          "description": "Mantieni visivamente fisso l'azimut del sole e ruota la scena"
+        },
+        "auto_rotate_speed": {
+          "name": "Velocità di rotazione automatica",
+          "description": "Velocità di rotazione automatica della scheda in gradi al secondo (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Sensore di potenza del tetto",
+          "description": "Sensore di potenza facoltativo mostrato sotto la percentuale del tetto."
+        },
+        "roof_power_enabled": {
+          "name": "Attiva l'etichetta della potenza del tetto",
+          "description": "Mostra o nascondi l'etichetta della potenza del tetto."
+        },
+        "roof_power_invert": {
+          "name": "Inverti il valore della potenza del tetto",
+          "description": "Inverti il valore della potenza (utile per i sensori con esportazione negativa)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Stato dell'allineamento solare del tetto",
+        "state": {
+          "at_peak": "Al picco",
+          "approaching": "In avvicinamento",
+          "declining": "In calo",
+          "unknown": "Sconosciuto"
+        }
+      }
+    }
+  }
+}

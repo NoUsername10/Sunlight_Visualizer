@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "A Sunlight Visualizer beállítása",
+        "description": "Állítsa be a Sunlight Visualizer integrációt. Aktív hely: {location_name} ({latitude}, {longitude}), forrás: {location_source}",
+        "data": {
+          "location_source": "Helyadatok forrása",
+          "location_zone_entity": "Alternatív zóna",
+          "use_custom_angle": "Egyéni szög használata (iránytű szerinti irány helyett)",
+          "direction": "Iránytű szerinti irány (válassza ki, merre néz a bejárati ajtó)",
+          "roof_direction": "A tető lejtésének iránya (az alacsonyabb oldal)",
+          "roof_power_entity": "Tetőteljesítmény-érzékelő (opcionális)",
+          "roof_power_enabled": "Tetőteljesítmény címkéjének engedélyezése",
+          "roof_power_invert": "Tetőteljesítmény előjelének megfordítása (mindig pozitív)",
+          "fixed_sun_rotation_enabled": "Rögzített nappozíció és azimut (a jelenet forgatása)",
+          "auto_rotate_speed": "Automatikus forgatás sebessége (deg/sec)",
+          "house_angle": "A ház szöge (fok, 0° = észak felé néző homlokzat)",
+          "ceiling_tilt": "Mennyezet dőlésszöge (0-90°, 0 = vízszintes)",
+          "update_interval": "Frissítési időköz (perc)",
+          "radiation_enabled": "Open-Meteo sugárzásérzékelők engedélyezése",
+          "weather_visuals_enabled": "3D időjárási látványelemek engedélyezése"
+        },
+        "data_description": {
+          "location_source": "Válassza a Home Assistant helyét (alapértelmezett) vagy egy egyéni zónát.",
+          "location_zone_entity": "Válasszon egy alternatív zónát vagy az Otthon használatát (alapértelmezett). Ha a zóna hiányzik vagy nem érhető el, a rendszer automatikusan az Otthon helyét használja.",
+          "use_custom_angle": "Jelölje be pontos szög megadásához, vagy törölje a jelölést az iránytű szerinti irány kiválasztásához",
+          "direction": "Válassza ki azt az iránytű szerinti irányt (N, NE, E stb.), amerre a bejárati ajtó néz.",
+          "roof_direction": "Válassza ki, hogy a ház melyik oldala felé lejt a tető",
+          "roof_power_entity": "Válassza ki a tető százalékos értéke alatt megjelenő teljesítményérzékelőt (W/kW)",
+          "roof_power_enabled": "A tető teljesítményértékének megjelenítése a százalékos érték alatt",
+          "roof_power_invert": "A teljesítményértékek előjelének megfordítása (akkor hasznos, ha az érzékelő negatív értéket ad)",
+          "fixed_sun_rotation_enabled": "A nap azimutjának vizuális rögzítése, miközben helyette a jelenet forog",
+          "auto_rotate_speed": "A kártya automatikus forgatásának alapértelmezett sebessége (1-90 deg/sec)",
+          "house_angle": "A ház homlokzatának északhoz viszonyított szöge (0-359°)",
+          "ceiling_tilt": "A mennyezet/napelemek dőlésszöge (0° = vízszintes, 90° = függőleges)",
+          "update_interval": "A nap helyzetének újraszámítási gyakorisága (1-60 perc)",
+          "radiation_enabled": "Az Open-Meteo 15 perces sugárzási előrejelzésének lekérése 15 percenként, amikor a nap fent van, és óránként, amikor a nap lent van. Sugárzásérzékelőket ad hozzá a falakhoz és a tetőhöz. Alapértelmezés szerint ki van kapcsolva, mert külső API-t használ.",
+          "weather_visuals_enabled": "Aktuális időjárási adatok lekérése az Open-Meteo szolgáltatástól az opcionális, kizárólag 3D módban látható felhőkhöz, csapadékhoz, szélhez, ködhöz és horizonton megjelenő villámokhoz. A 2.5D megjelenítés soha nem változik."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "A földrajzi szélességnek -90 és 90 fok között kell lennie",
+      "invalid_longitude": "A földrajzi hosszúságnak -180 és 180 fok között kell lennie",
+      "invalid_house_angle": "A ház szögének 0 és 360 fok között kell lennie",
+      "invalid_ceiling_tilt": "A mennyezet dőlésszögének 0 és 90 fok között kell lennie",
+      "invalid_update_interval": "A frissítési időköznek 1 és 60 perc között kell lennie",
+      "invalid_auto_rotate_speed": "Az automatikus forgatás sebességének 1 és 90 deg/sec között kell lennie",
+      "invalid_force_sun_azimuth": "A kényszerített napazimutnak 0 és 359 fok között kell lennie",
+      "invalid_force_sun_elevation": "A kényszerített napmagasságnak -90 és 90 fok között kell lennie",
+      "invalid_coordinates": "Adjon meg érvényes decimális számokat koordinátaként",
+      "latitude_out_of_range": "A földrajzi szélességnek -90° és 90° között kell lennie",
+      "longitude_out_of_range": "A földrajzi hosszúságnak -180° és 180° között kell lennie",
+      "direction_required": "Válasszon iránytű szerinti irányt, ha nem használ egyéni szöget",
+      "unknown": "Váratlan hiba történt"
+    },
+    "abort": {
+      "single_instance_allowed": "A Sunlight Visualizer csak egyszer állítható be."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "A Sunlight Visualizer beállításai",
+        "description": "Frissítse a Sunlight Visualizer beállításait. Aktív hely: {location_name} ({current_lat}, {current_lon}), forrás: {source}",
+        "data": {
+          "location_source": "Helyadatok forrása",
+          "location_zone_entity": "Alternatív zóna",
+          "use_custom_angle": "Egyéni szög használata (iránytű szerinti irány helyett)",
+          "direction": "Iránytű szerinti irány (válassza ki, merre néz a bejárati ajtó)",
+          "roof_direction": "A tető lejtésének iránya (az alacsonyabb oldal)",
+          "roof_power_entity": "Tetőteljesítmény-érzékelő (opcionális)",
+          "roof_power_enabled": "Tetőteljesítmény címkéjének engedélyezése",
+          "roof_power_invert": "Tetőteljesítmény előjelének megfordítása (mindig pozitív)",
+          "fixed_sun_rotation_enabled": "Rögzített nappozíció és azimut (a jelenet forgatása)",
+          "force_sun_fallback": "Tartalék napadatok kényszerítése",
+          "force_sun_azimuth": "Napazimut kényszerítése",
+          "force_sun_elevation": "Napmagasság kényszerítése",
+          "auto_rotate_speed": "Automatikus forgatás sebessége (deg/sec)",
+          "house_angle": "A ház szöge (fok, 0° = észak felé néző homlokzat)",
+          "ceiling_tilt": "Mennyezet dőlésszöge (0-90°, 0 = vízszintes)",
+          "update_interval": "Frissítési időköz (perc)",
+          "radiation_enabled": "Open-Meteo sugárzásérzékelők engedélyezése",
+          "remove_radiation_entities_on_disable": "Open-Meteo érzékelők eltávolítása kikapcsoláskor",
+          "weather_visuals_enabled": "3D időjárási látványelemek engedélyezése"
+        },
+        "data_description": {
+          "location_source": "Válassza a Home Assistant helyét (alapértelmezett) vagy egy egyéni zónát.",
+          "location_zone_entity": "Válasszon egy alternatív zónát vagy az Otthon használatát (alapértelmezett). Ha a zóna hiányzik vagy nem érhető el, a rendszer automatikusan az Otthon helyét használja.",
+          "use_custom_angle": "Jelölje be pontos szög megadásához, vagy törölje a jelölést az iránytű szerinti irány kiválasztásához",
+          "direction": "Válassza ki azt az iránytű szerinti irányt (N, NE, E stb.), amerre a bejárati ajtó néz.",
+          "roof_direction": "Válassza ki, hogy a ház melyik oldala felé lejt a tető",
+          "roof_power_entity": "Válassza ki a tető százalékos értéke alatt megjelenő teljesítményérzékelőt (W/kW)",
+          "roof_power_enabled": "A tető teljesítményértékének megjelenítése a százalékos érték alatt",
+          "roof_power_invert": "A teljesítményértékek előjelének megfordítása (akkor hasznos, ha az érzékelő negatív értéket ad)",
+          "fixed_sun_rotation_enabled": "A nap azimutjának vizuális rögzítése, miközben helyette a jelenet forog",
+          "force_sun_fallback": "Tartalék napadatok kényszerítése (teszteléshez)",
+          "force_sun_azimuth": "A kényszerített tartalék módban használt azimut (0-359°)",
+          "force_sun_elevation": "A kényszerített tartalék módban használt napmagasság (-90° és 90° között)",
+          "auto_rotate_speed": "A kártya automatikus forgatásának alapértelmezett sebessége (1-90 deg/sec)",
+          "house_angle": "A ház homlokzatának északhoz viszonyított szöge (0-359°)",
+          "ceiling_tilt": "A mennyezet/napelemek dőlésszöge (0° = vízszintes, 90° = függőleges)",
+          "update_interval": "A nap helyzetének újraszámítási gyakorisága (1-60 perc)",
+          "radiation_enabled": "Az Open-Meteo 15 perces sugárzási előrejelzésének lekérése 15 percenként, amikor a nap fent van, és óránként, amikor a nap lent van. Sugárzásérzékelőket ad hozzá a falakhoz és a tetőhöz. Alapértelmezés szerint ki van kapcsolva, mert külső API-t használ.",
+          "remove_radiation_entities_on_disable": "Az Open-Meteo sugárzási adatainak kikapcsolásakor csak az Open-Meteo- és sugárzási entitások törlődnek a Home Assistant rendszerből. A normál napfényérzékelők megmaradnak.",
+          "weather_visuals_enabled": "Aktuális időjárási adatok lekérése az Open-Meteo szolgáltatástól az opcionális, kizárólag 3D módban látható felhőkhöz, csapadékhoz, szélhez, ködhöz és horizonton megjelenő villámokhoz. A 2.5D megjelenítés soha nem változik."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Beállítások megadása",
+      "description": "Frissítse a Sunlight Visualizer beállításait az aktív konfigurációs bejegyzéshez.",
+      "fields": {
+        "entry_id": {
+          "name": "Konfigurációs bejegyzés azonosítója",
+          "description": "Opcionális. Ha nincs megadva, a rendszer az első Sunlight Visualizer-bejegyzést használja."
+        },
+        "house_angle": {
+          "name": "A ház szöge",
+          "description": "A homlokfal iránya fokban (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Mennyezet dőlésszöge",
+          "description": "A tető dőlésszöge fokban (0-90)."
+        },
+        "roof_direction": {
+          "name": "A tető iránya",
+          "description": "Az az oldal, amely felé a tető lejt."
+        },
+        "camera_rotation_h": {
+          "name": "Kamera vízszintes forgatása",
+          "description": "A kamera vízszintes elforgatása fokban (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Kamera függőleges forgatása",
+          "description": "A kamera függőleges elforgatása fokban (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Kamerazoom",
+          "description": "A GLB-kamera mentett nagyítási szintje (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Rögzített napazimut",
+          "description": "A kártya vizuálisan rögzített nap módjában használt állandó napazimut (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Rögzített nappozíció és azimut (a jelenet forgatása)",
+          "description": "A nap azimutjának vizuális rögzítése, miközben helyette a jelenet forog"
+        },
+        "auto_rotate_speed": {
+          "name": "Automatikus forgatás sebessége",
+          "description": "A kártya automatikus forgatásának sebessége fok/másodpercben (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Tetőteljesítmény-érzékelő",
+          "description": "A tető százalékos értéke alatt megjelenő opcionális teljesítményérzékelő."
+        },
+        "roof_power_enabled": {
+          "name": "Tetőteljesítmény címkéjének engedélyezése",
+          "description": "A tetőteljesítmény címkéjének megjelenítése vagy elrejtése."
+        },
+        "roof_power_invert": {
+          "name": "Tetőteljesítmény értékének megfordítása",
+          "description": "A teljesítményérték előjelének megfordítása (negatív betáplálási értéket adó érzékelőknél hasznos)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "A tető naphoz viszonyított tájolásának állapota",
+        "state": {
+          "at_peak": "A csúcson",
+          "approaching": "Közeledik",
+          "declining": "Csökken",
+          "unknown": "Ismeretlen"
+        }
+      }
+    }
+  }
+}
