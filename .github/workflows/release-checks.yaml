@@ -9,47 +9,60 @@ permissions:
   contents: read
 
 jobs:
-  frontend:
-    runs-on: ubuntu-latest
+  card:
+    name: Packaged card
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - name: Verify packaged card test files
+        run: |
+          for file in custom_components/sunlight_visualizer/www/sunlight-visualizer-card.js custom_components/sunlight_visualizer/www/models/experimental-house.glb scripts/validate-package.mjs scripts/validate-webgl-shaders.mjs scripts/package_release.py; do
+            if [ ! -f "$file" ]; then
+              echo "::error file=$file::Missing release file. Upload the complete GitHub package, including scripts/ and tests/. Card source in frontend/ is not required."
+              exit 1
+            fi
+          done
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-      - run: npm ci
-        working-directory: frontend
-      - run: npm run check && npm run build:sync
-        working-directory: frontend
+          package-manager-cache: false
+      - name: Validate packaged JavaScript and GLB
+        run: |
+          node --check custom_components/sunlight_visualizer/www/sunlight-visualizer-card.js
+          node scripts/validate-package.mjs
+      - name: Test packaged card in night mode
+        run: node scripts/validate-webgl-shaders.mjs
         env:
           SV_EXPECT_BAKED_NIGHT_LIGHTING: "1"
-      - name: Verify daylight render color parity
-        run: npm run check:webgl
-        working-directory: frontend
+      - name: Test packaged card in daylight
+        run: node scripts/validate-webgl-shaders.mjs
         env:
           SV_EXPECT_BAKED_NIGHT_LIGHTING: "0"
-      - name: Verify committed bundles match source
-        run: git diff --exit-code -- dist/sunlight-visualizer-card.js custom_components/sunlight_visualizer/www/sunlight-visualizer-card.js
       - name: Package integration
         run: python3 scripts/package_release.py
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: sunlight-visualizer-release
           path: release-artifacts/
 
   backend:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
         ha: ['2026.1.0', 'stable']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - name: Verify backend test upload
+        run: |
+          if [ ! -f tests/test_backend_smoke.py ]; then
+            echo "::error file=tests/test_backend_smoke.py::Missing backend smoke tests. Upload tests/ from the GitHub ZIP to the repository root."
+            exit 1
+          fi
       - name: Test against Home Assistant
         run: >-
           docker run --rm --pull=always
           -e PYTHONDONTWRITEBYTECODE=1
           -v "$PWD:/app" -w /app
           ghcr.io/home-assistant/home-assistant:${{ matrix.ha }}
-          sh -c 'python -c "from homeassistant.const import __version__; print(__version__)" && python -m unittest discover -s tests -v'
+          sh -c 'python -c "from homeassistant.const import __version__; print(__version__)" && python -m unittest discover -s /app/tests -v'
