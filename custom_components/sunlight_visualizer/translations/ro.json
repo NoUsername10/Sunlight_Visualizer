@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurarea Sunlight Visualizer",
+        "description": "Configurează integrarea Sunlight Visualizer. Locație activă: {location_name} ({latitude}, {longitude}); sursă: {location_source}",
+        "data": {
+          "location_source": "Sursa locației",
+          "location_zone_entity": "Zonă alternativă",
+          "use_custom_angle": "Folosește un unghi personalizat (în locul direcției busolei)",
+          "direction": "Direcția busolei (selectează direcția spre care este orientată ușa de la intrare)",
+          "roof_direction": "Direcția pantei acoperișului (latura descendentă)",
+          "roof_power_entity": "Senzor de putere pentru acoperiș (opțional)",
+          "roof_power_enabled": "Activează eticheta puterii acoperișului",
+          "roof_power_invert": "Inversează puterea acoperișului (forțează valori pozitive)",
+          "fixed_sun_rotation_enabled": "Poziție și azimut fixe ale soarelui (rotește scena)",
+          "auto_rotate_speed": "Viteza de rotire automată (deg/sec)",
+          "house_angle": "Unghiul casei (grade, 0° = fațada orientată spre nord)",
+          "ceiling_tilt": "Unghiul de înclinare a plafonului (0-90°, 0 = orizontal)",
+          "update_interval": "Interval de actualizare (minute)",
+          "radiation_enabled": "Activează senzorii de radiație Open-Meteo",
+          "weather_visuals_enabled": "Activează efectele meteo 3D"
+        },
+        "data_description": {
+          "location_source": "Alege locația Home Assistant (implicită) sau o zonă personalizată.",
+          "location_zone_entity": "Selectează o zonă alternativă sau alege locația Acasă (implicită). Dacă zona lipsește sau nu este disponibilă, se folosește automat locația Acasă.",
+          "use_custom_angle": "Bifează pentru a introduce unghiul exact sau debifează pentru a selecta direcția busolei",
+          "direction": "Selectează direcția busolei (N, NE, E etc.) spre care este orientată ușa de la intrare.",
+          "roof_direction": "Selectează latura casei spre care coboară panta acoperișului",
+          "roof_power_entity": "Selectează senzorul de putere care va fi afișat sub procentul acoperișului (W/kW)",
+          "roof_power_enabled": "Afișează puterea sub procentul acoperișului",
+          "roof_power_invert": "Inversează valorile puterii (util dacă senzorul furnizează valori negative)",
+          "fixed_sun_rotation_enabled": "Menține vizual fix azimutul soarelui și rotește scena în schimb",
+          "auto_rotate_speed": "Viteza implicită de rotire automată a cardului (1-90 deg/sec)",
+          "house_angle": "Unghiul fațadei casei față de nord (0-359°)",
+          "ceiling_tilt": "Unghiul de înclinare a plafonului/panourilor solare (0° = orizontal, 90° = vertical)",
+          "update_interval": "Frecvența recalculării poziției soarelui (1-60 minute)",
+          "radiation_enabled": "Preia de la Open-Meteo prognoza radiației la intervale de 15 minute, la fiecare 15 minute cât timp soarele este deasupra orizontului și o dată pe oră când este sub orizont. Adaugă senzori de radiație pentru pereți și acoperiș. Opțiunea este dezactivată implicit deoarece folosește un API extern.",
+          "weather_visuals_enabled": "Preia condițiile meteo actuale de la Open-Meteo pentru nori, precipitații, vânt, ceață și fulgere la orizont, opționale și vizibile numai în 3D. Randarea 2.5D nu este modificată niciodată."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Latitudinea trebuie să fie între -90 și 90 de grade",
+      "invalid_longitude": "Longitudinea trebuie să fie între -180 și 180 de grade",
+      "invalid_house_angle": "Unghiul casei trebuie să fie între 0 și 360 de grade",
+      "invalid_ceiling_tilt": "Înclinarea plafonului trebuie să fie între 0 și 90 de grade",
+      "invalid_update_interval": "Intervalul de actualizare trebuie să fie între 1 și 60 de minute",
+      "invalid_auto_rotate_speed": "Viteza de rotire automată trebuie să fie între 1 și 90 deg/sec",
+      "invalid_force_sun_azimuth": "Azimutul forțat al soarelui trebuie să fie între 0 și 359 de grade",
+      "invalid_force_sun_elevation": "Elevația forțată a soarelui trebuie să fie între -90 și 90 de grade",
+      "invalid_coordinates": "Introdu numere zecimale valide pentru coordonate",
+      "latitude_out_of_range": "Latitudinea trebuie să fie între -90° și 90°",
+      "longitude_out_of_range": "Longitudinea trebuie să fie între -180° și 180°",
+      "direction_required": "Selectează o direcție a busolei când nu se folosește un unghi personalizat",
+      "unknown": "A apărut o eroare neașteptată"
+    },
+    "abort": {
+      "single_instance_allowed": "Este permisă o singură configurare Sunlight Visualizer."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opțiuni Sunlight Visualizer",
+        "description": "Actualizează configurarea Sunlight Visualizer. Locație activă: {location_name} ({current_lat}, {current_lon}); sursă: {source}",
+        "data": {
+          "location_source": "Sursa locației",
+          "location_zone_entity": "Zonă alternativă",
+          "use_custom_angle": "Folosește un unghi personalizat (în locul direcției busolei)",
+          "direction": "Direcția busolei (selectează direcția spre care este orientată ușa de la intrare)",
+          "roof_direction": "Direcția pantei acoperișului (latura descendentă)",
+          "roof_power_entity": "Senzor de putere pentru acoperiș (opțional)",
+          "roof_power_enabled": "Activează eticheta puterii acoperișului",
+          "roof_power_invert": "Inversează puterea acoperișului (forțează valori pozitive)",
+          "fixed_sun_rotation_enabled": "Poziție și azimut fixe ale soarelui (rotește scena)",
+          "force_sun_fallback": "Forțează valorile solare de rezervă",
+          "force_sun_azimuth": "Forțează azimutul soarelui",
+          "force_sun_elevation": "Forțează elevația soarelui",
+          "auto_rotate_speed": "Viteza de rotire automată (deg/sec)",
+          "house_angle": "Unghiul casei (grade, 0° = fațada orientată spre nord)",
+          "ceiling_tilt": "Unghiul de înclinare a plafonului (0-90°, 0 = orizontal)",
+          "update_interval": "Interval de actualizare (minute)",
+          "radiation_enabled": "Activează senzorii de radiație Open-Meteo",
+          "remove_radiation_entities_on_disable": "Elimină senzorii Open-Meteo la dezactivare",
+          "weather_visuals_enabled": "Activează efectele meteo 3D"
+        },
+        "data_description": {
+          "location_source": "Alege locația Home Assistant (implicită) sau o zonă personalizată.",
+          "location_zone_entity": "Selectează o zonă alternativă sau alege locația Acasă (implicită). Dacă zona lipsește sau nu este disponibilă, se folosește automat locația Acasă.",
+          "use_custom_angle": "Bifează pentru a introduce unghiul exact sau debifează pentru a selecta direcția busolei",
+          "direction": "Selectează direcția busolei (N, NE, E etc.) spre care este orientată ușa de la intrare.",
+          "roof_direction": "Selectează latura casei spre care coboară panta acoperișului",
+          "roof_power_entity": "Selectează senzorul de putere care va fi afișat sub procentul acoperișului (W/kW)",
+          "roof_power_enabled": "Afișează puterea sub procentul acoperișului",
+          "roof_power_invert": "Inversează valorile puterii (util dacă senzorul furnizează valori negative)",
+          "fixed_sun_rotation_enabled": "Menține vizual fix azimutul soarelui și rotește scena în schimb",
+          "force_sun_fallback": "Forțează valorile solare de rezervă (pentru testare)",
+          "force_sun_azimuth": "Azimutul folosit la forțarea valorilor de rezervă (0-359°)",
+          "force_sun_elevation": "Elevația folosită la forțarea valorilor de rezervă (-90° până la 90°)",
+          "auto_rotate_speed": "Viteza implicită de rotire automată a cardului (1-90 deg/sec)",
+          "house_angle": "Unghiul fațadei casei față de nord (0-359°)",
+          "ceiling_tilt": "Unghiul de înclinare a plafonului/panourilor solare (0° = orizontal, 90° = vertical)",
+          "update_interval": "Frecvența recalculării poziției soarelui (1-60 minute)",
+          "radiation_enabled": "Preia de la Open-Meteo prognoza radiației la intervale de 15 minute, la fiecare 15 minute cât timp soarele este deasupra orizontului și o dată pe oră când este sub orizont. Adaugă senzori de radiație pentru pereți și acoperiș. Opțiunea este dezactivată implicit deoarece folosește un API extern.",
+          "remove_radiation_entities_on_disable": "La dezactivarea radiației Open-Meteo, elimină din Home Assistant numai entitățile Open-Meteo/de radiație. Senzorii obișnuiți de lumină solară rămân disponibili.",
+          "weather_visuals_enabled": "Preia condițiile meteo actuale de la Open-Meteo pentru nori, precipitații, vânt, ceață și fulgere la orizont, opționale și vizibile numai în 3D. Randarea 2.5D nu este modificată niciodată."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Setează opțiunile",
+      "description": "Actualizează opțiunile Sunlight Visualizer pentru intrarea de configurare activă.",
+      "fields": {
+        "entry_id": {
+          "name": "ID-ul intrării de configurare",
+          "description": "Opțional. Dacă este omis, se folosește prima intrare Sunlight Visualizer."
+        },
+        "house_angle": {
+          "name": "Unghiul casei",
+          "description": "Direcția peretelui frontal în grade (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Înclinarea plafonului",
+          "description": "Unghiul de înclinare a acoperișului în grade (0-90)."
+        },
+        "roof_direction": {
+          "name": "Direcția acoperișului",
+          "description": "Latura spre care coboară panta acoperișului."
+        },
+        "camera_rotation_h": {
+          "name": "Rotirea orizontală a camerei",
+          "description": "Rotirea orizontală a camerei în grade (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Rotirea verticală a camerei",
+          "description": "Rotirea verticală a camerei în grade (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Zoomul camerei",
+          "description": "Nivelul de zoom salvat al camerei GLB (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Azimut fix al soarelui",
+          "description": "Azimutul fix al soarelui folosit de modul cu soarele fix vizual al cardului (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Poziție și azimut fixe ale soarelui (rotește scena)",
+          "description": "Menține vizual fix azimutul soarelui și rotește scena în schimb"
+        },
+        "auto_rotate_speed": {
+          "name": "Viteza de rotire automată",
+          "description": "Viteza de rotire automată a cardului în grade pe secundă (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Senzor de putere pentru acoperiș",
+          "description": "Senzor opțional de putere afișat sub procentul acoperișului."
+        },
+        "roof_power_enabled": {
+          "name": "Activează eticheta puterii acoperișului",
+          "description": "Afișează sau ascunde eticheta puterii acoperișului."
+        },
+        "roof_power_invert": {
+          "name": "Inversează valoarea puterii acoperișului",
+          "description": "Inversează valoarea puterii (util pentru senzorii care indică exportul prin valori negative)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Starea alinierii acoperișului față de soare",
+        "state": {
+          "at_peak": "La valoarea maximă",
+          "approaching": "În creștere",
+          "declining": "În scădere",
+          "unknown": "Necunoscută"
+        }
+      }
+    }
+  }
+}

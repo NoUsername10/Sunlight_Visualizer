@@ -1,89 +1,68 @@
-# Sunlight Visualizer
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="90" alt="Sunlight Visualizer icon">
+# ☀️ Sunlight Visualizer
 
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
-[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open Sunlight Visualizer in HACS." />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
+<img src="assets/icon@2x.png" width="90" alt="Sunlight Visualizer icon">
 
-**See where the sun hits, understand why, and use the values in automations.**
+## Bring sunlight, weather and energy to life in Home Assistant
 
-Sunlight Visualizer turns your home into a sun-aware dashboard: useful sensors for automations, and a 2.5D house that shows the sun, shadows, power flow, roof production, and optional EV charging at a glance.
+**An interactive 3D house for your dashboard. Useful sun and shading sensors for your automations.**
 
-> **Need the full guide?** This README is the quick visual front page. The complete setup guide, sensor explanations, automation examples, and troubleshooting live in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki).
+See which walls catch the sun, follow your roof's solar exposure, and bring day, night and changing weather into one visual card. Connect your existing power sensors to see solar generation, household consumption and grid flow alongside the house.
 
-## What You Get
-### Basic sensors (Without Open Meteo enabled)
-<p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-default.png" width="30%" alt="Default Sunlight Visualizer sensors">
+Great for anyone who wants a more visual Home Assistant dashboard—and practical values for smarter blinds, awnings and heating or cooling automations.
+
+<p align="center">
+  <img src="assets/readme/house-3d-day.png" width="900" alt="Sunlight Visualizer 3D house in daylight, with solar panels, wall and roof information, and the energy overview">
 </p>
 
-
-### Extended sensors (With Open Meteo enabled)
-<p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_1.png" width="30%" alt="Open-Meteo wall radiation sensors">
-    <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_2.png" width="30%" alt="Open-Meteo roof radiation sensors">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_3.png" width="30%" alt="Open-Meteo roof radiation sensors">
-</p>
-
-
-**Sensors first:** start simple with wall/roof sun alignment and wall sun angle, then optionally add Open-Meteo radiation, shading demand, shading status, and roof radiation.
-
-<p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="32%" alt="Sunlight Visualizer day scene">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-dawn.png" width="32%" alt="Sunlight Visualizer dawn scene">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="32%" alt="Sunlight Visualizer night scene">
-</p>
-
-## EV Car Choices
-<p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/car-suv.png" width="20%" alt="Mini SUV EV car">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/car-smart.png" width="20%" alt="Smart car EV car">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/car-svg.png" width="20%" alt="SVG EV car fallback">
-</p>
-
-**Then the house:** sun, shadows, moon, roof panels, Energy HUD, grid power, EV charger pulse, tree, powerline, and camera controls in one compact Lovelace card.
-
-<p>
-  (Animated GIF, right click and select "Play Animation" if it does not autostart)
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="60%" alt="Sunlight Visualizer rotating card preview">
-</p>
-
-Rotate the house manually, auto-rotate it, or save the view that best explains your installation.
-
-## Use It For
-- **Sunscreen Alert:** “UV attack incoming” — the sun reaches the pool, go outside and bring the sunscreen.
-- **Blind and awning control:** close only when the right wall has direct sun and the sun angle is low enough to matter.
-- **Heat-load HVAC prep:** pre-cool when roof or wall exposure rises, relax when exposure drops.
-- **Solar output insights:** compare roof sun/radiation with roof power to spot underperformance.
-
-## Quick Highlights
 <table>
   <tr>
-    <td><strong>Default setup</strong><br>Wall/Roof Sun Alignment + Wall Sun Angle. No external API needed.</td>
-    <td><strong>Open-Meteo</strong><br>Radiation Direct/Total, Shading Demand/Status, Roof Radiation.</td>
+    <th>🌙 From daylight to night lighting</th>
+    <th>❄️ Weather that becomes part of the scene</th>
   </tr>
   <tr>
-    <td><strong>Energy HUD</strong><br><code>SOLAR</code>, <code>HOME</code>, <code>GRID</code>, optional <code>CAR</code>, plus power pulses.</td>
-    <td><strong>Visual card</strong><br>Sun, shadows, moon, EV cars, powerline, WebGL fallback, camera controls.</td>
+    <td><img src="assets/readme/house-3d-night.png" width="450" alt="The bundled 3D house at night, with night lighting and illuminated exterior lamps"></td>
+    <td><img src="assets/readme/house-3d-weather.png" width="450" alt="Snow falling around the bundled 3D house, with current temperature and wind information"></td>
   </tr>
 </table>
 
-**Release focus:** `0.3.0` adds Open-Meteo radiation sensors, wall sun-angle sensors, Energy HUD improvements, surface `%` selectors, WebGL EV car choices with SVG fallback, zone location selection, stronger resource registration, and many visual/occlusion fixes.
+*Actual card screenshots using the bundled 3D house and illustrative sensor/weather data. Configure the house orientation and roof tilt for your installation.*
 
-<details>
-<summary>Full feature highlights</summary><br>
+[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open Sunlight Visualizer in HACS" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
 
-- **A custom integration** (`sunlight_visualizer`) that calculates wall/roof sun values for automations.
-- **A Lovelace card** (`custom:sunlight-visualizer-card`) that shows the sun, house, roof, shadows, power flow, Energy HUD, and optional EV charging visuals.
-- **Wall and roof sun alignment:** geometric `%` values showing which surfaces face the sun.
-- **Wall Sun Angle:** always-on `°` values for how low/deep sunlight enters a lit wall or window.
-- **Open-Meteo radiation:** optional direct/total radiation, shading demand/status, and roof radiation using 15-minute forecast data.
-- **Location selection:** Home by default, or choose a `zone.*` override in setup/options.
-- **Surface `%` selectors:** choose whether labels show geometric alignment, shading demand, roof radiation percentage, or roof optimal-alignment percentage.
-- **EV visuals:** choose `Mini SUV`, `Smart car`, or `SVG car`; WebGL cars fall back to SVG when WebGL is unavailable.
-- **Power visuals:** bidirectional grid pulse and EV charger pulse with improved occlusion and draw order.
-- **Localized:** English, Swedish, Spanish, and Polish.
+[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.0](RELEASE_NOTES.md)
 
-</details>
+## ✨ Features in short
+
+- 🏡 **Interactive 3D house included** — explore the scene with sunlight, shadows, solar panels and day/night lighting.
+- ☀️ **Sun awareness for every wall and the roof** — see alignment, sun angle and roof alignment trends at a glance.
+- 🪟 **Sensors for smarter shading and comfort** — use sun exposure and optional shading demand in your own blind, awning and HVAC automations.
+- 🌦️ **Optional Open-Meteo weather** — clouds, rain, snow, fog, wind gusts and lightning, plus temperature, wind and weather details.
+- ⚡ **Energy overview built into the card** — display solar, home and grid power using your existing sensors, with optional EV charging information.
+- 📈 **Tap a surface to explore its values** — open graph dialogs from wall and roof signs and compare sun alignment, radiation and shading information.
+- 👆 **Touch and mouse controls** — drag to rotate, pinch or scroll to zoom, auto-rotate, and save your favourite camera view.
+- 🪶 **A lightweight 2.5D option** — choose 3D, SVG-based 2.5D, or Automatic mode with fallback when 3D is unavailable.
+- 💤 **Pauses when out of view** — 3D rendering and weather stop when the whole card is offscreen, then resume when it returns.
+- 🛠️ **Visual setup and card editor** — configure the integration through Home Assistant and add the card from the dashboard card picker.
+- 🔌 **Core sun sensors work without an external weather API** — enable Open-Meteo separately for forecast radiation, shading and 3D weather.
+- 🌍 **26-language interface** — translated setup, options, services, card editor, controls, weather details, graphs and 3D surface information.
+
+## 🌍 In your language
+
+The interface follows your Home Assistant language, with English as the fallback.
+
+🇬🇧 English · 🇩🇪 Deutsch · 🇳🇱 Nederlands · 🇨🇿 Čeština · 🇵🇱 Polski · 🇵🇹 Português · 🇧🇷 Português (Brasil)
+
+🇪🇸 Español · 🌎 Español (Latinoamérica) · 🇮🇹 Italiano · 🇫🇷 Français · 🇸🇪 Svenska · 🇩🇰 Dansk · 🇳🇴 Norsk bokmål
+
+🇫🇮 Suomi · 🇱🇹 Lietuvių · 🇨🇳 简体中文 · 🇯🇵 日本語 · 🇹🇭 ไทย · 🇻🇳 Tiếng Việt
+
+🇧🇬 Български · 🇬🇷 Ελληνικά · 🇭🇺 Magyar · 🇷🇴 Română · 🇹🇷 Türkçe · 🇺🇦 Українська
+
+**Ready to try it?** Install through HACS, add the integration, then add the Sunlight Visualizer card to your dashboard. Home Assistant **2026.1.0 or newer** is required.
+
+> **Want the full guide?** Find setup instructions, sensor explanations, automation examples and troubleshooting in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki). See the [release notes](RELEASE_NOTES.md) for upgrade instructions and known limitations.
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
 ## Installation
 ### HACS - Recommended
@@ -102,10 +81,10 @@ For normal HACS installs, the integration registers the Lovelace card resource a
 If you do not use HACS, copy `custom_components/sunlight_visualizer` into your Home Assistant `custom_components` folder, restart Home Assistant, then add the Lovelace resource manually as a JavaScript module:
 
 ```text
-/sunlight_visualizer/sunlight-visualizer-card.js?v=0.3.0
+/sunlight_visualizer/sunlight-visualizer-card.js?v=0.5.0
 ```
 
-The `?v=0.3.0` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
+The `?v=0.5.0` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
 
 </details>
 
@@ -124,6 +103,7 @@ During setup/options you configure:
 - **Ceiling/roof tilt:** used for roof sun and radiation calculations.
 - **Update interval:** how often geometric sun values update.
 - **Open-Meteo radiation sensors:** optional and disabled by default.
+- **3D weather visuals:** optional Open-Meteo current-weather data for the GLB renderer, disabled by default.
 - **Roof power sensor:** optional power value for the roof/card/HUD.
 
 When Open-Meteo is enabled, the integration fetches 15-minute forecast radiation data. While the sun is up it refreshes every 15 minutes; when the sun is down it refreshes hourly. The latest successful same-day forecast is cached so sensors can keep working if a later API call fails.
@@ -174,6 +154,19 @@ Open-Meteo can also clean up its own radiation entities when you disable it. In 
 | `Wall Shading Status` | Dashboard text for humans. |
 | `Roof Radiation Percentage` | How close the roof is to today’s radiation peak. |
 
+## Optional 3D Weather Visuals
+Open-Meteo weather visuals are a separate opt-in layer for the full 3D renderer. Enable **3D weather visuals** in the integration options, then choose the visual strength in the card editor.
+
+The integration provides a `3D Weather` entity and the card can show:
+- drifting clouds and daylight dimming,
+- rain, snow, and fog,
+- wind-direction-aware leaf gusts,
+- animated horizon lightning during thunderstorms,
+- a compact weather chip with condition, temperature, and wind direction,
+- a detailed popup with current conditions, wind, visibility, and sunrise/sunset information.
+
+Card visual strengths are `Automatic`, `Subtle`, `Normal`, `Strong`, and `Off`. Automatic adapts the effects to the reported weather. These effects are GLB/3D-only: the complete 2.5D SVG renderer remains unchanged, and disabling the weather option leaves the core sunlight integration behavior intact.
+
 ## Diagnostics
 <p>
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/diagnostic-default.png" width="38%" alt="Default diagnostic sensors">
@@ -184,6 +177,33 @@ Default diagnostics show the sun position and the coordinates currently used by 
 
 The status sensor is intentionally text-based. `OK` means the latest API data is healthy. Error/stale states expose attributes such as latest successful update, minutes since success, fetch attempts, API status, and last error.
 
+## Renderer Modes
+
+<details>
+<summary>See the lightweight 2.5D view</summary>
+
+<p>
+  <img src="assets/house-day.png" width="32%" alt="Lightweight 2.5D house in daylight">
+  <img src="assets/house-dawn.png" width="32%" alt="Lightweight 2.5D house at dawn">
+  <img src="assets/house-night.png" width="32%" alt="Lightweight 2.5D house at night">
+</p>
+
+<img src="assets/rotation.gif" width="60%" alt="Animated rotation of the 2.5D card">
+
+</details>
+
+The card provides three clear renderer choices. Cards without an explicit selection use **Automatic**.
+
+| Renderer | What it does |
+| --- | --- |
+| **Automatic** | Checks WebGL and loads the full 3D house. If WebGL or the model is unavailable, it safely switches to the complete 2.5D scene. |
+| **2.5D** | Uses only the complete SVG visualizer. It does not create a WebGL context or download the GLB model. |
+| **3D** | Uses only the complete GLB/WebGL scene. It does not generate a hidden SVG scene, but still falls back safely if 3D initialization fails. |
+
+> Prefer the previous SVG presentation? Select **2.5D** manually in the card editor. Automatic is the new default and does not silently preserve the old renderer choice.
+
+Automatic and 3D modes show a dedicated loading screen while the model is prepared. The bar uses real browser download progress when the server supplies a total size, switches to an indeterminate animation when it does not, and reports when a fallback is needed. The 2.5D house is not drawn underneath, so first load does not flash between renderers.
+
 ## Visual Card Configuration
 <p>
   <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual-card-configuration-1.png" width="32%" alt="Visual card configuration orientation and percentage sources">
@@ -192,28 +212,21 @@ The status sensor is intentionally text-based. `OK` means the latest API data is
 </p>
 
 The visual editor is designed so most users do not need YAML. It includes:
+- **Renderer:** choose `Automatic`, `2.5D`, or `3D`.
 - **Size and layout:** card width/height, auto-scale width, and preview pane.
 - **House and roof:** house direction, roof direction, roof tilt, and camera rotation.
 - **Surface `%` labels:** choose what percentage is painted on walls and roof.
 - **Grid connection:** grid flow sensor, sign inversion, power pole, power cable, and power pulse.
-- **EV charging:** car charger power sensor, EV visual type, EV scale, and charger pulse.
+- **EV charging:** car charger power sensor, 2.5D SVG EV visibility, and charger pulse.
 - **Roof power:** optional roof/solar power sensor and invert support.
 - **Energy HUD:** show/hide HUD, auto-compact behavior, roof alignment details, and opacity.
+- **3D weather visuals:** choose Automatic, Subtle, Normal, Strong, or Off when the integration weather option is enabled.
 - **Auto-rotate:** default card rotation speed.
 
-## EV Car Choices
-<p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/car-suv.png" width="30%" alt="Mini SUV EV car">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/car-smart.png" width="30%" alt="Smart car EV car">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/car-svg.png" width="30%" alt="SVG EV car fallback">
-</p>
+## EV Charging Visual
+The complete 2.5D renderer includes an optional SVG EV car controlled by **Show EV car in 2.5D**. The strict 3D renderer displays the contents authored into its GLB house model and does not overlay the retired experimental Smart car/Mini SUV selector.
 
-The card can show three EV styles:
-- **Mini SUV:** default WebGL car in `0.3.0`.
-- **Smart car:** alternate WebGL car.
-- **SVG car:** lightweight fallback and manual option.
-
-If WebGL is unavailable or fails, the card automatically falls back to the SVG car. `Show mini EV car` still controls whether EV visuals appear at all.
+The renderer boundary is intentional: 2.5D does not create WebGL car resources, and 3D does not place Three.js objects over a hidden SVG house. If Automatic or 3D cannot initialize WebGL/the GLB house, the whole card falls back to 2.5D rather than mixing the two renderers.
 
 When a valid car charger power sensor is selected, the HUD can show `CAR`, and the charger cable pulse animates toward the car while charging.
 
@@ -285,24 +298,22 @@ For deeper examples and troubleshooting, use the [Wiki](https://github.com/NoUse
 - `sensor.front_wall_shading_demand`, `sensor.right_wall_shading_demand`, `sensor.back_wall_shading_demand`, `sensor.left_wall_shading_demand` — wall shading demand (`%`).
 - `sensor.front_wall_shading_status`, `sensor.right_wall_shading_status`, `sensor.back_wall_shading_status`, `sensor.left_wall_shading_status` — wall shading status text.
 - `sensor.roof_radiation`, `sensor.roof_radiation_percentage` — roof forecast radiation and percentage of today’s roof peak.
+- `3D Weather` — optional current-weather entity used by the GLB weather chip, popup, and visual effects when 3D weather is enabled.
 
 ### Number entities
 - `number.house_angle` — exact front-door direction in degrees.
 - `number.ceiling_tilt` — roof/solar panel tilt.
 - `number.update_interval` — sun calculation update interval.
 - `number.house_camera_rotation_h`, `number.house_camera_rotation_v` — card camera defaults.
-- `number.auto_rotate_speed` — default card auto-rotate speed.
 
 ### Select entities
-- `select.house_direction` — compass direction for the front door.
+- `select.house_direction` — compass direction for the front door. Selecting `Custom` preserves the current orientation; set the exact value with `number.house_angle`.
 - `select.roof_direction` — roof downhill side.
 
 ### Switch entities
-- `switch.use_custom_house_angle` — use exact angle instead of compass direction.
-- `switch.fixed_sun_position` — keep sun visually fixed and rotate the scene.
-- `switch.force_sun_fallback` — test mode when the sun is down.
-- `switch.roof_power_label` — show roof power label.
-- `switch.invert_roof_power` — force roof power positive.
+- `Fixed sun position, azimuth. (Rotate scene)` — configuration switch that keeps the sun visually fixed and rotates the scene. Home Assistant assigns its entity ID and preserves an existing customized ID.
+
+Auto-rotate speed, forced sun fallback, roof power label visibility, and roof power inversion are integration/card options rather than separate entities.
 
 </details>
 
@@ -311,6 +322,8 @@ For deeper examples and troubleshooting, use the [Wiki](https://github.com/NoUse
 <summary>Core / Binding</summary><br>
 
 ```yaml
+rendererMode: auto # auto | two_point_five_d | three_d
+
 cardWidth: 450
 cardHeight: 450
 autoScaleWidth: true
@@ -351,8 +364,6 @@ energyHudUltraCompactAtPx: 300
 energyHudOpacity: 0.45
 
 miniEvCarEnabled: true
-evCarType: mini_suv # svg | smart | mini_suv
-evCarScale: 1.25
 
 sunAzEntity: null
 sunElEntity: null
@@ -425,10 +436,8 @@ energyHudCompactAtPx: 360
 energyHudUltraCompactAtPx: 300
 energyHudOpacity: 0.45
 
-# EV car visual.
+# Optional SVG EV car in the 2.5D renderer.
 miniEvCarEnabled: true
-evCarType: mini_suv # svg | smart | mini_suv
-evCarScale: 1.25
 
 # Below 300x300 the HUD uses clickable (i) mode.
 # At night the HUD can collapse automatically to avoid moon overlap.
@@ -439,6 +448,8 @@ evCarScale: 1.25
 <summary>Visual Environment</summary><br>
 
 ```yaml
+weatherVisuals: automatic # off | automatic | subtle | normal | strong; GLB/3D only
+
 shadowEnabled: true
 sunlightEnabled: true
 facadeSunDimmingEnabled: true
@@ -471,10 +482,13 @@ cssFpsAutoLimitEnabled: true
 </details>
 
 ## Validation / Localization / Notes
-- Current release: `0.3.1`.
+- Release version: `0.5.0`; requires Home Assistant `2026.1.0` or newer.
 - HACS-friendly resource registration is handled by the integration.
 - HACS/Hassfest validation is expected for release checks.
-- Supported translations: English, Swedish, Spanish, and Polish.
+- Backend release smoke tests run against Home Assistant `2026.1.0` and the latest stable release, covering core calculations, coordinator refresh/cache behavior, config-entry setup, and bundled asset registration. See [`tests/README.md`](./tests/README.md).
+- Integration setup/options/services and card interface translations: English, German, Dutch, Czech, Polish, European Portuguese, Brazilian Portuguese, Spanish, Latin American Spanish, Italian, French, Swedish, Danish, Norwegian Bokmål, Finnish, Lithuanian, Simplified Chinese, Japanese, Thai, Vietnamese, Bulgarian, Greek, Hungarian, Romanian, Turkish, and Ukrainian.
+- Existing sensor entity IDs and friendly names are unchanged; entity friendly names remain English.
+- Translation validation checks all backend and frontend locale files for exact key coverage and placeholder safety as part of `npm run check`.
 - In Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED` and disables live solar-alignment calculation for testing.
 - The [Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) has the deeper setup guide, automation examples, troubleshooting steps, and sensor explanations.
 

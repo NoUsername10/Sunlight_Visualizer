@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Cấu hình Sunlight Visualizer",
+        "description": "Thiết lập tích hợp Sunlight Visualizer. Vị trí đang dùng: {location_name} ({latitude}, {longitude}) từ {location_source}",
+        "data": {
+          "location_source": "Nguồn vị trí",
+          "location_zone_entity": "Ghi đè bằng vùng",
+          "use_custom_angle": "Sử dụng góc tùy chỉnh (thay cho hướng la bàn)",
+          "direction": "Hướng la bàn (chọn hướng cửa chính đang quay về)",
+          "roof_direction": "Hướng dốc mái (phía dốc xuống)",
+          "roof_power_entity": "Cảm biến công suất mái nhà (không bắt buộc)",
+          "roof_power_enabled": "Bật nhãn công suất mái nhà",
+          "roof_power_invert": "Đảo dấu công suất mái nhà (buộc thành giá trị dương)",
+          "fixed_sun_rotation_enabled": "Cố định vị trí Mặt Trời (góc phương vị) và xoay cảnh",
+          "auto_rotate_speed": "Tốc độ tự động xoay (deg/sec)",
+          "house_angle": "Góc của ngôi nhà (độ, 0° = mặt trước quay về hướng Bắc)",
+          "ceiling_tilt": "Góc nghiêng của trần nhà (0-90°, 0 = nằm ngang)",
+          "update_interval": "Khoảng thời gian cập nhật (phút)",
+          "radiation_enabled": "Bật cảm biến bức xạ Open-Meteo",
+          "weather_visuals_enabled": "Bật hiệu ứng thời tiết 3D"
+        },
+        "data_description": {
+          "location_source": "Chọn vị trí Home Assistant (mặc định) hoặc một vùng tùy chỉnh.",
+          "location_zone_entity": "Chọn một vùng để ghi đè hoặc chọn “Dùng vị trí nhà” (mặc định). Nếu vùng đó không tồn tại hoặc không khả dụng, vị trí nhà sẽ tự động được sử dụng.",
+          "use_custom_angle": "Chọn để nhập góc chính xác; bỏ chọn để chọn hướng la bàn",
+          "direction": "Chọn hướng la bàn (N, NE, E, v.v.) mà cửa chính đang quay về.",
+          "roof_direction": "Chọn phía mà mái nhà dốc xuống",
+          "roof_power_entity": "Chọn cảm biến công suất để hiển thị bên dưới chỉ số % của mái nhà (W/kW)",
+          "roof_power_enabled": "Hiển thị công suất mái nhà bên dưới chỉ số % của mái nhà",
+          "roof_power_invert": "Đảo dấu giá trị công suất (hữu ích nếu cảm biến báo giá trị âm)",
+          "fixed_sun_rotation_enabled": "Giữ cố định góc phương vị của Mặt Trời trên hình ảnh và xoay cảnh thay thế",
+          "auto_rotate_speed": "Tốc độ tự động xoay mặc định của thẻ (1-90 deg/sec)",
+          "house_angle": "Góc mặt trước của ngôi nhà so với hướng Bắc (0-359°)",
+          "ceiling_tilt": "Góc nghiêng của trần nhà/tấm pin mặt trời (0° = nằm ngang, 90° = thẳng đứng)",
+          "update_interval": "Khoảng thời gian giữa mỗi lần tính lại vị trí Mặt Trời (1-60 phút)",
+          "radiation_enabled": "Khi Mặt Trời ở trên đường chân trời, lấy dự báo bức xạ theo chu kỳ 15 phút từ Open-Meteo sau mỗi 15 phút; khi Mặt Trời đã lặn, lấy mỗi giờ. Thêm các cảm biến bức xạ cho tường/mái nhà. Mặc định bị tắt vì sử dụng API bên ngoài.",
+          "weather_visuals_enabled": "Lấy dữ liệu thời tiết hiện tại từ Open-Meteo để hiển thị tùy chọn mây, giáng thủy, gió, sương mù và chớp ở đường chân trời chỉ trong 3D. Trình kết xuất 2.5D hoàn toàn không bị thay đổi."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Vĩ độ phải nằm trong khoảng từ -90 đến 90 độ",
+      "invalid_longitude": "Kinh độ phải nằm trong khoảng từ -180 đến 180 độ",
+      "invalid_house_angle": "Góc của ngôi nhà phải nằm trong khoảng từ 0 đến 360 độ",
+      "invalid_ceiling_tilt": "Góc nghiêng của trần nhà phải nằm trong khoảng từ 0 đến 90 độ",
+      "invalid_update_interval": "Khoảng thời gian cập nhật phải nằm trong khoảng từ 1 đến 60 phút",
+      "invalid_auto_rotate_speed": "Tốc độ tự động xoay phải nằm trong khoảng từ 1 đến 90 deg/sec",
+      "invalid_force_sun_azimuth": "Góc phương vị Mặt Trời bắt buộc phải nằm trong khoảng từ 0 đến 359 độ",
+      "invalid_force_sun_elevation": "Góc cao Mặt Trời bắt buộc phải nằm trong khoảng từ -90 đến 90 độ",
+      "invalid_coordinates": "Vui lòng nhập tọa độ bằng số thập phân hợp lệ",
+      "latitude_out_of_range": "Vĩ độ phải nằm trong khoảng từ -90° đến 90°",
+      "longitude_out_of_range": "Kinh độ phải nằm trong khoảng từ -180° đến 180°",
+      "direction_required": "Vui lòng chọn hướng la bàn khi không sử dụng góc tùy chỉnh",
+      "unknown": "Đã xảy ra lỗi không mong muốn"
+    },
+    "abort": {
+      "single_instance_allowed": "Chỉ được phép có một cấu hình Sunlight Visualizer."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Tùy chọn Sunlight Visualizer",
+        "description": "Cập nhật cấu hình Sunlight Visualizer. Vị trí đang dùng: {location_name} ({current_lat}, {current_lon}) từ {source}",
+        "data": {
+          "location_source": "Nguồn vị trí",
+          "location_zone_entity": "Ghi đè bằng vùng",
+          "use_custom_angle": "Sử dụng góc tùy chỉnh (thay cho hướng la bàn)",
+          "direction": "Hướng la bàn (chọn hướng cửa chính đang quay về)",
+          "roof_direction": "Hướng dốc mái (phía dốc xuống)",
+          "roof_power_entity": "Cảm biến công suất mái nhà (không bắt buộc)",
+          "roof_power_enabled": "Bật nhãn công suất mái nhà",
+          "roof_power_invert": "Đảo dấu công suất mái nhà (buộc thành giá trị dương)",
+          "fixed_sun_rotation_enabled": "Cố định vị trí Mặt Trời (góc phương vị) và xoay cảnh",
+          "force_sun_fallback": "Buộc dùng giá trị Mặt Trời dự phòng",
+          "force_sun_azimuth": "Buộc dùng góc phương vị Mặt Trời",
+          "force_sun_elevation": "Buộc dùng góc cao Mặt Trời",
+          "auto_rotate_speed": "Tốc độ tự động xoay (deg/sec)",
+          "house_angle": "Góc của ngôi nhà (độ, 0° = mặt trước quay về hướng Bắc)",
+          "ceiling_tilt": "Góc nghiêng của trần nhà (0-90°, 0 = nằm ngang)",
+          "update_interval": "Khoảng thời gian cập nhật (phút)",
+          "radiation_enabled": "Bật cảm biến bức xạ Open-Meteo",
+          "remove_radiation_entities_on_disable": "Xóa cảm biến Open-Meteo khi tắt",
+          "weather_visuals_enabled": "Bật hiệu ứng thời tiết 3D"
+        },
+        "data_description": {
+          "location_source": "Chọn vị trí Home Assistant (mặc định) hoặc một vùng tùy chỉnh.",
+          "location_zone_entity": "Chọn một vùng để ghi đè hoặc chọn “Dùng vị trí nhà” (mặc định). Nếu vùng đó không tồn tại hoặc không khả dụng, vị trí nhà sẽ tự động được sử dụng.",
+          "use_custom_angle": "Chọn để nhập góc chính xác; bỏ chọn để chọn hướng la bàn",
+          "direction": "Chọn hướng la bàn (N, NE, E, v.v.) mà cửa chính đang quay về.",
+          "roof_direction": "Chọn phía mà mái nhà dốc xuống",
+          "roof_power_entity": "Chọn cảm biến công suất để hiển thị bên dưới chỉ số % của mái nhà (W/kW)",
+          "roof_power_enabled": "Hiển thị công suất mái nhà bên dưới chỉ số % của mái nhà",
+          "roof_power_invert": "Đảo dấu giá trị công suất (hữu ích nếu cảm biến báo giá trị âm)",
+          "fixed_sun_rotation_enabled": "Giữ cố định góc phương vị của Mặt Trời trên hình ảnh và xoay cảnh thay thế",
+          "force_sun_fallback": "Buộc sử dụng các giá trị Mặt Trời dự phòng (kiểm thử)",
+          "force_sun_azimuth": "Góc phương vị sử dụng khi buộc dùng giá trị dự phòng (0-359°)",
+          "force_sun_elevation": "Góc cao sử dụng khi buộc dùng giá trị dự phòng (-90° đến 90°)",
+          "auto_rotate_speed": "Tốc độ tự động xoay mặc định của thẻ (1-90 deg/sec)",
+          "house_angle": "Góc mặt trước của ngôi nhà so với hướng Bắc (0-359°)",
+          "ceiling_tilt": "Góc nghiêng của trần nhà/tấm pin mặt trời (0° = nằm ngang, 90° = thẳng đứng)",
+          "update_interval": "Khoảng thời gian giữa mỗi lần tính lại vị trí Mặt Trời (1-60 phút)",
+          "radiation_enabled": "Khi Mặt Trời ở trên đường chân trời, lấy dự báo bức xạ theo chu kỳ 15 phút từ Open-Meteo sau mỗi 15 phút; khi Mặt Trời đã lặn, lấy mỗi giờ. Thêm các cảm biến bức xạ cho tường/mái nhà. Mặc định bị tắt vì sử dụng API bên ngoài.",
+          "remove_radiation_entities_on_disable": "Khi tắt bức xạ Open-Meteo, chỉ xóa các thực thể Open-Meteo/bức xạ khỏi Home Assistant. Các cảm biến ánh nắng thông thường vẫn được giữ lại.",
+          "weather_visuals_enabled": "Lấy dữ liệu thời tiết hiện tại từ Open-Meteo để hiển thị tùy chọn mây, giáng thủy, gió, sương mù và chớp ở đường chân trời chỉ trong 3D. Trình kết xuất 2.5D hoàn toàn không bị thay đổi."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Thiết lập tùy chọn",
+      "description": "Cập nhật các tùy chọn Sunlight Visualizer cho mục cấu hình đang hoạt động.",
+      "fields": {
+        "entry_id": {
+          "name": "ID mục cấu hình",
+          "description": "Không bắt buộc. Nếu bỏ trống, mục Sunlight Visualizer đầu tiên sẽ được sử dụng."
+        },
+        "house_angle": {
+          "name": "Góc của ngôi nhà",
+          "description": "Hướng của bức tường phía trước, tính bằng độ (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Góc nghiêng của trần nhà",
+          "description": "Góc nghiêng của mái nhà, tính bằng độ (0-90)."
+        },
+        "roof_direction": {
+          "name": "Hướng dốc mái",
+          "description": "Phía mà mái nhà dốc xuống."
+        },
+        "camera_rotation_h": {
+          "name": "Xoay ngang camera",
+          "description": "Góc xoay ngang của camera, tính bằng độ (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Xoay dọc camera",
+          "description": "Góc xoay dọc của camera, tính bằng độ (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Thu phóng camera",
+          "description": "Mức thu phóng camera GLB đã lưu (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Góc phương vị Mặt Trời cố định",
+          "description": "Góc phương vị Mặt Trời cố định được dùng trong chế độ hiển thị Mặt Trời cố định của thẻ (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Cố định vị trí Mặt Trời (góc phương vị) và xoay cảnh",
+          "description": "Giữ cố định góc phương vị của Mặt Trời trên hình ảnh và xoay cảnh thay thế"
+        },
+        "auto_rotate_speed": {
+          "name": "Tốc độ tự động xoay",
+          "description": "Tốc độ tự động xoay của thẻ, tính bằng độ mỗi giây (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Cảm biến công suất mái nhà",
+          "description": "Cảm biến công suất không bắt buộc, được hiển thị bên dưới chỉ số phần trăm của mái nhà."
+        },
+        "roof_power_enabled": {
+          "name": "Bật nhãn công suất mái nhà",
+          "description": "Hiển thị hoặc ẩn nhãn công suất mái nhà."
+        },
+        "roof_power_invert": {
+          "name": "Đảo dấu công suất mái nhà",
+          "description": "Đảo dấu giá trị công suất (hữu ích với cảm biến báo công suất phát lên lưới dưới dạng số âm)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Trạng thái căn hướng ánh nắng với mái nhà",
+        "state": {
+          "at_peak": "Đang ở mức cao nhất",
+          "approaching": "Đang tiến gần mức cao nhất",
+          "declining": "Đang giảm",
+          "unknown": "Không xác định"
+        }
+      }
+    }
+  }
+}

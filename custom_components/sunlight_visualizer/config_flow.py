@@ -29,6 +29,7 @@ from .const import (
     CONF_ROOF_POWER_ENTITY,
     CONF_ROOF_POWER_INVERT,
     CONF_RADIATION_ENABLED,
+    CONF_WEATHER_VISUALS_ENABLED,
     CONF_REMOVE_RADIATION_ENTITIES_ON_DISABLE,
     CONF_UPDATE_INTERVAL,
     CONF_USE_CUSTOM_ANGLE,
@@ -46,6 +47,7 @@ from .const import (
     DEFAULT_ROOF_POWER_ENTITY,
     DEFAULT_ROOF_POWER_INVERT,
     DEFAULT_RADIATION_ENABLED,
+    DEFAULT_WEATHER_VISUALS_ENABLED,
     DEFAULT_UPDATE_INTERVAL,
     DIRECTIONS,
     DOMAIN,
@@ -250,9 +252,12 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 except vol.Invalid:
                     errors[CONF_HOUSE_ANGLE] = "invalid_house_angle"
 
+            # Preserve the custom-angle mode so selecting Custom can keep the
+            # current orientation instead of changing the house angle.
+            user_input[CONF_USE_CUSTOM_ANGLE] = bool(use_custom_angle)
+
             # Remove UI-only and legacy fields from saved data
             user_input.pop(CONF_DIRECTION, None)
-            user_input.pop(CONF_USE_CUSTOM_ANGLE, None)
             user_input.pop(CONF_ADVANCED_MODE, None)
 
             # Keep selected roof power sensor/invert even when label is disabled.
@@ -360,6 +365,10 @@ class SunlightIntensityConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 CONF_RADIATION_ENABLED,
                 default=DEFAULT_RADIATION_ENABLED,
             ): bool,
+            vol.Required(
+                CONF_WEATHER_VISUALS_ENABLED,
+                default=DEFAULT_WEATHER_VISUALS_ENABLED,
+            ): bool,
         }
 
         if DEFAULT_ROOF_POWER_ENTITY:
@@ -456,8 +465,8 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 except vol.Invalid:
                     errors[CONF_HOUSE_ANGLE] = "invalid_house_angle"
 
+            user_input[CONF_USE_CUSTOM_ANGLE] = bool(use_custom_angle)
             user_input.pop(CONF_DIRECTION, None)
-            user_input.pop(CONF_USE_CUSTOM_ANGLE, None)
             user_input.pop(CONF_ADVANCED_MODE, None)
 
             # Keep selected roof power sensor/invert even when label is disabled.
@@ -510,13 +519,16 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 return self.async_create_entry(title="", data=user_input)
 
         current_house_angle = current_config.get(CONF_HOUSE_ANGLE, DEFAULT_HOUSE_ANGLE)
-        use_custom_angle = True
+        angle_matches_direction = False
         matched_direction = "N"
         for direction, angle in DIRECTIONS.items():
             if angle == current_house_angle:
-                use_custom_angle = False
+                angle_matches_direction = True
                 matched_direction = direction
                 break
+        use_custom_angle = bool(
+            current_config.get(CONF_USE_CUSTOM_ANGLE, not angle_matches_direction)
+        )
 
         current_ceiling_tilt = current_config.get(CONF_CEILING_TILT, DEFAULT_CEILING_TILT)
         current_update_interval = current_config.get(
@@ -546,6 +558,9 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
         )
         current_radiation_enabled = current_config.get(
             CONF_RADIATION_ENABLED, DEFAULT_RADIATION_ENABLED
+        )
+        current_weather_visuals_enabled = current_config.get(
+            CONF_WEATHER_VISUALS_ENABLED, DEFAULT_WEATHER_VISUALS_ENABLED
         )
         current_location_source = current_config.get(
             CONF_LOCATION_SOURCE, DEFAULT_LOCATION_SOURCE
@@ -636,6 +651,10 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
             vol.Required(
                 CONF_RADIATION_ENABLED,
                 default=current_radiation_enabled,
+            ): bool,
+            vol.Required(
+                CONF_WEATHER_VISUALS_ENABLED,
+                default=current_weather_visuals_enabled,
             ): bool,
         }
 

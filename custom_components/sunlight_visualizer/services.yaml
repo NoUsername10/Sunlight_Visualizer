@@ -60,6 +60,16 @@ set_options:
           step: 1
           mode: box
 
+    camera_zoom:
+      name: Camera zoom
+      description: Saved GLB camera zoom level (1.15-4.5).
+      selector:
+        number:
+          min: 1.15
+          max: 4.5
+          step: 0.05
+          mode: box
+
     fixed_sun_azimuth:
       name: Fixed sun azimuth
       description: Fixed sun azimuth used by card visual fixed-sun mode (0-359).

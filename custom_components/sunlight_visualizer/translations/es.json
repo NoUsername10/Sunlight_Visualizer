@@ -3,105 +3,109 @@
   "config": {
     "step": {
       "user": {
-        "title": "Configuracion de Sunlight Visualizer",
-        "description": "Configura la integracion Sunlight Visualizer. Ubicacion activa: {location_name} ({latitude}, {longitude}) mediante {location_source}",
+        "title": "Configuración de Sunlight Visualizer",
+        "description": "Configura la integración Sunlight Visualizer. Ubicación activa: {location_name} ({latitude}, {longitude}) mediante {location_source}",
         "data": {
-          "location_source": "Origen de ubicacion",
-          "location_zone_entity": "Zona de reemplazo",
-          "use_custom_angle": "Usar angulo personalizado (en lugar de direccion de brujula)",
-          "direction": "Direccion de brujula (Selecciona la direccion hacia la que mira tu puerta principal)",
-          "roof_direction": "Direccion del techo (lado de bajada)",
-          "roof_power_entity": "Sensor de potencia del techo (opcional)",
-          "roof_power_enabled": "Activar etiqueta de potencia del techo",
-          "roof_power_invert": "Invertir potencia del techo (forzar positivo)",
-          "fixed_sun_rotation_enabled": "Fixed sun position, azimuth. (Rotate scene)",
-          "auto_rotate_speed": "Velocidad de auto-rotacion (grados/segundo)",
-          "house_angle": "Angulo de la casa (grados, 0° = frente hacia el norte)",
-          "ceiling_tilt": "Inclinacion del techo (0-90°, 0 = horizontal)",
-          "update_interval": "Intervalo de actualizacion (minutos)",
-          "radiation_enabled": "Activar sensores de radiacion de Open-Meteo"
+          "location_source": "Origen de la ubicación",
+          "location_zone_entity": "Zona alternativa",
+          "use_custom_angle": "Usar un ángulo personalizado (en lugar de la dirección de la brújula)",
+          "direction": "Dirección de la brújula (selecciona la dirección hacia la que está orientada la puerta principal)",
+          "roof_direction": "Orientación del tejado (lado más bajo)",
+          "roof_power_entity": "Sensor de potencia del tejado (opcional)",
+          "roof_power_enabled": "Activar la etiqueta de potencia del tejado",
+          "roof_power_invert": "Invertir la potencia del tejado (forzar un valor positivo)",
+          "fixed_sun_rotation_enabled": "Posición fija del sol, acimut (girar la escena)",
+          "auto_rotate_speed": "Velocidad de rotación automática (deg/sec)",
+          "house_angle": "Ángulo de la vivienda (grados, 0° = fachada orientada al norte)",
+          "ceiling_tilt": "Ángulo de inclinación del techo (0-90°, 0 = horizontal)",
+          "update_interval": "Intervalo de actualización (minutos)",
+          "radiation_enabled": "Activar los sensores de radiación de Open-Meteo",
+          "weather_visuals_enabled": "Activar los efectos meteorológicos 3D"
         },
         "data_description": {
-          "location_source": "Elige la ubicacion de Home Assistant (predeterminada) o una zona personalizada.",
-          "location_zone_entity": "Selecciona una zona de reemplazo o elige Use Home (default). Si no existe/no esta disponible, se usa Home automaticamente.",
-          "use_custom_angle": "Activa para introducir un angulo exacto; desactiva para elegir direccion de brujula",
-          "direction": "Selecciona direccion de brujula (N, NE, E, etc.) la direccion hacia la que mira tu puerta principal.",
-          "roof_direction": "Selecciona hacia que lado de la casa baja el techo",
-          "roof_power_entity": "Selecciona un sensor de potencia para mostrar debajo del % del techo (W/kW)",
-          "roof_power_enabled": "Mostrar valor de potencia del techo debajo del %",
-          "roof_power_invert": "Invertir valores de potencia (util para sensores con valores negativos)",
-          "fixed_sun_rotation_enabled": "Keep sun azimuth visually fixed and rotate the scene instead",
-          "auto_rotate_speed": "Velocidad predeterminada de auto-rotacion para la tarjeta (1-90 grados/seg)",
-          "house_angle": "Angulo del frente de tu casa respecto al norte (0-359°)",
-          "ceiling_tilt": "Angulo de inclinacion del techo/paneles solares (0° = plano, 90° = vertical)",
-          "update_interval": "Con que frecuencia se recalcula la posicion del sol (1-60 minutos)",
-          "radiation_enabled": "Obtiene radiacion prevista de Open-Meteo con resolucion de 15 minutos cada 15 minutos mientras el sol esta sobre el horizonte y cada hora cuando esta bajo el horizonte. Anade sensores de radiacion para paredes y techo. Desactivado por defecto porque usa una API externa."
+          "location_source": "Elige la ubicación de Home Assistant (predeterminada) o una zona personalizada.",
+          "location_zone_entity": "Selecciona una zona alternativa o elige Usar la ubicación de casa (predeterminada). Si la zona no existe o no está disponible, se utilizará automáticamente la ubicación de casa.",
+          "use_custom_angle": "Marca la casilla para introducir un ángulo exacto; desmárcala para seleccionar una dirección de la brújula",
+          "direction": "Selecciona la dirección de la brújula (N, NE, E, etc.) hacia la que está orientada la puerta principal.",
+          "roof_direction": "Selecciona hacia qué lado de la vivienda desciende la pendiente del tejado",
+          "roof_power_entity": "Selecciona un sensor de potencia para mostrarlo debajo del porcentaje del tejado (W/kW)",
+          "roof_power_enabled": "Mostrar el valor de potencia del tejado debajo del porcentaje del tejado",
+          "roof_power_invert": "Invertir los valores de potencia (útil si el sensor tiene valores negativos)",
+          "fixed_sun_rotation_enabled": "Mantener el acimut del sol visualmente fijo y girar la escena",
+          "auto_rotate_speed": "Velocidad predeterminada de rotación automática de la tarjeta (1-90 deg/sec)",
+          "house_angle": "Ángulo de la fachada de la vivienda con respecto al norte (0-359°)",
+          "ceiling_tilt": "Ángulo de inclinación del techo/paneles solares (0° = plano, 90° = vertical)",
+          "update_interval": "Frecuencia con la que se recalcula la posición del sol (1-60 minutos)",
+          "radiation_enabled": "Obtén de Open-Meteo la previsión de radiación con intervalos de 15 minutos, cada 15 minutos mientras el sol esté sobre el horizonte y cada hora cuando esté por debajo. Añade sensores de radiación para las paredes y el tejado. Esta opción está desactivada de forma predeterminada porque utiliza una API externa.",
+          "weather_visuals_enabled": "Obtén de Open-Meteo el tiempo actual para mostrar opcionalmente, solo en 3D, nubes, precipitaciones, viento, niebla y relámpagos en el horizonte. El renderizador 2.5D no se modifica nunca."
         }
       }
     },
     "error": {
       "invalid_latitude": "La latitud debe estar entre -90 y 90 grados",
       "invalid_longitude": "La longitud debe estar entre -180 y 180 grados",
-      "invalid_house_angle": "El angulo de la casa debe estar entre 0 y 360 grados",
-      "invalid_ceiling_tilt": "La inclinacion del techo debe estar entre 0 y 90 grados",
-      "invalid_update_interval": "El intervalo de actualizacion debe estar entre 1 y 60 minutos",
-      "invalid_auto_rotate_speed": "La velocidad de auto-rotacion debe estar entre 1 y 90 grados/seg",
-      "invalid_force_sun_azimuth": "El azimut forzado del sol debe estar entre 0 y 359 grados",
-      "invalid_force_sun_elevation": "La elevacion forzada del sol debe estar entre -90 y 90 grados",
-      "invalid_coordinates": "Introduce coordenadas decimales validas",
+      "invalid_house_angle": "El ángulo de la vivienda debe estar entre 0 y 360 grados",
+      "invalid_ceiling_tilt": "La inclinación del techo debe estar entre 0 y 90 grados",
+      "invalid_update_interval": "El intervalo de actualización debe estar entre 1 y 60 minutos",
+      "invalid_auto_rotate_speed": "La velocidad de rotación automática debe estar entre 1 y 90 deg/sec",
+      "invalid_force_sun_azimuth": "El acimut forzado del sol debe estar entre 0 y 359 grados",
+      "invalid_force_sun_elevation": "La elevación forzada del sol debe estar entre -90 y 90 grados",
+      "invalid_coordinates": "Introduce números decimales válidos para las coordenadas",
       "latitude_out_of_range": "La latitud debe estar entre -90° y 90°",
       "longitude_out_of_range": "La longitud debe estar entre -180° y 180°",
-      "direction_required": "Selecciona una direccion de brujula cuando no se use angulo personalizado",
-      "unknown": "Se produjo un error inesperado"
+      "direction_required": "Selecciona una dirección de la brújula cuando no se utilice un ángulo personalizado",
+      "unknown": "Se ha producido un error inesperado"
     },
     "abort": {
-      "single_instance_allowed": "Solo se permite una configuracion de Sunlight Visualizer."
+      "single_instance_allowed": "Solo se permite una configuración de Sunlight Visualizer."
     }
   },
   "options": {
     "step": {
       "init": {
         "title": "Opciones de Sunlight Visualizer",
-        "description": "Actualiza la configuracion de Sunlight Visualizer. Ubicacion activa: {location_name} ({current_lat}, {current_lon}) mediante {source}",
+        "description": "Actualiza la configuración de Sunlight Visualizer. Ubicación activa: {location_name} ({current_lat}, {current_lon}) mediante {source}",
         "data": {
-          "location_source": "Origen de ubicacion",
-          "location_zone_entity": "Zona de reemplazo",
-          "use_custom_angle": "Usar angulo personalizado (en lugar de direccion de brujula)",
-          "direction": "Direccion de brujula (Selecciona la direccion hacia la que mira tu puerta principal)",
-          "roof_direction": "Direccion del techo (lado de bajada)",
-          "roof_power_entity": "Sensor de potencia del techo (opcional)",
-          "roof_power_enabled": "Activar etiqueta de potencia del techo",
-          "roof_power_invert": "Invertir potencia del techo (forzar positivo)",
-          "fixed_sun_rotation_enabled": "Fixed sun position, azimuth. (Rotate scene)",
-          "force_sun_fallback": "Forzar sol de respaldo",
-          "force_sun_azimuth": "Forzar azimut del sol",
-          "force_sun_elevation": "Forzar elevacion del sol",
-          "auto_rotate_speed": "Velocidad de auto-rotacion (grados/segundo)",
-          "house_angle": "Angulo de la casa (grados, 0° = frente hacia el norte)",
-          "ceiling_tilt": "Inclinacion del techo (0-90°, 0 = horizontal)",
-          "update_interval": "Intervalo de actualizacion (minutos)",
-          "radiation_enabled": "Activar sensores de radiacion de Open-Meteo",
-          "remove_radiation_entities_on_disable": "Eliminar sensores de Open-Meteo al desactivar"
+          "location_source": "Origen de la ubicación",
+          "location_zone_entity": "Zona alternativa",
+          "use_custom_angle": "Usar un ángulo personalizado (en lugar de la dirección de la brújula)",
+          "direction": "Dirección de la brújula (selecciona la dirección hacia la que está orientada la puerta principal)",
+          "roof_direction": "Orientación del tejado (lado más bajo)",
+          "roof_power_entity": "Sensor de potencia del tejado (opcional)",
+          "roof_power_enabled": "Activar la etiqueta de potencia del tejado",
+          "roof_power_invert": "Invertir la potencia del tejado (forzar un valor positivo)",
+          "fixed_sun_rotation_enabled": "Posición fija del sol, acimut (girar la escena)",
+          "force_sun_fallback": "Forzar valores solares alternativos",
+          "force_sun_azimuth": "Forzar el acimut del sol",
+          "force_sun_elevation": "Forzar la elevación del sol",
+          "auto_rotate_speed": "Velocidad de rotación automática (deg/sec)",
+          "house_angle": "Ángulo de la vivienda (grados, 0° = fachada orientada al norte)",
+          "ceiling_tilt": "Ángulo de inclinación del techo (0-90°, 0 = horizontal)",
+          "update_interval": "Intervalo de actualización (minutos)",
+          "radiation_enabled": "Activar los sensores de radiación de Open-Meteo",
+          "remove_radiation_entities_on_disable": "Eliminar los sensores de Open-Meteo al desactivar la opción",
+          "weather_visuals_enabled": "Activar los efectos meteorológicos 3D"
         },
         "data_description": {
-          "location_source": "Elige la ubicacion de Home Assistant (predeterminada) o una zona personalizada.",
-          "location_zone_entity": "Selecciona una zona de reemplazo o elige Use Home (default). Si no existe/no esta disponible, se usa Home automaticamente.",
-          "use_custom_angle": "Activa para introducir un angulo exacto; desactiva para elegir direccion de brujula",
-          "direction": "Selecciona direccion de brujula (N, NE, E, etc.) la direccion hacia la que mira tu puerta principal.",
-          "roof_direction": "Selecciona hacia que lado de la casa baja el techo",
-          "roof_power_entity": "Selecciona un sensor de potencia para mostrar debajo del % del techo (W/kW)",
-          "roof_power_enabled": "Mostrar valor de potencia del techo debajo del %",
-          "roof_power_invert": "Invertir valores de potencia (util para sensores con valores negativos)",
-          "fixed_sun_rotation_enabled": "Keep sun azimuth visually fixed and rotate the scene instead",
-          "force_sun_fallback": "Forzar valores de sol de respaldo (pruebas)",
-          "force_sun_azimuth": "Azimut a usar al forzar respaldo (0-359°)",
-          "force_sun_elevation": "Elevacion a usar al forzar respaldo (-90° a 90°)",
-          "auto_rotate_speed": "Velocidad predeterminada de auto-rotacion para la tarjeta (1-90 grados/seg)",
-          "house_angle": "Angulo del frente de tu casa respecto al norte (0-359°)",
-          "ceiling_tilt": "Angulo de inclinacion del techo/paneles solares (0° = plano, 90° = vertical)",
-          "update_interval": "Con que frecuencia se recalcula la posicion del sol (1-60 minutos)",
-          "radiation_enabled": "Obtiene radiacion prevista de Open-Meteo con resolucion de 15 minutos cada 15 minutos mientras el sol esta sobre el horizonte y cada hora cuando esta bajo el horizonte. Anade sensores de radiacion para paredes y techo. Desactivado por defecto porque usa una API externa.",
-          "remove_radiation_entities_on_disable": "Al desactivar la radiación de Open-Meteo, elimina solo las entidades de Open-Meteo/radiación de Home Assistant. Los sensores normales de luz solar permanecen."
+          "location_source": "Elige la ubicación de Home Assistant (predeterminada) o una zona personalizada.",
+          "location_zone_entity": "Selecciona una zona alternativa o elige Usar la ubicación de casa (predeterminada). Si la zona no existe o no está disponible, se utilizará automáticamente la ubicación de casa.",
+          "use_custom_angle": "Marca la casilla para introducir un ángulo exacto; desmárcala para seleccionar una dirección de la brújula",
+          "direction": "Selecciona la dirección de la brújula (N, NE, E, etc.) hacia la que está orientada la puerta principal.",
+          "roof_direction": "Selecciona hacia qué lado de la vivienda desciende la pendiente del tejado",
+          "roof_power_entity": "Selecciona un sensor de potencia para mostrarlo debajo del porcentaje del tejado (W/kW)",
+          "roof_power_enabled": "Mostrar el valor de potencia del tejado debajo del porcentaje del tejado",
+          "roof_power_invert": "Invertir los valores de potencia (útil si el sensor tiene valores negativos)",
+          "fixed_sun_rotation_enabled": "Mantener el acimut del sol visualmente fijo y girar la escena",
+          "force_sun_fallback": "Forzar valores solares alternativos (pruebas)",
+          "force_sun_azimuth": "Acimut que se utilizará al forzar valores alternativos (0-359°)",
+          "force_sun_elevation": "Elevación que se utilizará al forzar valores alternativos (-90° a 90°)",
+          "auto_rotate_speed": "Velocidad predeterminada de rotación automática de la tarjeta (1-90 deg/sec)",
+          "house_angle": "Ángulo de la fachada de la vivienda con respecto al norte (0-359°)",
+          "ceiling_tilt": "Ángulo de inclinación del techo/paneles solares (0° = plano, 90° = vertical)",
+          "update_interval": "Frecuencia con la que se recalcula la posición del sol (1-60 minutos)",
+          "radiation_enabled": "Obtén de Open-Meteo la previsión de radiación con intervalos de 15 minutos, cada 15 minutos mientras el sol esté sobre el horizonte y cada hora cuando esté por debajo. Añade sensores de radiación para las paredes y el tejado. Esta opción está desactivada de forma predeterminada porque utiliza una API externa.",
+          "remove_radiation_entities_on_disable": "Al desactivar la radiación de Open-Meteo, elimina únicamente las entidades de Open-Meteo/radiación de Home Assistant. Los sensores de luz solar habituales se conservarán.",
+          "weather_visuals_enabled": "Obtén de Open-Meteo el tiempo actual para mostrar opcionalmente, solo en 3D, nubes, precipitaciones, viento, niebla y relámpagos en el horizonte. El renderizador 2.5D no se modifica nunca."
         }
       }
     }
@@ -109,55 +113,59 @@
   "services": {
     "set_options": {
       "name": "Establecer opciones",
-      "description": "Actualiza las opciones de Sunlight Visualizer para la entrada de configuracion activa.",
+      "description": "Actualizar las opciones de Sunlight Visualizer para la entrada de configuración activa.",
       "fields": {
         "entry_id": {
-          "name": "ID de entrada de configuracion",
-          "description": "Opcional. Si se omite, se usa la primera entrada de Sunlight Visualizer."
+          "name": "ID de la entrada de configuración",
+          "description": "Opcional. Si se omite, se utilizará la primera entrada de Sunlight Visualizer."
         },
         "house_angle": {
-          "name": "Angulo de la casa",
-          "description": "Direccion de la pared frontal en grados (0-359)."
+          "name": "Ángulo de la vivienda",
+          "description": "Orientación de la fachada en grados (0-359)."
         },
         "ceiling_tilt": {
-          "name": "Inclinacion del techo",
-          "description": "Angulo de inclinacion del techo en grados (0-90)."
+          "name": "Inclinación del techo",
+          "description": "Ángulo de inclinación del tejado en grados (0-90)."
         },
         "roof_direction": {
-          "name": "Direccion del techo",
-          "description": "Lado hacia el que baja el techo."
+          "name": "Orientación del tejado",
+          "description": "Lado hacia el que desciende la pendiente del tejado."
         },
         "camera_rotation_h": {
-          "name": "Rotacion de camara H",
-          "description": "Rotacion horizontal de la camara en grados (0-359)."
+          "name": "Rotación H de la cámara",
+          "description": "Rotación horizontal de la cámara en grados (0-359)."
         },
         "camera_rotation_v": {
-          "name": "Rotacion de camara V",
-          "description": "Rotacion vertical de la camara en grados (0-90)."
+          "name": "Rotación V de la cámara",
+          "description": "Rotación vertical de la cámara en grados (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Zoom de la cámara",
+          "description": "Nivel de zoom guardado de la cámara GLB (1.15-4.5)."
         },
         "fixed_sun_azimuth": {
-          "name": "Azimut solar fijo",
-          "description": "Azimut solar fijo para el modo visual de sol fijo en la tarjeta (0-359)."
+          "name": "Acimut fijo del sol",
+          "description": "Acimut fijo del sol utilizado por el modo visual de sol fijo de la tarjeta (0-359)."
         },
         "fixed_sun_rotation_enabled": {
-          "name": "Fixed sun position, azimuth. (Rotate scene)",
-          "description": "Keep sun azimuth visually fixed and rotate the scene instead"
+          "name": "Posición fija del sol, acimut (girar la escena)",
+          "description": "Mantener el acimut del sol visualmente fijo y girar la escena"
         },
         "auto_rotate_speed": {
-          "name": "Velocidad de auto-rotacion",
-          "description": "Velocidad de auto-rotacion de la tarjeta en grados por segundo (1-90)."
+          "name": "Velocidad de rotación automática",
+          "description": "Velocidad de rotación automática de la tarjeta en grados por segundo (1-90)."
         },
         "roof_power_entity": {
-          "name": "Sensor de potencia del techo",
-          "description": "Sensor de potencia opcional mostrado debajo del porcentaje del techo."
+          "name": "Sensor de potencia del tejado",
+          "description": "Sensor de potencia opcional que se muestra debajo del porcentaje del tejado."
         },
         "roof_power_enabled": {
-          "name": "Activar etiqueta de potencia del techo",
-          "description": "Mostrar u ocultar la etiqueta de potencia del techo."
+          "name": "Activar la etiqueta de potencia del tejado",
+          "description": "Mostrar u ocultar la etiqueta de potencia del tejado."
         },
         "roof_power_invert": {
-          "name": "Invertir valor de potencia del techo",
-          "description": "Invertir el valor de potencia (util para sensores de exportacion negativa)."
+          "name": "Invertir el valor de potencia del tejado",
+          "description": "Invertir el valor de potencia (útil para sensores con exportación negativa)."
         }
       }
     }
@@ -165,11 +173,11 @@
   "entity": {
     "sensor": {
       "solar_alignment_status": {
-        "name": "Estado de Alineación del Techo Solar",
+        "name": "Estado de alineación solar del tejado",
         "state": {
-          "at_peak": "En pico",
-          "approaching": "Acercándose",
-          "declining": "Disminuyendo",
+          "at_peak": "En el punto máximo",
+          "approaching": "Aproximándose",
+          "declining": "Descendiendo",
           "unknown": "Desconocido"
         }
       }

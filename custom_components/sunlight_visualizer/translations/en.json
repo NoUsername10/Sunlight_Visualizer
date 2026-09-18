@@ -19,7 +19,8 @@
           "house_angle": "House Angle (degrees, 0° = North-facing front)",
           "ceiling_tilt": "Ceiling tilt angle (0-90°, 0 = horizontal)",
           "update_interval": "Update interval (minutes)",
-          "radiation_enabled": "Enable Open-Meteo radiation sensors"
+          "radiation_enabled": "Enable Open-Meteo radiation sensors",
+          "weather_visuals_enabled": "Enable 3D weather visuals"
         },
         "data_description": {
           "location_source": "Choose Home Assistant location (default) or a custom Zone.",
@@ -35,7 +36,8 @@
           "house_angle": "Angle of your house's front relative to North (0-359°)",
           "ceiling_tilt": "Tilt angle of ceiling/solar panels (0° = flat, 90° = vertical)",
           "update_interval": "How often to recalculate sun position (1-60 minutes)",
-          "radiation_enabled": "Fetch 15-minute forecast radiation from Open-Meteo every 15 minutes while the sun is up and hourly when the sun is down. Adds wall/roof radiation sensors. Disabled by default because it uses an external API."
+          "radiation_enabled": "Fetch 15-minute forecast radiation from Open-Meteo every 15 minutes while the sun is up and hourly when the sun is down. Adds wall/roof radiation sensors. Disabled by default because it uses an external API.",
+          "weather_visuals_enabled": "Fetch current weather from Open-Meteo for optional 3D-only clouds, precipitation, wind, fog, and horizon lightning. The 2.5D renderer is never changed."
         }
       }
     },
@@ -81,7 +83,8 @@
           "ceiling_tilt": "Ceiling tilt angle (0-90°, 0 = horizontal)",
           "update_interval": "Update interval (minutes)",
           "radiation_enabled": "Enable Open-Meteo radiation sensors",
-          "remove_radiation_entities_on_disable": "Remove Open-Meteo sensors when disabling"
+          "remove_radiation_entities_on_disable": "Remove Open-Meteo sensors when disabling",
+          "weather_visuals_enabled": "Enable 3D weather visuals"
         },
         "data_description": {
           "location_source": "Choose Home Assistant location (default) or a custom Zone.",
@@ -101,7 +104,8 @@
           "ceiling_tilt": "Tilt angle of ceiling/solar panels (0° = flat, 90° = vertical)",
           "update_interval": "How often to recalculate sun position (1-60 minutes)",
           "radiation_enabled": "Fetch 15-minute forecast radiation from Open-Meteo every 15 minutes while the sun is up and hourly when the sun is down. Adds wall/roof radiation sensors. Disabled by default because it uses an external API.",
-          "remove_radiation_entities_on_disable": "When turning Open-Meteo radiation off, remove only the Open-Meteo/radiation entities from Home Assistant. Regular sunlight sensors remain."
+          "remove_radiation_entities_on_disable": "When turning Open-Meteo radiation off, remove only the Open-Meteo/radiation entities from Home Assistant. Regular sunlight sensors remain.",
+          "weather_visuals_enabled": "Fetch current weather from Open-Meteo for optional 3D-only clouds, precipitation, wind, fog, and horizon lightning. The 2.5D renderer is never changed."
         }
       }
     }
@@ -134,6 +138,10 @@
         "camera_rotation_v": {
           "name": "Camera rotation V",
           "description": "Vertical camera rotation in degrees (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Camera zoom",
+          "description": "Saved GLB camera zoom level (1.15-4.5)."
         },
         "fixed_sun_azimuth": {
           "name": "Fixed sun azimuth",

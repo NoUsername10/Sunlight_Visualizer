@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konfigurasjon av Sunlight Visualizer",
+        "description": "Konfigurer integrasjonen Sunlight Visualizer. Aktiv plassering: {location_name} ({latitude}, {longitude}) via {location_source}",
+        "data": {
+          "location_source": "Plasseringskilde",
+          "location_zone_entity": "Overstyr med sone",
+          "use_custom_angle": "Bruk egendefinert vinkel (i stedet for kompassretning)",
+          "direction": "Kompassretning (velg retningen inngangsdøren vender mot)",
+          "roof_direction": "Takets fallretning",
+          "roof_power_entity": "Effektsensor for taket (valgfri)",
+          "roof_power_enabled": "Vis takets effektverdi",
+          "roof_power_invert": "Inverter takets effekt (tving positiv verdi)",
+          "fixed_sun_rotation_enabled": "Fast solposisjon og asimut (roter scenen)",
+          "auto_rotate_speed": "Automatisk rotasjonshastighet (grader/sek)",
+          "house_angle": "Husets vinkel (grader, 0° = forsiden vender mot nord)",
+          "ceiling_tilt": "Takets hellingsvinkel (0-90°, 0 = vannrett)",
+          "update_interval": "Oppdateringsintervall (minutter)",
+          "radiation_enabled": "Aktiver strålingssensorer fra Open-Meteo",
+          "weather_visuals_enabled": "Aktiver væreffekter i 3D"
+        },
+        "data_description": {
+          "location_source": "Velg plasseringen fra Home Assistant (standard) eller en egendefinert sone.",
+          "location_zone_entity": "Velg en sone som skal overstyre plasseringen, eller velg Bruk hjemmet (standard). Hvis sonen mangler eller er utilgjengelig, brukes hjemmets plassering automatisk.",
+          "use_custom_angle": "Merk av for å angi en nøyaktig vinkel. Fjern avmerkingen for å velge kompassretning.",
+          "direction": "Velg kompassretningen (N, NE, E osv.) som inngangsdøren vender mot.",
+          "roof_direction": "Velg hvilken side av huset taket heller ned mot.",
+          "roof_power_entity": "Velg en effektsensor som skal vises under takets prosentverdi (W/kW).",
+          "roof_power_enabled": "Vis takets effektverdi under prosentverdien.",
+          "roof_power_invert": "Inverter effektverdiene (nyttig hvis sensoren viser negative verdier).",
+          "fixed_sun_rotation_enabled": "Hold solens asimut visuelt fast, og roter scenen i stedet.",
+          "auto_rotate_speed": "Standardhastighet for kortets automatiske rotasjon (1-90 grader/sek).",
+          "house_angle": "Vinkelen på husets forside i forhold til nord (0-359°).",
+          "ceiling_tilt": "Hellingsvinkel for taket eller solpanelene (0° = flatt, 90° = loddrett).",
+          "update_interval": "Hvor ofte solens posisjon skal beregnes på nytt (1-60 minutter).",
+          "radiation_enabled": "Hent en 15-minutters prognose for stråling fra Open-Meteo hvert 15. minutt mens solen er oppe, og hver time når solen er nede. Legger til strålingssensorer for vegger og tak. Funksjonen er deaktivert som standard fordi den bruker et eksternt API.",
+          "weather_visuals_enabled": "Hent gjeldende vær fra Open-Meteo for valgfrie skyer, nedbør, vind, tåke og lyn i horisonten som bare vises i 3D. 2.5D-gjengivelsen endres aldri."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Breddegraden må være mellom -90 og 90 grader",
+      "invalid_longitude": "Lengdegraden må være mellom -180 og 180 grader",
+      "invalid_house_angle": "Husets vinkel må være mellom 0 og 360 grader",
+      "invalid_ceiling_tilt": "Takets helling må være mellom 0 og 90 grader",
+      "invalid_update_interval": "Oppdateringsintervallet må være mellom 1 og 60 minutter",
+      "invalid_auto_rotate_speed": "Den automatiske rotasjonshastigheten må være mellom 1 og 90 grader/sek",
+      "invalid_force_sun_azimuth": "Tvungen solasimut må være mellom 0 og 359 grader",
+      "invalid_force_sun_elevation": "Tvungen solhøyde må være mellom -90 og 90 grader",
+      "invalid_coordinates": "Angi gyldige desimaltall for koordinatene",
+      "latitude_out_of_range": "Breddegraden må være mellom -90° og 90°",
+      "longitude_out_of_range": "Lengdegraden må være mellom -180° og 180°",
+      "direction_required": "Velg en kompassretning når egendefinert vinkel ikke brukes",
+      "unknown": "Det oppstod en uventet feil"
+    },
+    "abort": {
+      "single_instance_allowed": "Bare én konfigurasjon av Sunlight Visualizer er tillatt."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Innstillinger for Sunlight Visualizer",
+        "description": "Oppdater konfigurasjonen av Sunlight Visualizer. Aktiv plassering: {location_name} ({current_lat}, {current_lon}) via {source}",
+        "data": {
+          "location_source": "Plasseringskilde",
+          "location_zone_entity": "Overstyr med sone",
+          "use_custom_angle": "Bruk egendefinert vinkel (i stedet for kompassretning)",
+          "direction": "Kompassretning (velg retningen inngangsdøren vender mot)",
+          "roof_direction": "Takets fallretning",
+          "roof_power_entity": "Effektsensor for taket (valgfri)",
+          "roof_power_enabled": "Vis takets effektverdi",
+          "roof_power_invert": "Inverter takets effekt (tving positiv verdi)",
+          "fixed_sun_rotation_enabled": "Fast solposisjon og asimut (roter scenen)",
+          "force_sun_fallback": "Tving reserveverdier for solen",
+          "force_sun_azimuth": "Tving solasimut",
+          "force_sun_elevation": "Tving solhøyde",
+          "auto_rotate_speed": "Automatisk rotasjonshastighet (grader/sek)",
+          "house_angle": "Husets vinkel (grader, 0° = forsiden vender mot nord)",
+          "ceiling_tilt": "Takets hellingsvinkel (0-90°, 0 = vannrett)",
+          "update_interval": "Oppdateringsintervall (minutter)",
+          "radiation_enabled": "Aktiver strålingssensorer fra Open-Meteo",
+          "remove_radiation_entities_on_disable": "Fjern Open-Meteo-sensorer ved deaktivering",
+          "weather_visuals_enabled": "Aktiver væreffekter i 3D"
+        },
+        "data_description": {
+          "location_source": "Velg plasseringen fra Home Assistant (standard) eller en egendefinert sone.",
+          "location_zone_entity": "Velg en sone som skal overstyre plasseringen, eller velg Bruk hjemmet (standard). Hvis sonen mangler eller er utilgjengelig, brukes hjemmets plassering automatisk.",
+          "use_custom_angle": "Merk av for å angi en nøyaktig vinkel. Fjern avmerkingen for å velge kompassretning.",
+          "direction": "Velg kompassretningen (N, NE, E osv.) som inngangsdøren vender mot.",
+          "roof_direction": "Velg hvilken side av huset taket heller ned mot.",
+          "roof_power_entity": "Velg en effektsensor som skal vises under takets prosentverdi (W/kW).",
+          "roof_power_enabled": "Vis takets effektverdi under prosentverdien.",
+          "roof_power_invert": "Inverter effektverdiene (nyttig hvis sensoren viser negative verdier).",
+          "fixed_sun_rotation_enabled": "Hold solens asimut visuelt fast, og roter scenen i stedet.",
+          "force_sun_fallback": "Tving reserveverdier for solen (testing).",
+          "force_sun_azimuth": "Asimut som skal brukes med tvungne reserveverdier (0-359°).",
+          "force_sun_elevation": "Solhøyde som skal brukes med tvungne reserveverdier (-90° til 90°).",
+          "auto_rotate_speed": "Standardhastighet for kortets automatiske rotasjon (1-90 grader/sek).",
+          "house_angle": "Vinkelen på husets forside i forhold til nord (0-359°).",
+          "ceiling_tilt": "Hellingsvinkel for taket eller solpanelene (0° = flatt, 90° = loddrett).",
+          "update_interval": "Hvor ofte solens posisjon skal beregnes på nytt (1-60 minutter).",
+          "radiation_enabled": "Hent en 15-minutters prognose for stråling fra Open-Meteo hvert 15. minutt mens solen er oppe, og hver time når solen er nede. Legger til strålingssensorer for vegger og tak. Funksjonen er deaktivert som standard fordi den bruker et eksternt API.",
+          "remove_radiation_entities_on_disable": "Når stråling fra Open-Meteo deaktiveres, fjernes bare entitetene for Open-Meteo og stråling fra Home Assistant. Vanlige sollyssensorer beholdes.",
+          "weather_visuals_enabled": "Hent gjeldende vær fra Open-Meteo for valgfrie skyer, nedbør, vind, tåke og lyn i horisonten som bare vises i 3D. 2.5D-gjengivelsen endres aldri."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Angi innstillinger",
+      "description": "Oppdater innstillingene for den aktive konfigurasjonsoppføringen i Sunlight Visualizer.",
+      "fields": {
+        "entry_id": {
+          "name": "ID for konfigurasjonsoppføring",
+          "description": "Valgfritt. Hvis ingenting angis, brukes den første oppføringen for Sunlight Visualizer."
+        },
+        "house_angle": {
+          "name": "Husets vinkel",
+          "description": "Frontveggens retning i grader (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Takets helling",
+          "description": "Takets hellingsvinkel i grader (0-90)."
+        },
+        "roof_direction": {
+          "name": "Takets fallretning",
+          "description": "Siden som taket heller ned mot."
+        },
+        "camera_rotation_h": {
+          "name": "Vannrett kamerarotasjon",
+          "description": "Vannrett kamerarotasjon i grader (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Loddrett kamerarotasjon",
+          "description": "Loddrett kamerarotasjon i grader (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Kamerazoom",
+          "description": "Lagret zoomnivå for GLB-kameraet (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Fast solasimut",
+          "description": "Fast solasimut som brukes i kortets visuelle modus med fast sol (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Fast solposisjon og asimut (roter scenen)",
+          "description": "Hold solens asimut visuelt fast, og roter scenen i stedet."
+        },
+        "auto_rotate_speed": {
+          "name": "Automatisk rotasjonshastighet",
+          "description": "Kortets automatiske rotasjonshastighet i grader per sekund (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Effektsensor for taket",
+          "description": "Valgfri effektsensor som vises under takets prosentverdi."
+        },
+        "roof_power_enabled": {
+          "name": "Vis takets effektverdi",
+          "description": "Vis eller skjul takets effektverdi."
+        },
+        "roof_power_invert": {
+          "name": "Inverter takets effektverdi",
+          "description": "Inverter effektverdien (nyttig for sensorer som viser negativ eksport)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Status for takets retning mot solen",
+        "state": {
+          "at_peak": "På topp",
+          "approaching": "Nærmer seg",
+          "declining": "Avtar",
+          "unknown": "Ukjent"
+        }
+      }
+    }
+  }
+}
