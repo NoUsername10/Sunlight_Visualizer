@@ -1,88 +1,68 @@
-# Sunlight Visualizer
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="90" alt="Sunlight Visualizer icon">
+# ☀️ Sunlight Visualizer
 
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
-[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open Sunlight Visualizer in HACS." />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
+<img src="assets/icon@2x.png" width="90" alt="Sunlight Visualizer icon">
 
-**See where the sun hits, understand why, and use the values in automations.**
+## Bring sunlight, weather and energy to life in Home Assistant
 
-Sunlight Visualizer turns your home into a sun-aware dashboard: useful sensors for automations, plus a choice of a complete lightweight 2.5D scene or a full GLB/WebGL 3D house with lighting, shadows, power, and environmental effects.
+**An interactive 3D house for your dashboard. Useful sun and shading sensors for your automations.**
 
-> **Need the full guide?** This README is the quick visual front page. The complete setup guide, sensor explanations, automation examples, and troubleshooting live in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki).
+See which walls catch the sun, follow your roof's solar exposure, and bring day, night and changing weather into one visual card. Connect your existing power sensors to see solar generation, household consumption and grid flow alongside the house.
 
-## What You Get
-### Basic sensors (Without Open Meteo enabled)
-<p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-default.png" width="30%" alt="Default Sunlight Visualizer sensors">
+Great for anyone who wants a more visual Home Assistant dashboard—and practical values for smarter blinds, awnings and heating or cooling automations.
+
+<p align="center">
+  <img src="assets/readme/house-3d-day.png" width="900" alt="Sunlight Visualizer 3D house in daylight, with solar panels, wall and roof information, and the energy overview">
 </p>
 
-
-### Extended sensors (With Open Meteo enabled)
-<p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_1.png" width="30%" alt="Open-Meteo wall radiation sensors">
-    <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_2.png" width="30%" alt="Open-Meteo roof radiation sensors">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_3.png" width="30%" alt="Open-Meteo roof radiation sensors">
-</p>
-
-
-**Sensors first:** start simple with wall/roof sun alignment and wall sun angle, then optionally add Open-Meteo radiation, shading demand, shading status, and roof radiation.
-
-<p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="32%" alt="Sunlight Visualizer day scene">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-dawn.png" width="32%" alt="Sunlight Visualizer dawn scene">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="32%" alt="Sunlight Visualizer night scene">
-</p>
-
-**Then the house:** choose the complete SVG 2.5D visualizer or the full GLB/WebGL 3D scene. Both keep sun values, Energy HUD, camera controls, and graph dialogs in one compact Lovelace card.
-
-<p>
-  (Animated GIF, right click and select "Play Animation" if it does not autostart)
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/rotation.gif" width="60%" alt="Sunlight Visualizer rotating card preview">
-</p>
-
-Rotate the house manually, auto-rotate it, or save the view that best explains your installation.
-
-## Use It For
-- **Sunscreen Alert:** “UV attack incoming” — the sun reaches the pool, go outside and bring the sunscreen.
-- **Blind and awning control:** close only when the right wall has direct sun and the sun angle is low enough to matter.
-- **Heat-load HVAC prep:** pre-cool when roof or wall exposure rises, relax when exposure drops.
-- **Solar output insights:** compare roof sun/radiation with roof power to spot underperformance.
-
-## Quick Highlights
 <table>
   <tr>
-    <td><strong>Default setup</strong><br>Wall/Roof Sun Alignment + Wall Sun Angle. No external API needed.</td>
-    <td><strong>Open-Meteo</strong><br>Radiation Direct/Total, Shading Demand/Status, Roof Radiation.</td>
+    <th>🌙 From daylight to night lighting</th>
+    <th>❄️ Weather that becomes part of the scene</th>
   </tr>
   <tr>
-    <td><strong>Energy HUD</strong><br><code>SOLAR</code>, <code>HOME</code>, <code>GRID</code>, optional <code>CAR</code>, plus power pulses.</td>
-    <td><strong>Two renderers</strong><br>Automatic 3D with safe fallback, strict SVG 2.5D, or explicit full 3D.</td>
-  </tr>
-  <tr>
-    <td><strong>3D weather</strong><br>Optional clouds, rain, snow, fog, wind gusts, and horizon lightning.</td>
-    <td><strong>Built for motion</strong><br>Cached 3D scene/depth, selective shadow updates, and shader-driven effects.</td>
+    <td><img src="assets/readme/house-3d-night.png" width="450" alt="The bundled 3D house at night, with night lighting and illuminated exterior lamps"></td>
+    <td><img src="assets/readme/house-3d-weather.png" width="450" alt="Snow falling around the bundled 3D house, with current temperature and wind information"></td>
   </tr>
 </table>
 
-**Release focus:** `0.5.0` adds the 3D house renderer, optional Open-Meteo weather, a 26-language interface, zoom up to 4.5, and GLB performance and day/night lighting improvements. See [release notes](RELEASE_NOTES.md) for upgrade instructions and known limitations.
+*Actual card screenshots using the bundled 3D house and illustrative sensor/weather data. Configure the house orientation and roof tilt for your installation.*
 
-<details>
-<summary>Full feature highlights</summary><br>
+[<img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open Sunlight Visualizer in HACS" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
 
-- **A custom integration** (`sunlight_visualizer`) that calculates wall/roof sun values for automations.
-- **A Lovelace card** (`custom:sunlight-visualizer-card`) that shows the sun, house, roof, shadows, power flow, Energy HUD, and optional EV charging visuals.
-- **Wall and roof sun alignment:** geometric `%` values showing which surfaces face the sun.
-- **Wall Sun Angle:** always-on `°` values for how low/deep sunlight enters a lit wall or window.
-- **Open-Meteo radiation:** optional direct/total radiation, shading demand/status, and roof radiation using 15-minute forecast data.
-- **Optional 3D weather:** clouds, rain, snow, fog, wind gust leaves, horizon lightning, plus a compact current-weather overview.
-- **Location selection:** Home by default, or choose a `zone.*` override in setup/options.
-- **Surface `%` selectors:** choose whether labels show geometric alignment, shading demand, roof radiation percentage, or roof optimal-alignment percentage.
-- **Renderer choice:** `Automatic`, strict `2.5D`, or strict `3D`, with one shared set of sun, surface, power, HUD, and graph values.
-- **EV visuals:** 2.5D uses the SVG car; 3D keeps 3D scene visuals, with safe renderer fallback when WebGL is unavailable.
-- **Power visuals:** bidirectional grid pulse and EV charger pulse with improved occlusion and draw order.
-- **26-language interface:** Integration setup, options, services, the Lovelace editor, card controls, weather details, graphs, loading states, and 3D surface information follow the Home Assistant language with an English fallback.
+[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.0](RELEASE_NOTES.md)
 
-</details>
+## ✨ Features in short
+
+- 🏡 **Interactive 3D house included** — explore the scene with sunlight, shadows, solar panels and day/night lighting.
+- ☀️ **Sun awareness for every wall and the roof** — see alignment, sun angle and roof alignment trends at a glance.
+- 🪟 **Sensors for smarter shading and comfort** — use sun exposure and optional shading demand in your own blind, awning and HVAC automations.
+- 🌦️ **Optional Open-Meteo weather** — clouds, rain, snow, fog, wind gusts and lightning, plus temperature, wind and weather details.
+- ⚡ **Energy overview built into the card** — display solar, home and grid power using your existing sensors, with optional EV charging information.
+- 📈 **Tap a surface to explore its values** — open graph dialogs from wall and roof signs and compare sun alignment, radiation and shading information.
+- 👆 **Touch and mouse controls** — drag to rotate, pinch or scroll to zoom, auto-rotate, and save your favourite camera view.
+- 🪶 **A lightweight 2.5D option** — choose 3D, SVG-based 2.5D, or Automatic mode with fallback when 3D is unavailable.
+- 💤 **Pauses when out of view** — 3D rendering and weather stop when the whole card is offscreen, then resume when it returns.
+- 🛠️ **Visual setup and card editor** — configure the integration through Home Assistant and add the card from the dashboard card picker.
+- 🔌 **Core sun sensors work without an external weather API** — enable Open-Meteo separately for forecast radiation, shading and 3D weather.
+- 🌍 **26-language interface** — translated setup, options, services, card editor, controls, weather details, graphs and 3D surface information.
+
+## 🌍 In your language
+
+The interface follows your Home Assistant language, with English as the fallback.
+
+🇬🇧 English · 🇩🇪 Deutsch · 🇳🇱 Nederlands · 🇨🇿 Čeština · 🇵🇱 Polski · 🇵🇹 Português · 🇧🇷 Português (Brasil)
+
+🇪🇸 Español · 🌎 Español (Latinoamérica) · 🇮🇹 Italiano · 🇫🇷 Français · 🇸🇪 Svenska · 🇩🇰 Dansk · 🇳🇴 Norsk bokmål
+
+🇫🇮 Suomi · 🇱🇹 Lietuvių · 🇨🇳 简体中文 · 🇯🇵 日本語 · 🇹🇭 ไทย · 🇻🇳 Tiếng Việt
+
+🇧🇬 Български · 🇬🇷 Ελληνικά · 🇭🇺 Magyar · 🇷🇴 Română · 🇹🇷 Türkçe · 🇺🇦 Українська
+
+**Ready to try it?** Install through HACS, add the integration, then add the Sunlight Visualizer card to your dashboard. Home Assistant **2026.1.0 or newer** is required.
+
+> **Want the full guide?** Find setup instructions, sensor explanations, automation examples and troubleshooting in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki). See the [release notes](RELEASE_NOTES.md) for upgrade instructions and known limitations.
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
 ## Installation
 ### HACS - Recommended
@@ -198,6 +178,20 @@ Default diagnostics show the sun position and the coordinates currently used by 
 The status sensor is intentionally text-based. `OK` means the latest API data is healthy. Error/stale states expose attributes such as latest successful update, minutes since success, fetch attempts, API status, and last error.
 
 ## Renderer Modes
+
+<details>
+<summary>See the lightweight 2.5D view</summary>
+
+<p>
+  <img src="assets/house-day.png" width="32%" alt="Lightweight 2.5D house in daylight">
+  <img src="assets/house-dawn.png" width="32%" alt="Lightweight 2.5D house at dawn">
+  <img src="assets/house-night.png" width="32%" alt="Lightweight 2.5D house at night">
+</p>
+
+<img src="assets/rotation.gif" width="60%" alt="Animated rotation of the 2.5D card">
+
+</details>
+
 The card provides three clear renderer choices. Cards without an explicit selection use **Automatic**.
 
 | Renderer | What it does |
