@@ -494,12 +494,3 @@ cssFpsAutoLimitEnabled: true
 
 ## Changelog
 See [`CHANGELOG.md`](./CHANGELOG.md).
-
-## Local files and manual releases
-
-- The integration uses the fixed, baked model at `custom_components/sunlight_visualizer/www/models/experimental-house.glb`.
-- The original unbaked model is preserved at `assets/GLB/Original/experimental-house-original.glb`. Other original house models remain under `assets/GLB/House*`.
-- Editable Blender originals and baking tools are under `assets/Blender/`. These are authoring assets, not installed integration files.
-- Double-click `Skapa ZIP.command` (or run `python3 scripts/package_release.py`) to rebuild the two ZIPs in `release-artifacts/`. Build the frontend first after code changes.
-- For GitHub, extract the source ZIP and upload the contents of its top-level folder to the repository root. For small updates, upload the changed files to the matching paths; remove obsolete files explicitly. No local Git is required.
-- Do not upload `node_modules`, authoring assets or generated ZIPs as integration files. Wait for the GitHub validation workflows before publishing.
