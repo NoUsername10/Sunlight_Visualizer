@@ -1,4 +1,4 @@
-# ☀️ Sunlight Visualizer
+5# ☀️ Sunlight Visualizer
 
 <img src="assets/icon@2x.png" width="90" alt="Sunlight Visualizer icon">
 
@@ -15,11 +15,19 @@ Core sunlight sensors work without an external weather API. Optional Open-Meteo 
 
 **Sunlight is the foundation.** Weather effects and an energy overview are optional additions to the visualization. You can use the sunlight sensors and card without setting up weather or power sensors.
 
-<p align="center">
-  <img src="assets/readme/house-3d-day.png" width="900" alt="Sunlight alignment and shading information on each wall and the roof of the interactive house; the optional energy overview is also shown">
-</p>
+<table>
+  <tr>
+    <th>🖼️ House Overview</th>
+    <th>🎞️ GIF Animation (Right click, Play animation"</th>
 
-*Configure the house direction and roof tilt for your home and see the actual sunlight and shadows on your house.*
+  </tr>
+  <tr>
+    <td><img src="assets/readme/house-3d-day.png" width="450" alt="House view"></td>
+    <td><img src="assets/readme/rotation.gif" width="450" alt="House animation"></td>
+  </tr>
+</table>
+
+
 
 [<img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open Sunlight Visualizer in HACS" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
 
