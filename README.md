@@ -33,7 +33,7 @@ Core sunlight sensors work without an external weather API. Optional Open-Meteo 
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
-[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.1](RELEASE_NOTES.md)
+[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.1](CHANGELOG.md)
 
 ## ☀️ Sunlight and shading at the centre
 
