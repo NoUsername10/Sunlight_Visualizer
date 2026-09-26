@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Planned
 - Configurable placement for the 2.5D power pole and tree.
 
+## [0.5.1] - 2026-09-26
+
+### Added
+- Camera rotation, zoom, save/restore buttons and angle readouts fade after three seconds of inactivity in both 2.5D and 3D. Touch, mouse movement and keyboard focus reveal them; active gestures and rotation keep them available. Hidden controls do not intercept scene interaction.
+
 ## [0.5.0] - 2026-09-18
 
 ### Added
