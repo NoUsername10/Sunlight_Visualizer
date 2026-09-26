@@ -18,7 +18,7 @@ Core sunlight sensors work without an external weather API. Optional Open-Meteo 
 <table>
   <tr>
     <th>🖼️ House Overview</th>
-    <th>🎞️ GIF Animation (Right click, Play animation"</th>
+    <th>🎞️ GIF Animation (Right click, select Play animation)</th>
 
   </tr>
   <tr>
