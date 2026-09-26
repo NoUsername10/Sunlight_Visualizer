@@ -6,9 +6,12 @@
 
 **A sunlight and shading integration for Home Assistant, with an interactive house card that makes its sensors easy to understand.**
 
-Sunlight Visualizer uses your location, house direction and roof tilt to calculate how the sun aligns with each wall and the roof. See which surfaces face the sun, follow the sun's angle through the day, and use the resulting sensors in your own blind, awning, heating and cooling automations.
+Sunlight Visualizer uses your location, house direction and roof tilt to calculate how the sun aligns with each wall and the roof. 
+See which surfaces face the sun, follow the sun's angle through the day, and use the resulting sensors in your own blind, awning, heating and cooling automations.
 
-The house card brings those values together visually. Choose an interactive **3D house** or a lightweight **2.5D view**, and tap wall or roof signs to explore their values. Core sunlight sensors work without an external weather API. Optional Open-Meteo radiation and shading sensors add forecast-based context when you need it.
+The house card brings those values together visually. 
+Choose an interactive **3D house** or a lightweight **2.5D view**, and tap wall or roof signs to explore their values. 
+Core sunlight sensors work without an external weather API. Optional Open-Meteo radiation and shading sensors add forecast-based context when you need it.
 
 **Sunlight is the foundation.** Weather effects and an energy overview are optional additions to the visualization. You can use the sunlight sensors and card without setting up weather or power sensors.
 
@@ -16,7 +19,7 @@ The house card brings those values together visually. Choose an interactive **3D
   <img src="assets/readme/house-3d-day.png" width="900" alt="Sunlight alignment and shading information on each wall and the roof of the interactive house; the optional energy overview is also shown">
 </p>
 
-*Actual card screenshot with the bundled house and illustrative sensor data. Configure the house direction and roof tilt for your home.*
+*Configure the house direction and roof tilt for your home and see the actual sunlight and shadows on your house.*
 
 [<img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open Sunlight Visualizer in HACS" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
 
@@ -52,16 +55,45 @@ The house card brings those values together visually. Choose an interactive **3D
 The interface follows your Home Assistant language, with English as the fallback.
 
 🇬🇧 English · 🇩🇪 Deutsch · 🇳🇱 Nederlands · 🇨🇿 Čeština · 🇵🇱 Polski · 🇵🇹 Português · 🇧🇷 Português (Brasil)
-
 🇪🇸 Español · 🌎 Español (Latinoamérica) · 🇮🇹 Italiano · 🇫🇷 Français · 🇸🇪 Svenska · 🇩🇰 Dansk · 🇳🇴 Norsk bokmål
-
 🇫🇮 Suomi · 🇱🇹 Lietuvių · 🇨🇳 简体中文 · 🇯🇵 日本語 · 🇹🇭 ไทย · 🇻🇳 Tiếng Việt
-
 🇧🇬 Български · 🇬🇷 Ελληνικά · 🇭🇺 Magyar · 🇷🇴 Română · 🇹🇷 Türkçe · 🇺🇦 Українська
 
 **Ready to try it?** Install through HACS, add the integration, then add the Sunlight Visualizer card to your dashboard. Home Assistant **2026.1.0 or newer** is required.
 
 > **Want the full guide?** Find setup instructions, sensor explanations, automation examples and troubleshooting in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki). See the [release notes](RELEASE_NOTES.md) for upgrade instructions and known limitations.
+
+
+## Optional 3D Weather Visuals
+Weather is an optional visual companion to the sunlight and shading sensors.
+
+<table>
+  <tr>
+    <th>🌧️ Rain and lightning</th>
+    <th>❄️ Snow</th>
+    <th>🌙 From daylight to night lighting</th>
+  </tr>
+  <tr>
+    <td><img src="assets/readme/house-3d-thunder-rain.png" width="450" alt="Rain falling around the bundled 3D house during a thunderstorm, with a visible lightning bolt and storm clouds"></td>
+    <td><img src="assets/readme/house-3d-weather.png" width="450" alt="Snow falling around the bundled 3D house, with temperature and wind information"></td>
+     <td><img src="assets/readme/house-3d-night.png" width="450" alt="The bundled 3D house at night, with night lighting and illuminated exterior lamps"></td>
+  </tr>
+</table>
+
+
+Open-Meteo weather visuals are a separate opt-in layer for the full 3D renderer. Enable **3D weather visuals** in the integration options, then choose the visual strength in the card editor.
+
+The integration provides a `3D Weather` entity and the card can show:
+- drifting clouds and daylight dimming,
+- rain, snow, and fog,
+- wind-direction-aware leaf gusts,
+- animated horizon lightning during thunderstorms,
+- a compact weather chip with condition, temperature, and wind direction,
+- a detailed popup with current conditions, wind, visibility, and sunrise/sunset information.
+
+Card visual strengths are `Automatic`, `Subtle`, `Normal`, `Strong`, and `Off`. Automatic adapts the effects to the reported weather. These effects are GLB/3D-only: the complete 2.5D SVG renderer remains unchanged, and disabling the weather option leaves the core sunlight integration behavior intact.
+
+
 
 
 ## Installation
@@ -153,34 +185,6 @@ Open-Meteo can also clean up its own radiation entities when you disable it. In 
 | `Wall Shading Demand` | Automation: should blinds/awnings probably react? |
 | `Wall Shading Status` | Dashboard text for humans. |
 | `Roof Radiation Percentage` | How close the roof is to today’s radiation peak. |
-
-## Optional 3D Weather Visuals
-Weather is an optional visual companion to the sunlight and shading sensors.
-
-<table>
-  <tr>
-    <th>🌧️ Rain and lightning</th>
-    <th>❄️ Snow</th>
-  </tr>
-  <tr>
-    <td><img src="assets/readme/house-3d-thunder-rain.png" width="450" alt="Rain falling around the bundled 3D house during a thunderstorm, with a visible lightning bolt and storm clouds"></td>
-    <td><img src="assets/readme/house-3d-weather.png" width="450" alt="Snow falling around the bundled 3D house, with temperature and wind information"></td>
-  </tr>
-</table>
-
-*Actual card captures with illustrative weather data. The storm image uses the card's weather test mode and captures a lightning flash during rainfall.*
-
-Open-Meteo weather visuals are a separate opt-in layer for the full 3D renderer. Enable **3D weather visuals** in the integration options, then choose the visual strength in the card editor.
-
-The integration provides a `3D Weather` entity and the card can show:
-- drifting clouds and daylight dimming,
-- rain, snow, and fog,
-- wind-direction-aware leaf gusts,
-- animated horizon lightning during thunderstorms,
-- a compact weather chip with condition, temperature, and wind direction,
-- a detailed popup with current conditions, wind, visibility, and sunrise/sunset information.
-
-Card visual strengths are `Automatic`, `Subtle`, `Normal`, `Strong`, and `Off`. Automatic adapts the effects to the reported weather. These effects are GLB/3D-only: the complete 2.5D SVG renderer remains unchanged, and disabling the weather option leaves the core sunlight integration behavior intact.
 
 ## Diagnostics
 <p>
