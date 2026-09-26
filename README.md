@@ -1,6 +1,6 @@
 ## ☀️ Sunlight Visualizer
 
-<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="90" alt="Sunlight Visualizer icon">
+<img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/icon@2x.png" width="90" alt="Sunlight Visualizer icon">
 
 ## See where the sun reaches your home—and put that knowledge to work
 
@@ -22,8 +22,8 @@ Core sunlight sensors work without an external weather API. Optional Open-Meteo 
 
   </tr>
   <tr>
-    <td><img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/house-3d-day.png" width="450" alt="House view"></td>
-    <td><img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/rotation.gif" width="450" alt="House animation"></td>
+    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/house-3d-day.png" width="450" alt="House view"></td>
+    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/rotation.gif" width="450" alt="House animation"></td>
   </tr>
 </table>
 
@@ -82,9 +82,9 @@ Weather is an optional visual companion to the sunlight and shading sensors.
     <th>🌙 From daylight to night lighting</th>
   </tr>
   <tr>
-    <td><img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/house-3d-thunder-rain.png" width="450" alt="Rain falling around the bundled 3D house during a thunderstorm, with a visible lightning bolt and storm clouds"></td>
-    <td><img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/house-3d-weather.png" width="450" alt="Snow falling around the bundled 3D house, with temperature and wind information"></td>
-     <td><img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/house-3d-night.png" width="450" alt="The bundled 3D house at night, with night lighting and illuminated exterior lamps"></td>
+    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/house-3d-thunder-rain.png" width="450" alt="Rain falling around the bundled 3D house during a thunderstorm, with a visible lightning bolt and storm clouds"></td>
+    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/house-3d-weather.png" width="450" alt="Snow falling around the bundled 3D house, with temperature and wind information"></td>
+     <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/house-3d-night.png" width="450" alt="The bundled 3D house at night, with night lighting and illuminated exterior lamps"></td>
   </tr>
 </table>
 
@@ -130,8 +130,8 @@ The `?v=0.5.1` query string is a cache-busting version marker. It helps browsers
 
 ## Basic Setup
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/setup-configuration.png" width="45%" alt="Sunlight Visualizer setup configuration">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/setup-options.png" width="45%" alt="Sunlight Visualizer options flow">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/setup-configuration.png" width="45%" alt="Sunlight Visualizer setup configuration">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/setup-options.png" width="45%" alt="Sunlight Visualizer options flow">
 </p>
 
 **Default setup uses your Home Assistant Home location.** If you need a different place, choose a `zone.*` override. If the selected zone is removed or unavailable, the integration safely falls back to Home.
@@ -150,7 +150,7 @@ When Open-Meteo is enabled, the integration fetches 15-minute forecast radiation
 
 ## Default Sensors
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-default.png" width="45%" alt="Default Sunlight Visualizer sensors">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/sensors-default.png" width="45%" alt="Default Sunlight Visualizer sensors">
 </p>
 
 These sensors are always available without any external weather API:
@@ -165,9 +165,9 @@ A simple blind/awning automation can start with **Wall Sun Alignment** and **Wal
 
 ## Optional Open-Meteo Sensors
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_1.png" width="31%" alt="Open-Meteo wall radiation sensors part 1">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_2.png" width="31%" alt="Open-Meteo wall radiation sensors part 2">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/sensors-extended_3.png" width="31%" alt="Open-Meteo roof radiation sensors">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/sensors-extended_1.png" width="31%" alt="Open-Meteo wall radiation sensors part 1">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/sensors-extended_2.png" width="31%" alt="Open-Meteo wall radiation sensors part 2">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/sensors-extended_3.png" width="31%" alt="Open-Meteo roof radiation sensors">
 </p>
 
 Open-Meteo support is opt-in because it uses an external API. When enabled, the integration adds radiation and shading sensors while keeping the default sun-alignment sensors unchanged.
@@ -196,8 +196,8 @@ Open-Meteo can also clean up its own radiation entities when you disable it. In 
 
 ## Diagnostics
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/diagnostic-default.png" width="38%" alt="Default diagnostic sensors">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/diagnostic-extended.png" width="38%" alt="Open-Meteo diagnostic sensors">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/diagnostic-default.png" width="38%" alt="Default diagnostic sensors">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/diagnostic-extended.png" width="38%" alt="Open-Meteo diagnostic sensors">
 </p>
 
 Default diagnostics show the sun position and the coordinates currently used by the integration. With Open-Meteo enabled, diagnostics also show raw API radiation values and **Open-Meteo Radiation Status**.
@@ -206,7 +206,7 @@ The status sensor is intentionally text-based. `OK` means the latest API data is
 
 ## Renderer Modes
 <p align="center">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/house-3d-night.png" width="650" alt="The bundled house at night, with exterior lighting and nighttime surface information">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/house-3d-night.png" width="650" alt="The bundled house at night, with exterior lighting and nighttime surface information">
 </p>
 
 *The same sunlight visualization also follows the transition into night. Illustrative sensor data shown.*
@@ -216,9 +216,9 @@ The status sensor is intentionally text-based. `OK` means the latest API data is
 <summary>See the lightweight 2.5D view</summary>
 
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="32%" alt="Lightweight 2.5D house in daylight">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-dawn.png" width="32%" alt="Lightweight 2.5D house at dawn">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="32%" alt="Lightweight 2.5D house at night">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/house-day.png" width="32%" alt="Lightweight 2.5D house in daylight">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/house-dawn.png" width="32%" alt="Lightweight 2.5D house at dawn">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/house-night.png" width="32%" alt="Lightweight 2.5D house at night">
 </p>
 
 </details>
@@ -237,9 +237,9 @@ Automatic and 3D modes show a dedicated loading screen while the model is prepar
 
 ## Visual Card Configuration
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual-card-configuration-1.png" width="32%" alt="Visual card configuration orientation and percentage sources">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual-card-configuration-2.png" width="32%" alt="Visual card configuration power and EV options">
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/visual-card-configuration-3.png" width="32%" alt="Visual card configuration HUD options">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/visual-card-configuration-1.png" width="32%" alt="Visual card configuration orientation and percentage sources">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/visual-card-configuration-2.png" width="32%" alt="Visual card configuration power and EV options">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/visual-card-configuration-3.png" width="32%" alt="Visual card configuration HUD options">
 </p>
 
 The visual editor is designed so most users do not need YAML. It includes:
@@ -277,37 +277,37 @@ Roof percentage source options:
 Legacy manual entity overrides still work when the new source selectors are not explicitly set. For new setups, the visual selectors are recommended.
 
 ## Sensor Visual Guide
-<details>
+
 <summary>Open the visual sensor guide</summary><br>
 
 These diagrams explain how the main values relate to each other.
 
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/sensor-guide-overview.svg" width="90%" alt="Sensor guide overview">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/sensor-guide-overview.svg" width="90%" alt="Sensor guide overview">
 </p>
 
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/wall-sunlight-explained.svg" width="90%" alt="Wall sun alignment explained">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/wall-sunlight-explained.svg" width="90%" alt="Wall sun alignment explained">
 </p>
 
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/wall-sun-angle-explained.svg" width="90%" alt="Wall sun angle explained">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/wall-sun-angle-explained.svg" width="90%" alt="Wall sun angle explained">
 </p>
 
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/radiation-types-explained.svg" width="90%" alt="Radiation types explained">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/radiation-types-explained.svg" width="90%" alt="Radiation types explained">
 </p>
 
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/shading-demand-explained.svg" width="90%" alt="Shading demand explained">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/shading-demand-explained.svg" width="90%" alt="Shading demand explained">
 </p>
 
 <p>
-  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/roof-radiation-explained.svg" width="90%" alt="Roof radiation explained">
+  <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/roof-radiation-explained.svg" width="90%" alt="Roof radiation explained">
 </p>
 
 For deeper examples and troubleshooting, use the [Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki).
-</details>
+
 
 ## What The Integration Creates
 <details>
