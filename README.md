@@ -1,6 +1,6 @@
-5# ☀️ Sunlight Visualizer
+## ☀️ Sunlight Visualizer
 
-<img src="assets/icon@2x.png" width="90" alt="Sunlight Visualizer icon">
+<img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/icon@2x.png" width="90" alt="Sunlight Visualizer icon">
 
 ## See where the sun reaches your home—and put that knowledge to work
 
@@ -22,8 +22,8 @@ Core sunlight sensors work without an external weather API. Optional Open-Meteo 
 
   </tr>
   <tr>
-    <td><img src="assets/readme/house-3d-day.png" width="450" alt="House view"></td>
-    <td><img src="assets/readme/rotation.gif" width="450" alt="House animation"></td>
+    <td><img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/house-3d-day.png" width="450" alt="House view"></td>
+    <td><img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/rotation.gif" width="450" alt="House animation"></td>
   </tr>
 </table>
 
@@ -82,9 +82,9 @@ Weather is an optional visual companion to the sunlight and shading sensors.
     <th>🌙 From daylight to night lighting</th>
   </tr>
   <tr>
-    <td><img src="assets/readme/house-3d-thunder-rain.png" width="450" alt="Rain falling around the bundled 3D house during a thunderstorm, with a visible lightning bolt and storm clouds"></td>
-    <td><img src="assets/readme/house-3d-weather.png" width="450" alt="Snow falling around the bundled 3D house, with temperature and wind information"></td>
-     <td><img src="assets/readme/house-3d-night.png" width="450" alt="The bundled 3D house at night, with night lighting and illuminated exterior lamps"></td>
+    <td><img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/house-3d-thunder-rain.png" width="450" alt="Rain falling around the bundled 3D house during a thunderstorm, with a visible lightning bolt and storm clouds"></td>
+    <td><img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/house-3d-weather.png" width="450" alt="Snow falling around the bundled 3D house, with temperature and wind information"></td>
+     <td><img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/house-3d-night.png" width="450" alt="The bundled 3D house at night, with night lighting and illuminated exterior lamps"></td>
   </tr>
 </table>
 
@@ -206,7 +206,7 @@ The status sensor is intentionally text-based. `OK` means the latest API data is
 
 ## Renderer Modes
 <p align="center">
-  <img src="assets/readme/house-3d-night.png" width="650" alt="The bundled house at night, with exterior lighting and nighttime surface information">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/house-3d-night.png" width="650" alt="The bundled house at night, with exterior lighting and nighttime surface information">
 </p>
 
 *The same sunlight visualization also follows the transition into night. Illustrative sensor data shown.*
@@ -216,12 +216,10 @@ The status sensor is intentionally text-based. `OK` means the latest API data is
 <summary>See the lightweight 2.5D view</summary>
 
 <p>
-  <img src="assets/house-day.png" width="32%" alt="Lightweight 2.5D house in daylight">
-  <img src="assets/house-dawn.png" width="32%" alt="Lightweight 2.5D house at dawn">
-  <img src="assets/house-night.png" width="32%" alt="Lightweight 2.5D house at night">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-day.png" width="32%" alt="Lightweight 2.5D house in daylight">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-dawn.png" width="32%" alt="Lightweight 2.5D house at dawn">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/house-night.png" width="32%" alt="Lightweight 2.5D house at night">
 </p>
-
-<img src="assets/rotation.gif" width="60%" alt="Animated rotation of the 2.5D card">
 
 </details>
 
@@ -285,27 +283,27 @@ Legacy manual entity overrides still work when the new source selectors are not 
 These diagrams explain how the main values relate to each other.
 
 <p>
-  <img src="assets/readme/sensor-guide-overview.svg" width="90%" alt="Sensor guide overview">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/sensor-guide-overview.svg" width="90%" alt="Sensor guide overview">
 </p>
 
 <p>
-  <img src="assets/readme/wall-sunlight-explained.svg" width="90%" alt="Wall sun alignment explained">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/wall-sunlight-explained.svg" width="90%" alt="Wall sun alignment explained">
 </p>
 
 <p>
-  <img src="assets/readme/wall-sun-angle-explained.svg" width="90%" alt="Wall sun angle explained">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/wall-sun-angle-explained.svg" width="90%" alt="Wall sun angle explained">
 </p>
 
 <p>
-  <img src="assets/readme/radiation-types-explained.svg" width="90%" alt="Radiation types explained">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/radiation-types-explained.svg" width="90%" alt="Radiation types explained">
 </p>
 
 <p>
-  <img src="assets/readme/shading-demand-explained.svg" width="90%" alt="Shading demand explained">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/shading-demand-explained.svg" width="90%" alt="Shading demand explained">
 </p>
 
 <p>
-  <img src="assets/readme/roof-radiation-explained.svg" width="90%" alt="Roof radiation explained">
+  <img src="https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/assets/readme/roof-radiation-explained.svg" width="90%" alt="Roof radiation explained">
 </p>
 
 For deeper examples and troubleshooting, use the [Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki).
