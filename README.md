@@ -517,11 +517,6 @@ cssFpsAutoLimitEnabled: true
 ## Validation / Localization / Notes
 - Release version: `0.5.1`; requires Home Assistant `2026.1.0` or newer.
 - HACS-friendly resource registration is handled by the integration.
-- HACS/Hassfest validation is expected for release checks.
-- Backend release smoke tests run against Home Assistant `2026.1.0` and the latest stable release, covering core calculations, coordinator refresh/cache behavior, config-entry setup, and bundled asset registration. See [`tests/README.md`](./tests/README.md).
-- Integration setup/options/services and card interface translations: English, German, Dutch, Czech, Polish, European Portuguese, Brazilian Portuguese, Spanish, Latin American Spanish, Italian, French, Swedish, Danish, Norwegian Bokmål, Finnish, Lithuanian, Simplified Chinese, Japanese, Thai, Vietnamese, Bulgarian, Greek, Hungarian, Romanian, Turkish, and Ukrainian.
-- Existing sensor entity IDs and friendly names are unchanged; entity friendly names remain English.
-- Translation validation checks all backend and frontend locale files for exact key coverage and placeholder safety as part of `npm run check`.
 - In Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED` and disables live solar-alignment calculation for testing.
 - The [Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) has the deeper setup guide, automation examples, troubleshooting steps, and sensor explanations.
 
