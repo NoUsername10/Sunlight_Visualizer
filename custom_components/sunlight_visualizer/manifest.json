@@ -15,5 +15,5 @@
   "integration_type": "service",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/NoUsername10/Sunlight_Visualizer/issues",
-  "version": "0.5.2"
+  "version": "0.5.3"
 }

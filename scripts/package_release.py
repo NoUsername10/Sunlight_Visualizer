@@ -2,6 +2,7 @@
 from pathlib import Path
 import hashlib
 import json
+import shutil
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -70,7 +71,17 @@ github = OUTPUT/f'Sunlight_Visualizer-{version}-github.zip'
 roots = ['.github','custom_components','tests','scripts','wiki','assets','Icons']
 github_files = [p for name in roots for p in (ROOT/name).rglob('*') if allowed(p)]
 github_files += [p for p in ROOT.iterdir() if allowed(p) and (p.suffix in {'.md','.json','.command'} or p.name in {'LICENSE','.gitignore'})]
-write_archive(github,set(github_files),prefix='sunlight_visualizer/')
+github_inventory = write_archive(github,set(github_files),prefix='sunlight_visualizer/')
+# Keep the loose drag-and-drop upload folder in sync with the verified GitHub ZIP.
+staged = OUTPUT/'sunlight_visualizer'
+if staged.exists():
+    shutil.rmtree(staged)
+with zipfile.ZipFile(github) as z:
+    z.extractall(OUTPUT)
+for name, digest in github_inventory.items():
+    if hashlib.sha256((OUTPUT/name).read_bytes()).hexdigest() != digest:
+        raise SystemExit('Staged GitHub upload mismatch: '+name)
+print(f'Verified staged GitHub upload: {len(github_inventory)} files')
 (OUTPUT/'SHA256SUMS').write_text(''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n' for p in [github,installation]))
 # Retire the old generated upload archive so it cannot publish card source by mistake.
 legacy_source = OUTPUT/f'Sunlight_Visualizer-{version}-source.zip'
