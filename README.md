@@ -22,14 +22,16 @@ Core sunlight sensors work without an external weather API. Optional Open-Meteo 
 
   </tr>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/house-3d-day.png" width="450" alt="House view"></td>
-    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/rotation.gif" width="450" alt="House animation"></td>
+    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/house-3d-day1.png" width="450" alt="House view"></td>
+    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/rotation1.gif" width="450" alt="House animation"></td>
   </tr>
 </table>
 
 
 
 [<img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open Sunlight Visualizer in HACS" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
+
+If you like this integration you can fuel the next update with caffeine :-)
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
