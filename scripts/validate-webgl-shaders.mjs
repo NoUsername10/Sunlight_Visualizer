@@ -32,7 +32,7 @@ const expectBakedNightLighting = process.env.SV_EXPECT_BAKED_NIGHT_LIGHTING === 
 
 const REQUIRED_PROGRAM_KEYS = [
   "sv-glb-static-color-depth-v1",
-  "sv-weather-cloud-deck-v7",
+  "sv-weather-cloud-deck-v8",
   "sv-weather-rain-instanced-v11",
   "sv-weather-rain-splashes-v9",
   "sv-weather-rain-splash-droplets-v2",
@@ -102,6 +102,8 @@ function findBrowser() {
 }
 
 function smokePage() {
+  if (process.argv.includes("--night-sky")) return readFileSync(join(scriptDir, "fixtures", "night-sky-smoke.html"), "utf8");
+  if (process.env.SV_SURROUNDINGS_SMOKE === "1" || process.argv.includes("--surroundings")) return readFileSync(join(scriptDir, "fixtures", "surroundings-smoke.html"), "utf8");
   const sunState = expectBakedNightLighting ? "below_horizon" : "above_horizon";
   const sunElevation = expectBakedNightLighting ? -18 : 45;
   return `<!doctype html>
@@ -176,6 +178,27 @@ function smokePage() {
         throw new Error("Transient empty renderer selector event changed the saved mode");
       }
 
+      const pauseControls = () => new Promise((resolve) => setTimeout(resolve, 3300));
+      const assertControls = async (target, visible, label) => {
+        const controls = [...target.shadowRoot.querySelectorAll(".cam-btn, .cam-readout")];
+        if (!controls.length) throw new Error(label + ": missing controls");
+        if (target.hasAttribute("data-camera-controls-visible") !== visible) {
+          throw new Error(label + ": incorrect visibility state");
+        }
+        for (const control of controls) {
+          // CSS transitions settle on rendered frames, not JavaScript timers.
+          const deadline = performance.now() + 1500;
+          let style = getComputedStyle(control);
+          while (style.opacity !== (visible ? "1" : "0") && performance.now() < deadline) {
+            await new Promise((resolve) => setTimeout(resolve, 40));
+            style = getComputedStyle(control);
+          }
+          if (!visible && (style.opacity !== "0" || style.pointerEvents !== "none")) {
+            throw new Error(label + ": hidden control still visible or intercepting touches: " + control.className + " opacity=" + style.opacity + " pointerEvents=" + style.pointerEvents);
+          }
+        }
+      };
+
       const svgCard = document.createElement("sunlight-visualizer-card");
       svgCard.setConfig({
         rendererMode: "two_point_five_d",
@@ -214,7 +237,39 @@ function smokePage() {
       if (Number(svgCard._autoRotateOffsetDeg || 0) === rotationBefore) {
         throw new Error("2.5D drag control did not update camera rotation");
       }
+      await assertControls(svgCard, true, "Initial controls");
+      await pauseControls();
+      await assertControls(svgCard, false, "Idle 2.5D controls");
+      // Exercise the actual DOM listeners, including touch cancellation outside
+      // the host, without a fake pointer ID reaching native setPointerCapture.
+      svgCard.dispatchEvent(new PointerEvent("pointerdown", { pointerId: 23, pointerType: "touch", bubbles: true }));
+      await pauseControls();
+      await assertControls(svgCard, true, "Long touch hold");
+      window.dispatchEvent(new PointerEvent("pointercancel", { pointerId: 23, pointerType: "touch" }));
+      await pauseControls();
+      await assertControls(svgCard, false, "Cancelled touch");
+      const saveButton = svgCard.shadowRoot.querySelector(".cam-btn-save");
+      saveButton.focus();
+      if (!saveButton.matches(":focus-visible")) throw new Error("Keyboard focus not established");
+      await pauseControls();
+      await assertControls(svgCard, true, "Keyboard focus");
+      saveButton.blur();
+      await pauseControls();
+      await assertControls(svgCard, false, "Keyboard focus left the card");
+      svgCard.dispatchEvent(new PointerEvent("pointermove", { pointerType: "mouse", bubbles: true }));
+      await assertControls(svgCard, true, "Mouse reveal");
+      svgCard.shadowRoot.querySelector(".cam-btn-h1").click();
+      await svgCard.updateComplete;
+      await pauseControls();
+      await assertControls(svgCard, true, "Rotation stop controls");
+      svgCard.shadowRoot.querySelector(".cam-btn-h1").click();
+      await svgCard.updateComplete;
+      await pauseControls();
+      await assertControls(svgCard, false, "Stopped rotation");
+      svgCard.dispatchEvent(new WheelEvent("wheel", { bubbles: true }));
+      await assertControls(svgCard, true, "Wheel reveal");
       svgCard.remove();
+      if (svgCard._cameraControlsVisibility.timer !== null) throw new Error("Detached card retained controls timer");
 
       const card = document.createElement("sunlight-visualizer-card");
       card.setConfig({
@@ -250,6 +305,7 @@ function smokePage() {
       let visibilityValidated = false;
       let gestureValidated = false;
       let colorParityValidated = false;
+      let controlsValidated = false;
       const colorParityResults = [];
       let fogBudgetResult = "";
       const validateViewportPause = async () => {
@@ -280,6 +336,7 @@ function smokePage() {
           await card.updateComplete;
           const pausedFrames = frames;
           const weatherTime = card._threeHouseWeatherVisuals.rainUniforms.time.value;
+          const sockVersion = card._threeHouseWindsock.cloth.geometry.getAttribute("position").version;
           const rotation = card._autoRotateOffsetDeg;
           card.hass = { ...hass };
           card.setConfig({ ...card._config });
@@ -288,6 +345,9 @@ function smokePage() {
           card._scheduleThreeHouseVisualLoop(false, 20);
           card._renderThreeHouseScene();
           await sleep(250);
+          if (card._threeHouseWindsock.cloth.geometry.getAttribute("position").version !== sockVersion) {
+            throw new Error(label + ": offscreen windsock still animated");
+          }
           if (frames !== pausedFrames || card._threeHouseWeatherVisuals.rainUniforms.time.value !== weatherTime) {
             throw new Error(label + ": hidden scene continued rendering/animating");
           }
@@ -301,7 +361,9 @@ function smokePage() {
         const assertResumed = async (label) => {
           const pausedFrames = frames;
           const weatherTime = card._threeHouseWeatherVisuals.rainUniforms.time.value;
+          const sockVersion = card._threeHouseWindsock.cloth.geometry.getAttribute("position").version;
           await waitFor(() => card._threeHouseInViewport && frames > pausedFrames
+            && card._threeHouseWindsock.cloth.geometry.getAttribute("position").version > sockVersion
             && card._threeHouseWeatherVisuals.rainUniforms.time.value > weatherTime, label + ": animation did not resume");
           if (card._threeHouseRenderer !== renderer || card._threeHouseModel !== model) {
             throw new Error(label + ": visibility change recreated the renderer/model");
@@ -538,8 +600,17 @@ function smokePage() {
             finish("failed", "3D renderer canvas is missing");
             return;
           }
+          if (!controlsValidated) {
+            await pauseControls();
+            await assertControls(card, false, "Idle 3D controls");
+            const hud = card.shadowRoot.querySelector(".weather-chip");
+            if (hud && getComputedStyle(hud).opacity === "0") throw new Error("Camera auto-hide also hid weather");
+            card.dispatchEvent(new PointerEvent("pointermove", { bubbles: true, pointerType: "mouse" }));
+            await assertControls(card, true, "3D reveal");
+            controlsValidated = true;
+          }
           const zoomBefore = card._threeHouseZoom;
-          card._changeThreeHouseZoom(0.25);
+          card.shadowRoot.querySelector(".glb-zoom-in").click();
           if (!(card._threeHouseZoom > zoomBefore)) {
             finish("failed", "3D zoom control did not update camera zoom");
             return;
@@ -676,9 +747,14 @@ function smokePage() {
             finish("failed", "3D weather animation did not resume after card reconnection");
             return;
           }
+          const sock = card._threeHouseWindsock;
+          if (!sock?.group.visible || sock.cloth.geometry.index.count / 3 !== 480) {
+            finish("failed", "Windsock missing after reconnect or exceeded cloth mesh budget");
+            return;
+          }
           finish(
             "passed",
-            "validated strict 2.5D/3D behavior, native viewport scroll/hide pause, partial visibility resume, hidden HA updates, save/move/reconnect animation recovery, and compiled "
+            "validated windsock visibility, offscreen pause/resume and reconnect, camera auto-hide/reveal, touch hold/cancel, keyboard focus/blur, rotation stop and zoom buttons, strict 2.5D/3D behavior, native viewport scroll/hide pause, partial visibility resume, hidden HA updates, save/move/reconnect animation recovery, and compiled "
               + required.length
               + " required Three.js programs; color parity: " + colorParityResults.join("; ") + "; " + fogBudgetResult,
           );
@@ -902,7 +978,7 @@ try {
   ]);
 
   let result = { status: "pending", detail: "" };
-  const deadline = Date.now() + 45000;
+  const deadline = Date.now() + 75000;
   while (Date.now() < deadline) {
     const response = await send(
       "Runtime.evaluate",
@@ -935,6 +1011,15 @@ try {
     );
   }
 
+  if (process.env.SV_SURROUNDINGS_DEBUG_DIR && process.argv.includes("--surroundings")) {
+    const frames = await send("Runtime.evaluate", {
+      expression: "window.testFrames", returnByValue: true,
+    }, sessionId);
+    for (const [name, dataUrl] of Object.entries(frames?.result?.value || {})) {
+      writeFileSync(join(process.env.SV_SURROUNDINGS_DEBUG_DIR, `${name}.png`),
+        Buffer.from(String(dataUrl).split(",")[1], "base64"));
+    }
+  }
   console.log(`WebGL shader compile smoke OK: ${result.detail}`);
 } finally {
   if (child && child.exitCode === null) child.kill("SIGTERM");

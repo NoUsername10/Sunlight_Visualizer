@@ -7,6 +7,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Planned
 - Configurable placement for the 2.5D power pole and tree.
 
+## [0.5.3] - 2026-10-01
+
+### Added
+- 3D surroundings with rolling terrain, instanced trees and shrubs enabled by default, with an explicit off switch and independently switchable background haze. Scenery uses the existing static cache; haze shares scene depth and pauses offscreen.
+- An independent 3D windsock near the left end of the roof when weather visuals are enabled. Five orange/white bands use a custom 3 m/s per band scale, reaching full extension at 15 m/s. It follows weather wind direction and smoothly alternates steady wind with illustrative gusts, using a small cloth-like mesh and the existing offscreen-paused animation loop.
+
+### Fixed
+- Darken the 3D house and garden in daytime thunderstorms so they match the storm sky, while preserving the illustrative tree and house shadows and leaving sensor calculations unchanged.
+- Keep tree and house shadows legible at full cloud cover using a visual-only sun key; strengthen clear-day directional contrast and colour without changing calculated radiation or shading values.
+- Give fully overcast daylight a gentle directional sky fill so the unlit house wall remains darker, while keeping exposure and sunlight sensor values unchanged.
+- Keep background haze behind nearer clouds, match its tint to the rendered sky, and soften the distance fade so hills and trees do not form a pale horizontal band.
+- Place the projected shadow receiver just above the baked GLB garden, where its shadow is visible. Strengthen it under very high cloud cover without restoring harsh direct sunlight; sensor calculations are unchanged.
+- Give clear daylight stronger directional contrast than full cloud cover. Direct-sun lighting now prefers DNI/direct radiation over global shortwave radiation and fades with cloud cover, while diffuse fill, exposure and sensor values remain unchanged.
+- Keep the animated windsock clear of background haze by depth-testing the haze against the existing composite depth buffer; no extra geometry or render pass.
+- Start experimental background haze at the actual scaled compass ring, keeping the house and area inside the ring clear with a gradual fade beyond it.
+- Strengthen sunrise/sunset colours around 5° sun elevation, including cloudy skies and warm house/cloud tint, while preserving balanced exposure, light intensities and diffuse luminance.
+- Distribute the existing 190 night stars across a full upper sky dome. Render stars behind both cloud layers so cloud opacity naturally obscures their glow instead of stars being drawn over the clouds.
+- Restore greener surroundings near the house and lower slopes, limiting grey-brown rock to the higher peaks. Preserve golden-hour warmth and low-angle sunlight contrast against the stronger sky fill, with blue night tint fading in after sunset.
+- Keep the GLB garden texture within the house model. Experimental surroundings now use their own static procedural green meadow clearing and grey-brown rock on higher peaks, adapted from the Three.js terrain example while sharing scene lighting.
+- Balance diffuse house/terrain lighting against the evolving sky rather than direct solar radiation. Clouds share the sky tint, smooth twilight transition and renderer tone mapping; soften the daytime vignette to preserve ground visibility.
+- Removed diagonal baked-light/AO seams from flat wall panels, window panes/trim and the garden using continuous padded UV islands. Preserved GLB contact shadows and night lighting. Softened background haze into a broad gradual distance fade instead of a dense ring around the clearing.
+- Let the 3D sky and experimental background haze follow gradual sunrise/sunset colours while preserving the full daytime palette. Weather sky blending now fades through twilight instead of switching at the sun-visibility threshold.
+- Show wind leaf bursts about every 20 seconds after the initial burst; weather updates no longer restart them early.
+- Spread partial cloud cover and cloud fade timing around the whole sky so opposite camera views no longer favour one cloud-filled side.
+
+## [0.5.2] - 2026-09-26
+
+### Added
+- Fixed errors in readme.
+
 ## [0.5.1] - 2026-09-26
 
 ### Added
