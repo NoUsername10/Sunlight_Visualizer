@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sunlight Visualizer 配置",
+        "description": "配置 Sunlight Visualizer 集成。当前使用的位置：{location_name}（{latitude}, {longitude}），来源：{location_source}",
+        "data": {
+          "location_source": "位置来源",
+          "location_zone_entity": "使用区域覆盖",
+          "use_custom_angle": "使用自定义角度（而非罗盘方向）",
+          "direction": "罗盘方向（选择入户门朝向）",
+          "roof_direction": "屋顶坡向（向下倾斜的一侧）",
+          "roof_power_entity": "屋顶功率传感器（可选）",
+          "roof_power_enabled": "显示屋顶功率标签",
+          "roof_power_invert": "反转屋顶功率（强制为正值）",
+          "fixed_sun_rotation_enabled": "固定太阳位置（方位角），旋转场景",
+          "auto_rotate_speed": "自动旋转速度（deg/sec）",
+          "house_angle": "房屋朝向角度（单位：度，0° = 正面朝北）",
+          "ceiling_tilt": "顶棚倾斜角度（0-90°，0 = 水平）",
+          "update_interval": "更新间隔（分钟）",
+          "radiation_enabled": "启用 Open-Meteo 太阳辐射传感器",
+          "weather_visuals_enabled": "启用 3D 天气视觉效果"
+        },
+        "data_description": {
+          "location_source": "选择 Home Assistant 位置（默认）或自定义区域。",
+          "location_zone_entity": "选择一个区域来覆盖位置，或选择“使用家庭位置”（默认）。如果该区域缺失或不可用，将自动使用家庭位置。",
+          "use_custom_angle": "选中可输入精确角度；取消选中则选择罗盘方向",
+          "direction": "选择入户门所朝向的罗盘方向（N、NE、E 等）。",
+          "roof_direction": "选择屋顶向下倾斜的一侧",
+          "roof_power_entity": "选择要显示在屋顶 % 数值下方的功率传感器（W/kW）",
+          "roof_power_enabled": "在屋顶 % 数值下方显示屋顶功率值",
+          "roof_power_invert": "反转功率值（适用于传感器值为负数的情况）",
+          "fixed_sun_rotation_enabled": "在视觉上固定太阳方位角，改为旋转场景",
+          "auto_rotate_speed": "卡片的默认自动旋转速度（1-90 deg/sec）",
+          "house_angle": "房屋正面相对于北方的角度（0-359°）",
+          "ceiling_tilt": "顶棚/太阳能板的倾斜角度（0° = 水平，90° = 垂直）",
+          "update_interval": "重新计算太阳位置的频率（1-60 分钟）",
+          "radiation_enabled": "太阳升起期间，每 15 分钟从 Open-Meteo 获取未来 15 分钟的辐射预报；太阳落下后则每小时获取一次。此选项会添加墙面/屋顶辐射传感器。由于会调用外部 API，默认禁用。",
+          "weather_visuals_enabled": "从 Open-Meteo 获取当前天气，用于可选且仅限 3D 的云、降水、风、雾和地平线闪电效果。绝不会更改 2.5D 渲染器。"
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "纬度必须在 -90 到 90 度之间",
+      "invalid_longitude": "经度必须在 -180 到 180 度之间",
+      "invalid_house_angle": "房屋角度必须在 0 到 360 度之间",
+      "invalid_ceiling_tilt": "顶棚倾斜角度必须在 0 到 90 度之间",
+      "invalid_update_interval": "更新间隔必须在 1 到 60 分钟之间",
+      "invalid_auto_rotate_speed": "自动旋转速度必须在 1 到 90 deg/sec 之间",
+      "invalid_force_sun_azimuth": "强制太阳方位角必须在 0 到 359 度之间",
+      "invalid_force_sun_elevation": "强制太阳高度角必须在 -90 到 90 度之间",
+      "invalid_coordinates": "请输入有效的坐标小数值",
+      "latitude_out_of_range": "纬度必须在 -90° 到 90° 之间",
+      "longitude_out_of_range": "经度必须在 -180° 到 180° 之间",
+      "direction_required": "未使用自定义角度时，请选择罗盘方向",
+      "unknown": "发生意外错误"
+    },
+    "abort": {
+      "single_instance_allowed": "只能创建一个 Sunlight Visualizer 配置。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Sunlight Visualizer 选项",
+        "description": "更新 Sunlight Visualizer 配置。当前使用的位置：{location_name}（{current_lat}, {current_lon}），来源：{source}",
+        "data": {
+          "location_source": "位置来源",
+          "location_zone_entity": "使用区域覆盖",
+          "use_custom_angle": "使用自定义角度（而非罗盘方向）",
+          "direction": "罗盘方向（选择入户门朝向）",
+          "roof_direction": "屋顶坡向（向下倾斜的一侧）",
+          "roof_power_entity": "屋顶功率传感器（可选）",
+          "roof_power_enabled": "显示屋顶功率标签",
+          "roof_power_invert": "反转屋顶功率（强制为正值）",
+          "fixed_sun_rotation_enabled": "固定太阳位置（方位角），旋转场景",
+          "force_sun_fallback": "强制使用太阳位置回退值",
+          "force_sun_azimuth": "强制太阳方位角",
+          "force_sun_elevation": "强制太阳高度角",
+          "auto_rotate_speed": "自动旋转速度（deg/sec）",
+          "house_angle": "房屋朝向角度（单位：度，0° = 正面朝北）",
+          "ceiling_tilt": "顶棚倾斜角度（0-90°，0 = 水平）",
+          "update_interval": "更新间隔（分钟）",
+          "radiation_enabled": "启用 Open-Meteo 太阳辐射传感器",
+          "remove_radiation_entities_on_disable": "禁用时移除 Open-Meteo 传感器",
+          "weather_visuals_enabled": "启用 3D 天气视觉效果"
+        },
+        "data_description": {
+          "location_source": "选择 Home Assistant 位置（默认）或自定义区域。",
+          "location_zone_entity": "选择一个区域来覆盖位置，或选择“使用家庭位置”（默认）。如果该区域缺失或不可用，将自动使用家庭位置。",
+          "use_custom_angle": "选中可输入精确角度；取消选中则选择罗盘方向",
+          "direction": "选择入户门所朝向的罗盘方向（N、NE、E 等）。",
+          "roof_direction": "选择屋顶向下倾斜的一侧",
+          "roof_power_entity": "选择要显示在屋顶 % 数值下方的功率传感器（W/kW）",
+          "roof_power_enabled": "在屋顶 % 数值下方显示屋顶功率值",
+          "roof_power_invert": "反转功率值（适用于传感器值为负数的情况）",
+          "fixed_sun_rotation_enabled": "在视觉上固定太阳方位角，改为旋转场景",
+          "force_sun_fallback": "强制使用太阳位置回退值（测试用）",
+          "force_sun_azimuth": "强制使用回退值时采用的方位角（0-359°）",
+          "force_sun_elevation": "强制使用回退值时采用的高度角（-90° 到 90°）",
+          "auto_rotate_speed": "卡片的默认自动旋转速度（1-90 deg/sec）",
+          "house_angle": "房屋正面相对于北方的角度（0-359°）",
+          "ceiling_tilt": "顶棚/太阳能板的倾斜角度（0° = 水平，90° = 垂直）",
+          "update_interval": "重新计算太阳位置的频率（1-60 分钟）",
+          "radiation_enabled": "太阳升起期间，每 15 分钟从 Open-Meteo 获取未来 15 分钟的辐射预报；太阳落下后则每小时获取一次。此选项会添加墙面/屋顶辐射传感器。由于会调用外部 API，默认禁用。",
+          "remove_radiation_entities_on_disable": "关闭 Open-Meteo 辐射功能时，仅从 Home Assistant 中移除 Open-Meteo/辐射实体。常规日照传感器会保留。",
+          "weather_visuals_enabled": "从 Open-Meteo 获取当前天气，用于可选且仅限 3D 的云、降水、风、雾和地平线闪电效果。绝不会更改 2.5D 渲染器。"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "设置选项",
+      "description": "更新当前配置条目的 Sunlight Visualizer 选项。",
+      "fields": {
+        "entry_id": {
+          "name": "配置条目 ID",
+          "description": "可选。如果省略，将使用第一个 Sunlight Visualizer 配置条目。"
+        },
+        "house_angle": {
+          "name": "房屋朝向角度",
+          "description": "正面墙体的朝向角度（0-359）。"
+        },
+        "ceiling_tilt": {
+          "name": "顶棚倾斜角",
+          "description": "屋顶倾斜角度（0-90）。"
+        },
+        "roof_direction": {
+          "name": "屋顶坡向",
+          "description": "屋顶向下倾斜的一侧。"
+        },
+        "camera_rotation_h": {
+          "name": "相机旋转 H",
+          "description": "相机的水平旋转角度（0-359）。"
+        },
+        "camera_rotation_v": {
+          "name": "相机旋转 V",
+          "description": "相机的垂直旋转角度（0-90）。"
+        },
+        "camera_zoom": {
+          "name": "相机缩放",
+          "description": "已保存的 GLB 相机缩放级别（1.15-4.5）。"
+        },
+        "fixed_sun_azimuth": {
+          "name": "固定太阳方位角",
+          "description": "卡片在固定太阳视觉模式下使用的固定太阳方位角（0-359）。"
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "固定太阳位置（方位角），旋转场景",
+          "description": "在视觉上固定太阳方位角，改为旋转场景"
+        },
+        "auto_rotate_speed": {
+          "name": "自动旋转速度",
+          "description": "卡片的自动旋转速度，单位为度/秒（1-90）。"
+        },
+        "roof_power_entity": {
+          "name": "屋顶功率传感器",
+          "description": "显示在屋顶百分比下方的可选功率传感器。"
+        },
+        "roof_power_enabled": {
+          "name": "显示屋顶功率标签",
+          "description": "显示或隐藏屋顶功率标签。"
+        },
+        "roof_power_invert": {
+          "name": "反转屋顶功率值",
+          "description": "反转功率值（适用于将输出功率报告为负数的传感器）。"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "屋顶日照朝向匹配状态",
+        "state": {
+          "at_peak": "处于峰值",
+          "approaching": "接近峰值",
+          "declining": "正在下降",
+          "unknown": "未知"
+        }
+      }
+    }
+  }
+}

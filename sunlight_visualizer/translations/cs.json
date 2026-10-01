@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Nastavení Sunlight Visualizer",
+        "description": "Nastavte integraci Sunlight Visualizer. Aktivní poloha: {location_name} ({latitude}, {longitude}) ze zdroje {location_source}",
+        "data": {
+          "location_source": "Zdroj polohy",
+          "location_zone_entity": "Alternativní zóna",
+          "use_custom_angle": "Použít vlastní úhel (místo světové strany)",
+          "direction": "Světová strana (vyberte směr, kterým jsou orientovány vstupní dveře)",
+          "roof_direction": "Směr sklonu střechy (nižší strana)",
+          "roof_power_entity": "Senzor výkonu střechy (volitelné)",
+          "roof_power_enabled": "Zobrazit údaj o výkonu střechy",
+          "roof_power_invert": "Obrátit výkon střechy (vynutit kladnou hodnotu)",
+          "fixed_sun_rotation_enabled": "Pevný azimut Slunce (otáčet scénu)",
+          "auto_rotate_speed": "Rychlost automatického otáčení (deg/sec)",
+          "house_angle": "Natočení domu (stupně, 0° = průčelí na sever)",
+          "ceiling_tilt": "Úhel sklonu stropu (0-90°, 0 = vodorovně)",
+          "update_interval": "Interval aktualizace (minuty)",
+          "radiation_enabled": "Povolit senzory slunečního záření Open-Meteo",
+          "weather_visuals_enabled": "Povolit 3D efekty počasí"
+        },
+        "data_description": {
+          "location_source": "Vyberte polohu z Home Assistant (výchozí) nebo vlastní zónu.",
+          "location_zone_entity": "Vyberte alternativní zónu nebo možnost Použít domov (výchozí). Pokud zóna chybí nebo není dostupná, automaticky se použije poloha domova.",
+          "use_custom_angle": "Zaškrtnutím zadáte přesný úhel, zrušením zaškrtnutí vyberete světovou stranu",
+          "direction": "Vyberte světovou stranu (S, SV, V atd.), kterou jsou orientovány vstupní dveře.",
+          "roof_direction": "Vyberte stranu domu, ke které se střecha svažuje",
+          "roof_power_entity": "Vyberte senzor výkonu, který se zobrazí pod procentuálním údajem střechy (%) (W/kW)",
+          "roof_power_enabled": "Zobrazit hodnotu výkonu střechy pod procentuálním údajem střechy (%)",
+          "roof_power_invert": "Obrátit hodnoty výkonu (užitečné, pokud senzor vrací záporné hodnoty)",
+          "fixed_sun_rotation_enabled": "Ponechat azimut Slunce ve vizualizaci pevný a místo něj otáčet scénu",
+          "auto_rotate_speed": "Výchozí rychlost automatického otáčení karty (1-90 deg/sec)",
+          "house_angle": "Úhel průčelí domu vzhledem k severu (0-359°)",
+          "ceiling_tilt": "Úhel sklonu stropu/solárních panelů (0° = vodorovně, 90° = svisle)",
+          "update_interval": "Jak často přepočítávat polohu Slunce (1-60 minut)",
+          "radiation_enabled": "Za dne načítá z Open-Meteo každých 15 minut předpověď záření v 15minutových intervalech a v noci každou hodinu. Přidá senzory záření pro stěny a střechu. Ve výchozím nastavení je vypnuto, protože používá externí API.",
+          "weather_visuals_enabled": "Načítá aktuální počasí z Open-Meteo pro volitelné mraky, srážky, vítr, mlhu a blesky na obzoru zobrazované pouze ve 3D. Vykreslování ve 2.5D se nikdy nemění."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Zeměpisná šířka musí být mezi -90 a 90 stupni",
+      "invalid_longitude": "Zeměpisná délka musí být mezi -180 a 180 stupni",
+      "invalid_house_angle": "Natočení domu musí být mezi 0 a 360 stupni",
+      "invalid_ceiling_tilt": "Sklon stropu musí být mezi 0 a 90 stupni",
+      "invalid_update_interval": "Interval aktualizace musí být mezi 1 a 60 minutami",
+      "invalid_auto_rotate_speed": "Rychlost automatického otáčení musí být mezi 1 a 90 deg/sec",
+      "invalid_force_sun_azimuth": "Vynucený azimut Slunce musí být mezi 0 a 359 stupni",
+      "invalid_force_sun_elevation": "Vynucená výška Slunce musí být mezi -90 a 90 stupni",
+      "invalid_coordinates": "Zadejte platná desetinná čísla souřadnic",
+      "latitude_out_of_range": "Zeměpisná šířka musí být mezi -90° a 90°",
+      "longitude_out_of_range": "Zeměpisná délka musí být mezi -180° a 180°",
+      "direction_required": "Pokud nepoužíváte vlastní úhel, vyberte světovou stranu",
+      "unknown": "Došlo k neočekávané chybě"
+    },
+    "abort": {
+      "single_instance_allowed": "Je povoleno pouze jedno nastavení Sunlight Visualizer."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Možnosti Sunlight Visualizer",
+        "description": "Aktualizujte nastavení Sunlight Visualizer. Aktivní poloha: {location_name} ({current_lat}, {current_lon}) ze zdroje {source}",
+        "data": {
+          "location_source": "Zdroj polohy",
+          "location_zone_entity": "Alternativní zóna",
+          "use_custom_angle": "Použít vlastní úhel (místo světové strany)",
+          "direction": "Světová strana (vyberte směr, kterým jsou orientovány vstupní dveře)",
+          "roof_direction": "Směr sklonu střechy (nižší strana)",
+          "roof_power_entity": "Senzor výkonu střechy (volitelné)",
+          "roof_power_enabled": "Zobrazit údaj o výkonu střechy",
+          "roof_power_invert": "Obrátit výkon střechy (vynutit kladnou hodnotu)",
+          "fixed_sun_rotation_enabled": "Pevný azimut Slunce (otáčet scénu)",
+          "force_sun_fallback": "Vynutit náhradní hodnoty polohy Slunce",
+          "force_sun_azimuth": "Vynutit azimut Slunce",
+          "force_sun_elevation": "Vynutit výšku Slunce",
+          "auto_rotate_speed": "Rychlost automatického otáčení (deg/sec)",
+          "house_angle": "Natočení domu (stupně, 0° = průčelí na sever)",
+          "ceiling_tilt": "Úhel sklonu stropu (0-90°, 0 = vodorovně)",
+          "update_interval": "Interval aktualizace (minuty)",
+          "radiation_enabled": "Povolit senzory slunečního záření Open-Meteo",
+          "remove_radiation_entities_on_disable": "Při vypnutí odebrat senzory Open-Meteo",
+          "weather_visuals_enabled": "Povolit 3D efekty počasí"
+        },
+        "data_description": {
+          "location_source": "Vyberte polohu z Home Assistant (výchozí) nebo vlastní zónu.",
+          "location_zone_entity": "Vyberte alternativní zónu nebo možnost Použít domov (výchozí). Pokud zóna chybí nebo není dostupná, automaticky se použije poloha domova.",
+          "use_custom_angle": "Zaškrtnutím zadáte přesný úhel, zrušením zaškrtnutí vyberete světovou stranu",
+          "direction": "Vyberte světovou stranu (S, SV, V atd.), kterou jsou orientovány vstupní dveře.",
+          "roof_direction": "Vyberte stranu domu, ke které se střecha svažuje",
+          "roof_power_entity": "Vyberte senzor výkonu, který se zobrazí pod procentuálním údajem střechy (%) (W/kW)",
+          "roof_power_enabled": "Zobrazit hodnotu výkonu střechy pod procentuálním údajem střechy (%)",
+          "roof_power_invert": "Obrátit hodnoty výkonu (užitečné, pokud senzor vrací záporné hodnoty)",
+          "fixed_sun_rotation_enabled": "Ponechat azimut Slunce ve vizualizaci pevný a místo něj otáčet scénu",
+          "force_sun_fallback": "Vynutit náhradní hodnoty polohy Slunce (testování)",
+          "force_sun_azimuth": "Azimut použitý při vynucení náhradních hodnot (0-359°)",
+          "force_sun_elevation": "Výška Slunce použitá při vynucení náhradních hodnot (-90° až 90°)",
+          "auto_rotate_speed": "Výchozí rychlost automatického otáčení karty (1-90 deg/sec)",
+          "house_angle": "Úhel průčelí domu vzhledem k severu (0-359°)",
+          "ceiling_tilt": "Úhel sklonu stropu/solárních panelů (0° = vodorovně, 90° = svisle)",
+          "update_interval": "Jak často přepočítávat polohu Slunce (1-60 minut)",
+          "radiation_enabled": "Za dne načítá z Open-Meteo každých 15 minut předpověď záření v 15minutových intervalech a v noci každou hodinu. Přidá senzory záření pro stěny a střechu. Ve výchozím nastavení je vypnuto, protože používá externí API.",
+          "remove_radiation_entities_on_disable": "Při vypnutí záření Open-Meteo odebere z Home Assistant pouze entity Open-Meteo/záření. Běžné senzory slunečního svitu zůstanou zachovány.",
+          "weather_visuals_enabled": "Načítá aktuální počasí z Open-Meteo pro volitelné mraky, srážky, vítr, mlhu a blesky na obzoru zobrazované pouze ve 3D. Vykreslování ve 2.5D se nikdy nemění."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Nastavit možnosti",
+      "description": "Aktualizuje možnosti Sunlight Visualizer pro aktivní položku konfigurace.",
+      "fields": {
+        "entry_id": {
+          "name": "ID položky konfigurace",
+          "description": "Volitelné. Pokud není uvedeno, použije se první položka Sunlight Visualizer."
+        },
+        "house_angle": {
+          "name": "Natočení domu",
+          "description": "Směr průčelí ve stupních (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Sklon stropu",
+          "description": "Úhel sklonu střechy ve stupních (0-90)."
+        },
+        "roof_direction": {
+          "name": "Směr sklonu střechy",
+          "description": "Strana, ke které se střecha svažuje."
+        },
+        "camera_rotation_h": {
+          "name": "Otočení kamery H",
+          "description": "Vodorovné otočení kamery ve stupních (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Otočení kamery V",
+          "description": "Svislé otočení kamery ve stupních (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Přiblížení kamery",
+          "description": "Uložená úroveň přiblížení kamery GLB (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Pevný azimut Slunce",
+          "description": "Pevný azimut Slunce používaný v režimu karty s vizuálně pevným Sluncem (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Pevný azimut Slunce (otáčet scénu)",
+          "description": "Ponechat azimut Slunce ve vizualizaci pevný a místo něj otáčet scénu"
+        },
+        "auto_rotate_speed": {
+          "name": "Rychlost automatického otáčení",
+          "description": "Rychlost automatického otáčení karty ve stupních za sekundu (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Senzor výkonu střechy",
+          "description": "Volitelný senzor výkonu zobrazený pod procentuálním údajem střechy."
+        },
+        "roof_power_enabled": {
+          "name": "Zobrazit údaj o výkonu střechy",
+          "description": "Zobrazit nebo skrýt údaj o výkonu střechy."
+        },
+        "roof_power_invert": {
+          "name": "Obrátit hodnotu výkonu střechy",
+          "description": "Obrátit hodnotu výkonu (užitečné pro senzory, které vykazují export jako zápornou hodnotu)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Stav natočení střechy vůči Slunci",
+        "state": {
+          "at_peak": "Na maximu",
+          "approaching": "Blíží se",
+          "declining": "Klesá",
+          "unknown": "Neznámý"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sunlight Visualizer konfigūracija",
+        "description": "Konfigūruokite Sunlight Visualizer integraciją. Aktyvi vieta: {location_name} ({latitude}, {longitude}), šaltinis: {location_source}",
+        "data": {
+          "location_source": "Vietos šaltinis",
+          "location_zone_entity": "Vietą pakeičianti zona",
+          "use_custom_angle": "Naudoti pasirinktinį kampą (vietoj kompaso krypties)",
+          "direction": "Kompaso kryptis (pasirinkite kryptį, į kurią nukreiptos priekinės durys)",
+          "roof_direction": "Stogo nuolydžio kryptis",
+          "roof_power_entity": "Stogo galios jutiklis (nebūtina)",
+          "roof_power_enabled": "Rodyti stogo galios reikšmę",
+          "roof_power_invert": "Apversti stogo galios ženklą (padaryti reikšmę teigiamą)",
+          "fixed_sun_rotation_enabled": "Fiksuota saulės padėtis ir azimutas (sukti sceną)",
+          "auto_rotate_speed": "Automatinio sukimosi greitis (laipsn./sek.)",
+          "house_angle": "Namo kampas (laipsniais, 0° = fasadas nukreiptas į šiaurę)",
+          "ceiling_tilt": "Stogo posvyrio kampas (0-90°, 0 = horizontaliai)",
+          "update_interval": "Atnaujinimo intervalas (minutėmis)",
+          "radiation_enabled": "Įjungti Open-Meteo spinduliuotės jutiklius",
+          "weather_visuals_enabled": "Įjungti 3D orų efektus"
+        },
+        "data_description": {
+          "location_source": "Pasirinkite Home Assistant vietą (numatyta) arba pasirinktinę zoną.",
+          "location_zone_entity": "Pasirinkite vietą pakeičiančią zoną arba Naudoti namų vietą (numatyta). Jei zonos nėra arba ji nepasiekiama, automatiškai naudojama namų vieta.",
+          "use_custom_angle": "Pažymėkite, jei norite įvesti tikslų kampą. Panaikinkite žymėjimą, jei norite pasirinkti kompaso kryptį.",
+          "direction": "Pasirinkite kompaso kryptį (N, NE, E ir t. t.), į kurią nukreiptos priekinės durys.",
+          "roof_direction": "Pasirinkite namo pusę, į kurią leidžiasi stogo nuolydis.",
+          "roof_power_entity": "Pasirinkite galios jutiklį, kuris bus rodomas po stogo procentine reikšme (W/kW).",
+          "roof_power_enabled": "Rodyti stogo galios reikšmę po procentine reikšme.",
+          "roof_power_invert": "Apversti galios reikšmių ženklą (naudinga, jei jutiklis rodo neigiamas reikšmes).",
+          "fixed_sun_rotation_enabled": "Ekrane išlaikyti fiksuotą saulės azimutą ir vietoj jo sukti sceną.",
+          "auto_rotate_speed": "Numatytasis kortelės automatinio sukimosi greitis (1-90 laipsn./sek.).",
+          "house_angle": "Namo fasado kampas šiaurės atžvilgiu (0-359°).",
+          "ceiling_tilt": "Stogo arba saulės modulių posvyrio kampas (0° = plokščias, 90° = vertikalus).",
+          "update_interval": "Kaip dažnai perskaičiuoti saulės padėtį (1-60 minučių).",
+          "radiation_enabled": "Gauti 15 minučių spinduliuotės prognozę iš Open-Meteo kas 15 minučių, kol saulė yra pakilusi, ir kas valandą jai nusileidus. Pridedami sienų ir stogo spinduliuotės jutikliai. Pagal numatytuosius nustatymus funkcija išjungta, nes naudojama išorinė API.",
+          "weather_visuals_enabled": "Gauti dabartinius orus iš Open-Meteo pasirinktiniams debesų, kritulių, vėjo, rūko ir žaibų horizonte efektams, rodomiems tik 3D. 2.5D atvaizdavimas niekada nekeičiamas."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Platuma turi būti nuo -90 iki 90 laipsnių",
+      "invalid_longitude": "Ilguma turi būti nuo -180 iki 180 laipsnių",
+      "invalid_house_angle": "Namo kampas turi būti nuo 0 iki 360 laipsnių",
+      "invalid_ceiling_tilt": "Stogo posvyris turi būti nuo 0 iki 90 laipsnių",
+      "invalid_update_interval": "Atnaujinimo intervalas turi būti nuo 1 iki 60 minučių",
+      "invalid_auto_rotate_speed": "Automatinio sukimosi greitis turi būti nuo 1 iki 90 laipsn./sek.",
+      "invalid_force_sun_azimuth": "Priverstinai nustatytas saulės azimutas turi būti nuo 0 iki 359 laipsnių",
+      "invalid_force_sun_elevation": "Priverstinai nustatytas saulės aukštis turi būti nuo -90 iki 90 laipsnių",
+      "invalid_coordinates": "Įveskite galiojančius dešimtainius koordinačių skaičius",
+      "latitude_out_of_range": "Platuma turi būti nuo -90° iki 90°",
+      "longitude_out_of_range": "Ilguma turi būti nuo -180° iki 180°",
+      "direction_required": "Kai pasirinktinis kampas nenaudojamas, pasirinkite kompaso kryptį",
+      "unknown": "Įvyko netikėta klaida"
+    },
+    "abort": {
+      "single_instance_allowed": "Leidžiama tik viena Sunlight Visualizer konfigūracija."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Sunlight Visualizer parinktys",
+        "description": "Atnaujinkite Sunlight Visualizer konfigūraciją. Aktyvi vieta: {location_name} ({current_lat}, {current_lon}), šaltinis: {source}",
+        "data": {
+          "location_source": "Vietos šaltinis",
+          "location_zone_entity": "Vietą pakeičianti zona",
+          "use_custom_angle": "Naudoti pasirinktinį kampą (vietoj kompaso krypties)",
+          "direction": "Kompaso kryptis (pasirinkite kryptį, į kurią nukreiptos priekinės durys)",
+          "roof_direction": "Stogo nuolydžio kryptis",
+          "roof_power_entity": "Stogo galios jutiklis (nebūtina)",
+          "roof_power_enabled": "Rodyti stogo galios reikšmę",
+          "roof_power_invert": "Apversti stogo galios ženklą (padaryti reikšmę teigiamą)",
+          "fixed_sun_rotation_enabled": "Fiksuota saulės padėtis ir azimutas (sukti sceną)",
+          "force_sun_fallback": "Priverstinai naudoti atsargines saulės reikšmes",
+          "force_sun_azimuth": "Priverstinai nustatyti saulės azimutą",
+          "force_sun_elevation": "Priverstinai nustatyti saulės aukštį",
+          "auto_rotate_speed": "Automatinio sukimosi greitis (laipsn./sek.)",
+          "house_angle": "Namo kampas (laipsniais, 0° = fasadas nukreiptas į šiaurę)",
+          "ceiling_tilt": "Stogo posvyrio kampas (0-90°, 0 = horizontaliai)",
+          "update_interval": "Atnaujinimo intervalas (minutėmis)",
+          "radiation_enabled": "Įjungti Open-Meteo spinduliuotės jutiklius",
+          "remove_radiation_entities_on_disable": "Išjungiant pašalinti Open-Meteo jutiklius",
+          "weather_visuals_enabled": "Įjungti 3D orų efektus"
+        },
+        "data_description": {
+          "location_source": "Pasirinkite Home Assistant vietą (numatyta) arba pasirinktinę zoną.",
+          "location_zone_entity": "Pasirinkite vietą pakeičiančią zoną arba Naudoti namų vietą (numatyta). Jei zonos nėra arba ji nepasiekiama, automatiškai naudojama namų vieta.",
+          "use_custom_angle": "Pažymėkite, jei norite įvesti tikslų kampą. Panaikinkite žymėjimą, jei norite pasirinkti kompaso kryptį.",
+          "direction": "Pasirinkite kompaso kryptį (N, NE, E ir t. t.), į kurią nukreiptos priekinės durys.",
+          "roof_direction": "Pasirinkite namo pusę, į kurią leidžiasi stogo nuolydis.",
+          "roof_power_entity": "Pasirinkite galios jutiklį, kuris bus rodomas po stogo procentine reikšme (W/kW).",
+          "roof_power_enabled": "Rodyti stogo galios reikšmę po procentine reikšme.",
+          "roof_power_invert": "Apversti galios reikšmių ženklą (naudinga, jei jutiklis rodo neigiamas reikšmes).",
+          "fixed_sun_rotation_enabled": "Ekrane išlaikyti fiksuotą saulės azimutą ir vietoj jo sukti sceną.",
+          "force_sun_fallback": "Priverstinai naudoti atsargines saulės reikšmes (bandymams).",
+          "force_sun_azimuth": "Azimutas, naudojamas su priverstinėmis atsarginėmis reikšmėmis (0-359°).",
+          "force_sun_elevation": "Saulės aukštis, naudojamas su priverstinėmis atsarginėmis reikšmėmis (-90°–90°).",
+          "auto_rotate_speed": "Numatytasis kortelės automatinio sukimosi greitis (1-90 laipsn./sek.).",
+          "house_angle": "Namo fasado kampas šiaurės atžvilgiu (0-359°).",
+          "ceiling_tilt": "Stogo arba saulės modulių posvyrio kampas (0° = plokščias, 90° = vertikalus).",
+          "update_interval": "Kaip dažnai perskaičiuoti saulės padėtį (1-60 minučių).",
+          "radiation_enabled": "Gauti 15 minučių spinduliuotės prognozę iš Open-Meteo kas 15 minučių, kol saulė yra pakilusi, ir kas valandą jai nusileidus. Pridedami sienų ir stogo spinduliuotės jutikliai. Pagal numatytuosius nustatymus funkcija išjungta, nes naudojama išorinė API.",
+          "remove_radiation_entities_on_disable": "Išjungus Open-Meteo spinduliuotę, iš Home Assistant pašalinti tik su Open-Meteo ir spinduliuote susijusius objektus. Įprasti saulės šviesos jutikliai išlieka.",
+          "weather_visuals_enabled": "Gauti dabartinius orus iš Open-Meteo pasirinktiniams debesų, kritulių, vėjo, rūko ir žaibų horizonte efektams, rodomiems tik 3D. 2.5D atvaizdavimas niekada nekeičiamas."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Nustatyti parinktis",
+      "description": "Atnaujinti aktyvaus Sunlight Visualizer konfigūracijos įrašo parinktis.",
+      "fields": {
+        "entry_id": {
+          "name": "Konfigūracijos įrašo ID",
+          "description": "Nebūtina. Jei nenurodyta, naudojamas pirmasis Sunlight Visualizer įrašas."
+        },
+        "house_angle": {
+          "name": "Namo kampas",
+          "description": "Priekinės sienos kryptis laipsniais (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Stogo posvyris",
+          "description": "Stogo posvyrio kampas laipsniais (0-90)."
+        },
+        "roof_direction": {
+          "name": "Stogo nuolydžio kryptis",
+          "description": "Pusė, į kurią leidžiasi stogo nuolydis."
+        },
+        "camera_rotation_h": {
+          "name": "Horizontalus kameros pasukimas",
+          "description": "Horizontalus kameros pasukimas laipsniais (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Vertikalus kameros pasukimas",
+          "description": "Vertikalus kameros pasukimas laipsniais (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Kameros mastelis",
+          "description": "Išsaugotas GLB kameros mastelio lygis (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Fiksuotas saulės azimutas",
+          "description": "Fiksuotas saulės azimutas, naudojamas kortelės fiksuotos saulės vaizdo režime (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Fiksuota saulės padėtis ir azimutas (sukti sceną)",
+          "description": "Ekrane išlaikyti fiksuotą saulės azimutą ir vietoj jo sukti sceną."
+        },
+        "auto_rotate_speed": {
+          "name": "Automatinio sukimosi greitis",
+          "description": "Kortelės automatinio sukimosi greitis laipsniais per sekundę (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Stogo galios jutiklis",
+          "description": "Nebūtinas galios jutiklis, rodomas po stogo procentine reikšme."
+        },
+        "roof_power_enabled": {
+          "name": "Rodyti stogo galios reikšmę",
+          "description": "Rodyti arba slėpti stogo galios reikšmę."
+        },
+        "roof_power_invert": {
+          "name": "Apversti stogo galios reikšmės ženklą",
+          "description": "Apversti galios reikšmės ženklą (naudinga jutikliams, kurie eksportuojamą galią rodo kaip neigiamą)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Stogo orientacijos į saulę būsena",
+        "state": {
+          "at_peak": "Pasiekė maksimumą",
+          "approaching": "Artėja",
+          "declining": "Mažėja",
+          "unknown": "Nežinoma"
+        }
+      }
+    }
+  }
+}

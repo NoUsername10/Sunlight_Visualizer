@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuration de Sunlight Visualizer",
+        "description": "Configurez l'intégration Sunlight Visualizer. Emplacement actif : {location_name} ({latitude}, {longitude}) via {location_source}",
+        "data": {
+          "location_source": "Source de l'emplacement",
+          "location_zone_entity": "Zone de remplacement",
+          "use_custom_angle": "Utiliser un angle personnalisé (au lieu d'une direction cardinale)",
+          "direction": "Direction cardinale (sélectionnez celle vers laquelle votre porte d'entrée est orientée)",
+          "roof_direction": "Orientation du toit (côté le plus bas)",
+          "roof_power_entity": "Capteur de puissance du toit (facultatif)",
+          "roof_power_enabled": "Activer l'étiquette de puissance du toit",
+          "roof_power_invert": "Inverser la puissance du toit (forcer une valeur positive)",
+          "fixed_sun_rotation_enabled": "Position fixe du soleil, azimut (faire pivoter la scène)",
+          "auto_rotate_speed": "Vitesse de rotation automatique (deg/sec)",
+          "house_angle": "Angle de la maison (degrés, 0° = façade orientée au nord)",
+          "ceiling_tilt": "Angle d'inclinaison du plafond (0-90°, 0 = horizontal)",
+          "update_interval": "Intervalle de mise à jour (minutes)",
+          "radiation_enabled": "Activer les capteurs de rayonnement Open-Meteo",
+          "weather_visuals_enabled": "Activer les effets météo 3D"
+        },
+        "data_description": {
+          "location_source": "Choisissez l'emplacement Home Assistant (par défaut) ou une zone personnalisée.",
+          "location_zone_entity": "Sélectionnez une zone de remplacement ou choisissez Utiliser le domicile (par défaut). Si la zone est absente ou indisponible, l'emplacement du domicile est utilisé automatiquement.",
+          "use_custom_angle": "Cochez pour saisir un angle exact ; décochez pour sélectionner une direction cardinale",
+          "direction": "Sélectionnez la direction cardinale (N, NE, E, etc.) vers laquelle votre porte d'entrée est orientée.",
+          "roof_direction": "Sélectionnez le côté de la maison vers lequel descend la pente du toit",
+          "roof_power_entity": "Sélectionnez un capteur de puissance à afficher sous le pourcentage du toit (W/kW)",
+          "roof_power_enabled": "Afficher la puissance du toit sous le pourcentage du toit",
+          "roof_power_invert": "Inverser les valeurs de puissance (utile si le capteur renvoie des valeurs négatives)",
+          "fixed_sun_rotation_enabled": "Garder l'azimut du soleil visuellement fixe et faire pivoter la scène",
+          "auto_rotate_speed": "Vitesse de rotation automatique par défaut de la carte (1-90 deg/sec)",
+          "house_angle": "Angle de la façade de la maison par rapport au nord (0-359°)",
+          "ceiling_tilt": "Angle d'inclinaison du plafond/des panneaux solaires (0° = à plat, 90° = vertical)",
+          "update_interval": "Fréquence de recalcul de la position du soleil (1-60 minutes)",
+          "radiation_enabled": "Récupère auprès d'Open-Meteo les prévisions de rayonnement par tranches de 15 minutes, toutes les 15 minutes lorsque le soleil est au-dessus de l'horizon et toutes les heures lorsqu'il est en dessous. Ajoute des capteurs de rayonnement pour les murs et le toit. Cette option est désactivée par défaut, car elle utilise une API externe.",
+          "weather_visuals_enabled": "Récupère auprès d'Open-Meteo la météo actuelle pour afficher, en option et uniquement en 3D, les nuages, les précipitations, le vent, le brouillard et les éclairs à l'horizon. Le moteur de rendu 2.5D n'est jamais modifié."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "La latitude doit être comprise entre -90 et 90 degrés",
+      "invalid_longitude": "La longitude doit être comprise entre -180 et 180 degrés",
+      "invalid_house_angle": "L'angle de la maison doit être compris entre 0 et 360 degrés",
+      "invalid_ceiling_tilt": "L'inclinaison du plafond doit être comprise entre 0 et 90 degrés",
+      "invalid_update_interval": "L'intervalle de mise à jour doit être compris entre 1 et 60 minutes",
+      "invalid_auto_rotate_speed": "La vitesse de rotation automatique doit être comprise entre 1 et 90 deg/sec",
+      "invalid_force_sun_azimuth": "L'azimut forcé du soleil doit être compris entre 0 et 359 degrés",
+      "invalid_force_sun_elevation": "L'élévation forcée du soleil doit être comprise entre -90 et 90 degrés",
+      "invalid_coordinates": "Saisissez des nombres décimaux valides pour les coordonnées",
+      "latitude_out_of_range": "La latitude doit être comprise entre -90° et 90°",
+      "longitude_out_of_range": "La longitude doit être comprise entre -180° et 180°",
+      "direction_required": "Sélectionnez une direction cardinale lorsqu'aucun angle personnalisé n'est utilisé",
+      "unknown": "Une erreur inattendue s'est produite"
+    },
+    "abort": {
+      "single_instance_allowed": "Une seule configuration de Sunlight Visualizer est autorisée."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options de Sunlight Visualizer",
+        "description": "Mettez à jour la configuration de Sunlight Visualizer. Emplacement actif : {location_name} ({current_lat}, {current_lon}) via {source}",
+        "data": {
+          "location_source": "Source de l'emplacement",
+          "location_zone_entity": "Zone de remplacement",
+          "use_custom_angle": "Utiliser un angle personnalisé (au lieu d'une direction cardinale)",
+          "direction": "Direction cardinale (sélectionnez celle vers laquelle votre porte d'entrée est orientée)",
+          "roof_direction": "Orientation du toit (côté le plus bas)",
+          "roof_power_entity": "Capteur de puissance du toit (facultatif)",
+          "roof_power_enabled": "Activer l'étiquette de puissance du toit",
+          "roof_power_invert": "Inverser la puissance du toit (forcer une valeur positive)",
+          "fixed_sun_rotation_enabled": "Position fixe du soleil, azimut (faire pivoter la scène)",
+          "force_sun_fallback": "Forcer les valeurs solaires de secours",
+          "force_sun_azimuth": "Forcer l'azimut du soleil",
+          "force_sun_elevation": "Forcer l'élévation du soleil",
+          "auto_rotate_speed": "Vitesse de rotation automatique (deg/sec)",
+          "house_angle": "Angle de la maison (degrés, 0° = façade orientée au nord)",
+          "ceiling_tilt": "Angle d'inclinaison du plafond (0-90°, 0 = horizontal)",
+          "update_interval": "Intervalle de mise à jour (minutes)",
+          "radiation_enabled": "Activer les capteurs de rayonnement Open-Meteo",
+          "remove_radiation_entities_on_disable": "Supprimer les capteurs Open-Meteo lors de la désactivation",
+          "weather_visuals_enabled": "Activer les effets météo 3D"
+        },
+        "data_description": {
+          "location_source": "Choisissez l'emplacement Home Assistant (par défaut) ou une zone personnalisée.",
+          "location_zone_entity": "Sélectionnez une zone de remplacement ou choisissez Utiliser le domicile (par défaut). Si la zone est absente ou indisponible, l'emplacement du domicile est utilisé automatiquement.",
+          "use_custom_angle": "Cochez pour saisir un angle exact ; décochez pour sélectionner une direction cardinale",
+          "direction": "Sélectionnez la direction cardinale (N, NE, E, etc.) vers laquelle votre porte d'entrée est orientée.",
+          "roof_direction": "Sélectionnez le côté de la maison vers lequel descend la pente du toit",
+          "roof_power_entity": "Sélectionnez un capteur de puissance à afficher sous le pourcentage du toit (W/kW)",
+          "roof_power_enabled": "Afficher la puissance du toit sous le pourcentage du toit",
+          "roof_power_invert": "Inverser les valeurs de puissance (utile si le capteur renvoie des valeurs négatives)",
+          "fixed_sun_rotation_enabled": "Garder l'azimut du soleil visuellement fixe et faire pivoter la scène",
+          "force_sun_fallback": "Forcer les valeurs solaires de secours (test)",
+          "force_sun_azimuth": "Azimut à utiliser lorsque les valeurs de secours sont forcées (0-359°)",
+          "force_sun_elevation": "Élévation à utiliser lorsque les valeurs de secours sont forcées (-90° à 90°)",
+          "auto_rotate_speed": "Vitesse de rotation automatique par défaut de la carte (1-90 deg/sec)",
+          "house_angle": "Angle de la façade de la maison par rapport au nord (0-359°)",
+          "ceiling_tilt": "Angle d'inclinaison du plafond/des panneaux solaires (0° = à plat, 90° = vertical)",
+          "update_interval": "Fréquence de recalcul de la position du soleil (1-60 minutes)",
+          "radiation_enabled": "Récupère auprès d'Open-Meteo les prévisions de rayonnement par tranches de 15 minutes, toutes les 15 minutes lorsque le soleil est au-dessus de l'horizon et toutes les heures lorsqu'il est en dessous. Ajoute des capteurs de rayonnement pour les murs et le toit. Cette option est désactivée par défaut, car elle utilise une API externe.",
+          "remove_radiation_entities_on_disable": "Lors de la désactivation du rayonnement Open-Meteo, supprimez uniquement les entités Open-Meteo/rayonnement de Home Assistant. Les capteurs de lumière solaire habituels sont conservés.",
+          "weather_visuals_enabled": "Récupère auprès d'Open-Meteo la météo actuelle pour afficher, en option et uniquement en 3D, les nuages, les précipitations, le vent, le brouillard et les éclairs à l'horizon. Le moteur de rendu 2.5D n'est jamais modifié."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Définir les options",
+      "description": "Mettre à jour les options de Sunlight Visualizer pour l'entrée de configuration active.",
+      "fields": {
+        "entry_id": {
+          "name": "ID de l'entrée de configuration",
+          "description": "Facultatif. Si ce champ est omis, la première entrée Sunlight Visualizer est utilisée."
+        },
+        "house_angle": {
+          "name": "Angle de la maison",
+          "description": "Orientation du mur avant en degrés (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Inclinaison du plafond",
+          "description": "Angle d'inclinaison du toit en degrés (0-90)."
+        },
+        "roof_direction": {
+          "name": "Orientation du toit",
+          "description": "Côté vers lequel descend la pente du toit."
+        },
+        "camera_rotation_h": {
+          "name": "Rotation H de la caméra",
+          "description": "Rotation horizontale de la caméra en degrés (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Rotation V de la caméra",
+          "description": "Rotation verticale de la caméra en degrés (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Zoom de la caméra",
+          "description": "Niveau de zoom enregistré de la caméra GLB (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Azimut fixe du soleil",
+          "description": "Azimut fixe du soleil utilisé par le mode visuel de soleil fixe de la carte (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Position fixe du soleil, azimut (faire pivoter la scène)",
+          "description": "Garder l'azimut du soleil visuellement fixe et faire pivoter la scène"
+        },
+        "auto_rotate_speed": {
+          "name": "Vitesse de rotation automatique",
+          "description": "Vitesse de rotation automatique de la carte en degrés par seconde (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Capteur de puissance du toit",
+          "description": "Capteur de puissance facultatif affiché sous le pourcentage du toit."
+        },
+        "roof_power_enabled": {
+          "name": "Activer l'étiquette de puissance du toit",
+          "description": "Afficher ou masquer l'étiquette de puissance du toit."
+        },
+        "roof_power_invert": {
+          "name": "Inverser la valeur de puissance du toit",
+          "description": "Inverser la valeur de puissance (utile pour les capteurs dont l'exportation est négative)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "État de l'alignement solaire du toit",
+        "state": {
+          "at_peak": "Au maximum",
+          "approaching": "En approche",
+          "declining": "En baisse",
+          "unknown": "Inconnu"
+        }
+      }
+    }
+  }
+}

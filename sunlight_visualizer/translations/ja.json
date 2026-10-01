@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sunlight Visualizer の設定",
+        "description": "Sunlight Visualizer インテグレーションを設定します。現在の位置：{location_name}（{latitude}, {longitude}）、取得元：{location_source}",
+        "data": {
+          "location_source": "位置情報の取得元",
+          "location_zone_entity": "ゾーンで上書き",
+          "use_custom_angle": "カスタム角度を使用（方角の代わり）",
+          "direction": "方角（玄関が向いている方角を選択）",
+          "roof_direction": "屋根の傾斜方向（低くなる側）",
+          "roof_power_entity": "屋根の電力センサー（任意）",
+          "roof_power_enabled": "屋根の電力ラベルを有効化",
+          "roof_power_invert": "屋根の電力値を反転（正の値に変換）",
+          "fixed_sun_rotation_enabled": "太陽の位置（方位角）を固定（シーンを回転）",
+          "auto_rotate_speed": "自動回転速度（deg/sec）",
+          "house_angle": "家の向き（度、0° = 正面が北向き）",
+          "ceiling_tilt": "天井の傾斜角（0-90°、0 = 水平）",
+          "update_interval": "更新間隔（分）",
+          "radiation_enabled": "Open-Meteo の日射センサーを有効化",
+          "weather_visuals_enabled": "3D 天気エフェクトを有効化"
+        },
+        "data_description": {
+          "location_source": "Home Assistant の位置（デフォルト）またはカスタムゾーンを選択します。",
+          "location_zone_entity": "上書きに使用するゾーンを選択するか、［自宅を使用］（デフォルト）を選択します。ゾーンが存在しない、または利用できない場合は、自宅の位置が自動的に使用されます。",
+          "use_custom_angle": "オンにすると正確な角度を入力でき、オフにすると方角を選択できます",
+          "direction": "玄関が向いている方角（N、NE、E など）を選択します。",
+          "roof_direction": "屋根が低くなる側を選択します",
+          "roof_power_entity": "屋根の % 表示の下に表示する電力センサーを選択します（W/kW）",
+          "roof_power_enabled": "屋根の % 表示の下に電力値を表示します",
+          "roof_power_invert": "電力値を反転します（センサー値が負の場合に便利です）",
+          "fixed_sun_rotation_enabled": "太陽の方位角を画面上で固定し、代わりにシーンを回転させます",
+          "auto_rotate_speed": "カードのデフォルト自動回転速度（1-90 deg/sec）",
+          "house_angle": "北を基準にした家の正面の角度（0-359°）",
+          "ceiling_tilt": "天井/ソーラーパネルの傾斜角（0° = 水平、90° = 垂直）",
+          "update_interval": "太陽位置を再計算する間隔（1-60 分）",
+          "radiation_enabled": "太陽が出ている間は 15 分ごとに Open-Meteo から 15 分単位の日射量予報を取得し、太陽が沈んでいる間は毎時取得します。壁面/屋根の日射センサーが追加されます。外部 API を使用するため、デフォルトでは無効です。",
+          "weather_visuals_enabled": "Open-Meteo から現在の天気を取得し、3D のみに適用されるオプションの雲、降水、風、霧、地平線上の稲妻の表示に使用します。2.5D レンダラーは一切変更されません。"
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "緯度は -90 から 90 度の範囲で指定してください",
+      "invalid_longitude": "経度は -180 から 180 度の範囲で指定してください",
+      "invalid_house_angle": "家の角度は 0 から 360 度の範囲で指定してください",
+      "invalid_ceiling_tilt": "天井の傾斜角は 0 から 90 度の範囲で指定してください",
+      "invalid_update_interval": "更新間隔は 1 から 60 分の範囲で指定してください",
+      "invalid_auto_rotate_speed": "自動回転速度は 1 から 90 deg/sec の範囲で指定してください",
+      "invalid_force_sun_azimuth": "強制指定する太陽方位角は 0 から 359 度の範囲で指定してください",
+      "invalid_force_sun_elevation": "強制指定する太陽高度角は -90 から 90 度の範囲で指定してください",
+      "invalid_coordinates": "座標には有効な小数値を入力してください",
+      "latitude_out_of_range": "緯度は -90° から 90° の範囲で指定してください",
+      "longitude_out_of_range": "経度は -180° から 180° の範囲で指定してください",
+      "direction_required": "カスタム角度を使用しない場合は、方角を選択してください",
+      "unknown": "予期しないエラーが発生しました"
+    },
+    "abort": {
+      "single_instance_allowed": "Sunlight Visualizer は単一の設定のみ作成できます。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Sunlight Visualizer のオプション",
+        "description": "Sunlight Visualizer の設定を更新します。現在の位置：{location_name}（{current_lat}, {current_lon}）、取得元：{source}",
+        "data": {
+          "location_source": "位置情報の取得元",
+          "location_zone_entity": "ゾーンで上書き",
+          "use_custom_angle": "カスタム角度を使用（方角の代わり）",
+          "direction": "方角（玄関が向いている方角を選択）",
+          "roof_direction": "屋根の傾斜方向（低くなる側）",
+          "roof_power_entity": "屋根の電力センサー（任意）",
+          "roof_power_enabled": "屋根の電力ラベルを有効化",
+          "roof_power_invert": "屋根の電力値を反転（正の値に変換）",
+          "fixed_sun_rotation_enabled": "太陽の位置（方位角）を固定（シーンを回転）",
+          "force_sun_fallback": "太陽位置のフォールバック値を強制使用",
+          "force_sun_azimuth": "太陽方位角を強制指定",
+          "force_sun_elevation": "太陽高度角を強制指定",
+          "auto_rotate_speed": "自動回転速度（deg/sec）",
+          "house_angle": "家の向き（度、0° = 正面が北向き）",
+          "ceiling_tilt": "天井の傾斜角（0-90°、0 = 水平）",
+          "update_interval": "更新間隔（分）",
+          "radiation_enabled": "Open-Meteo の日射センサーを有効化",
+          "remove_radiation_entities_on_disable": "無効化時に Open-Meteo センサーを削除",
+          "weather_visuals_enabled": "3D 天気エフェクトを有効化"
+        },
+        "data_description": {
+          "location_source": "Home Assistant の位置（デフォルト）またはカスタムゾーンを選択します。",
+          "location_zone_entity": "上書きに使用するゾーンを選択するか、［自宅を使用］（デフォルト）を選択します。ゾーンが存在しない、または利用できない場合は、自宅の位置が自動的に使用されます。",
+          "use_custom_angle": "オンにすると正確な角度を入力でき、オフにすると方角を選択できます",
+          "direction": "玄関が向いている方角（N、NE、E など）を選択します。",
+          "roof_direction": "屋根が低くなる側を選択します",
+          "roof_power_entity": "屋根の % 表示の下に表示する電力センサーを選択します（W/kW）",
+          "roof_power_enabled": "屋根の % 表示の下に電力値を表示します",
+          "roof_power_invert": "電力値を反転します（センサー値が負の場合に便利です）",
+          "fixed_sun_rotation_enabled": "太陽の方位角を画面上で固定し、代わりにシーンを回転させます",
+          "force_sun_fallback": "太陽位置のフォールバック値を強制的に使用します（テスト用）",
+          "force_sun_azimuth": "フォールバックを強制する場合に使用する方位角（0-359°）",
+          "force_sun_elevation": "フォールバックを強制する場合に使用する高度角（-90° から 90°）",
+          "auto_rotate_speed": "カードのデフォルト自動回転速度（1-90 deg/sec）",
+          "house_angle": "北を基準にした家の正面の角度（0-359°）",
+          "ceiling_tilt": "天井/ソーラーパネルの傾斜角（0° = 水平、90° = 垂直）",
+          "update_interval": "太陽位置を再計算する間隔（1-60 分）",
+          "radiation_enabled": "太陽が出ている間は 15 分ごとに Open-Meteo から 15 分単位の日射量予報を取得し、太陽が沈んでいる間は毎時取得します。壁面/屋根の日射センサーが追加されます。外部 API を使用するため、デフォルトでは無効です。",
+          "remove_radiation_entities_on_disable": "Open-Meteo の日射機能をオフにすると、Open-Meteo/日射エンティティだけが Home Assistant から削除されます。通常の日照センサーは残ります。",
+          "weather_visuals_enabled": "Open-Meteo から現在の天気を取得し、3D のみに適用されるオプションの雲、降水、風、霧、地平線上の稲妻の表示に使用します。2.5D レンダラーは一切変更されません。"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "オプションを設定",
+      "description": "有効な設定エントリの Sunlight Visualizer オプションを更新します。",
+      "fields": {
+        "entry_id": {
+          "name": "設定エントリ ID",
+          "description": "任意。省略すると、最初の Sunlight Visualizer エントリが使用されます。"
+        },
+        "house_angle": {
+          "name": "家の向き",
+          "description": "正面の壁が向く角度（0-359）。"
+        },
+        "ceiling_tilt": {
+          "name": "天井の傾斜角",
+          "description": "屋根の傾斜角（0-90）。"
+        },
+        "roof_direction": {
+          "name": "屋根の傾斜方向",
+          "description": "屋根が低くなる側。"
+        },
+        "camera_rotation_h": {
+          "name": "カメラの回転 H",
+          "description": "カメラの水平回転角（0-359）。"
+        },
+        "camera_rotation_v": {
+          "name": "カメラの回転 V",
+          "description": "カメラの垂直回転角（0-90）。"
+        },
+        "camera_zoom": {
+          "name": "カメラのズーム",
+          "description": "保存済みの GLB カメラのズームレベル（1.15-4.5）。"
+        },
+        "fixed_sun_azimuth": {
+          "name": "固定する太陽方位角",
+          "description": "カードの太陽固定表示モードで使用する太陽方位角（0-359）。"
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "太陽の位置（方位角）を固定（シーンを回転）",
+          "description": "太陽の方位角を画面上で固定し、代わりにシーンを回転させます"
+        },
+        "auto_rotate_speed": {
+          "name": "自動回転速度",
+          "description": "カードの自動回転速度（度/秒、1-90）。"
+        },
+        "roof_power_entity": {
+          "name": "屋根の電力センサー",
+          "description": "屋根のパーセント表示の下に表示する任意の電力センサー。"
+        },
+        "roof_power_enabled": {
+          "name": "屋根の電力ラベルを有効化",
+          "description": "屋根の電力ラベルを表示または非表示にします。"
+        },
+        "roof_power_invert": {
+          "name": "屋根の電力値を反転",
+          "description": "電力値を反転します（売電値が負になるセンサーに便利です）。"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "屋根と日射の方向一致状態",
+        "state": {
+          "at_peak": "ピーク",
+          "approaching": "ピークに接近中",
+          "declining": "低下中",
+          "unknown": "不明"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sunlight Visualizer Yapılandırması",
+        "description": "Sunlight Visualizer entegrasyonunu yapılandırın. Etkin konum: {location_name} ({latitude}, {longitude}); kaynak: {location_source}",
+        "data": {
+          "location_source": "Konum kaynağı",
+          "location_zone_entity": "Alternatif Bölge",
+          "use_custom_angle": "Özel açı kullan (pusula yönü yerine)",
+          "direction": "Pusula yönü (ön kapınızın baktığı yönü seçin)",
+          "roof_direction": "Çatı eğim yönü (alçalan taraf)",
+          "roof_power_entity": "Çatı güç sensörü (isteğe bağlı)",
+          "roof_power_enabled": "Çatı gücü etiketini etkinleştir",
+          "roof_power_invert": "Çatı gücünü tersine çevir (pozitif olmaya zorla)",
+          "fixed_sun_rotation_enabled": "Sabit güneş konumu ve azimutu (sahneyi döndür)",
+          "auto_rotate_speed": "Otomatik döndürme hızı (deg/sec)",
+          "house_angle": "Ev açısı (derece, 0° = ön cephe kuzeye dönük)",
+          "ceiling_tilt": "Tavan eğim açısı (0-90°, 0 = yatay)",
+          "update_interval": "Güncelleme aralığı (dakika)",
+          "radiation_enabled": "Open-Meteo ışınım sensörlerini etkinleştir",
+          "weather_visuals_enabled": "3D hava durumu görsellerini etkinleştir"
+        },
+        "data_description": {
+          "location_source": "Home Assistant konumunu (varsayılan) veya özel bir Bölgeyi seçin.",
+          "location_zone_entity": "Alternatif bir Bölge seçin veya Ev konumunu kullanın (varsayılan). Bölge yoksa ya da kullanılamıyorsa Ev konumu otomatik olarak kullanılır.",
+          "use_custom_angle": "Tam açı girmek için işaretleyin; pusula yönü seçmek için işareti kaldırın",
+          "direction": "Ön kapınızın baktığı pusula yönünü (N, NE, E vb.) seçin.",
+          "roof_direction": "Çatının evin hangi tarafına doğru alçaldığını seçin",
+          "roof_power_entity": "Çatı yüzdesinin altında gösterilecek güç sensörünü seçin (W/kW)",
+          "roof_power_enabled": "Çatı gücü değerini çatı yüzdesinin altında göster",
+          "roof_power_invert": "Güç değerlerini tersine çevir (sensör negatif değer veriyorsa kullanışlıdır)",
+          "fixed_sun_rotation_enabled": "Güneş azimutunu görsel olarak sabit tutup bunun yerine sahneyi döndür",
+          "auto_rotate_speed": "Kartın varsayılan otomatik döndürme hızı (1-90 deg/sec)",
+          "house_angle": "Evin ön cephesinin kuzeye göre açısı (0-359°)",
+          "ceiling_tilt": "Tavanın/güneş panellerinin eğim açısı (0° = düz, 90° = dikey)",
+          "update_interval": "Güneş konumunun yeniden hesaplanma sıklığı (1-60 dakika)",
+          "radiation_enabled": "Open-Meteo'dan 15 dakikalık ışınım tahminini, güneş ufkun üzerindeyken 15 dakikada bir ve ufkun altındayken saatte bir alın. Duvar ve çatı ışınım sensörleri ekler. Harici bir API kullandığından varsayılan olarak devre dışıdır.",
+          "weather_visuals_enabled": "Yalnızca 3D görünümde isteğe bağlı bulut, yağış, rüzgâr, sis ve ufuk şimşekleri için güncel hava durumunu Open-Meteo'dan alın. 2.5D işleyici hiçbir zaman değiştirilmez."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Enlem -90 ile 90 derece arasında olmalıdır",
+      "invalid_longitude": "Boylam -180 ile 180 derece arasında olmalıdır",
+      "invalid_house_angle": "Ev açısı 0 ile 360 derece arasında olmalıdır",
+      "invalid_ceiling_tilt": "Tavan eğimi 0 ile 90 derece arasında olmalıdır",
+      "invalid_update_interval": "Güncelleme aralığı 1 ile 60 dakika arasında olmalıdır",
+      "invalid_auto_rotate_speed": "Otomatik döndürme hızı 1 ile 90 deg/sec arasında olmalıdır",
+      "invalid_force_sun_azimuth": "Zorlanan güneş azimutu 0 ile 359 derece arasında olmalıdır",
+      "invalid_force_sun_elevation": "Zorlanan güneş yüksekliği -90 ile 90 derece arasında olmalıdır",
+      "invalid_coordinates": "Koordinatlar için geçerli ondalık sayılar girin",
+      "latitude_out_of_range": "Enlem -90° ile 90° arasında olmalıdır",
+      "longitude_out_of_range": "Boylam -180° ile 180° arasında olmalıdır",
+      "direction_required": "Özel açı kullanılmıyorsa bir pusula yönü seçin",
+      "unknown": "Beklenmeyen bir hata oluştu"
+    },
+    "abort": {
+      "single_instance_allowed": "Yalnızca tek bir Sunlight Visualizer yapılandırmasına izin verilir."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Sunlight Visualizer Seçenekleri",
+        "description": "Sunlight Visualizer yapılandırmasını güncelleyin. Etkin konum: {location_name} ({current_lat}, {current_lon}); kaynak: {source}",
+        "data": {
+          "location_source": "Konum kaynağı",
+          "location_zone_entity": "Alternatif Bölge",
+          "use_custom_angle": "Özel açı kullan (pusula yönü yerine)",
+          "direction": "Pusula yönü (ön kapınızın baktığı yönü seçin)",
+          "roof_direction": "Çatı eğim yönü (alçalan taraf)",
+          "roof_power_entity": "Çatı güç sensörü (isteğe bağlı)",
+          "roof_power_enabled": "Çatı gücü etiketini etkinleştir",
+          "roof_power_invert": "Çatı gücünü tersine çevir (pozitif olmaya zorla)",
+          "fixed_sun_rotation_enabled": "Sabit güneş konumu ve azimutu (sahneyi döndür)",
+          "force_sun_fallback": "Yedek güneş değerlerini zorla",
+          "force_sun_azimuth": "Güneş azimutunu zorla",
+          "force_sun_elevation": "Güneş yüksekliğini zorla",
+          "auto_rotate_speed": "Otomatik döndürme hızı (deg/sec)",
+          "house_angle": "Ev açısı (derece, 0° = ön cephe kuzeye dönük)",
+          "ceiling_tilt": "Tavan eğim açısı (0-90°, 0 = yatay)",
+          "update_interval": "Güncelleme aralığı (dakika)",
+          "radiation_enabled": "Open-Meteo ışınım sensörlerini etkinleştir",
+          "remove_radiation_entities_on_disable": "Devre dışı bırakırken Open-Meteo sensörlerini kaldır",
+          "weather_visuals_enabled": "3D hava durumu görsellerini etkinleştir"
+        },
+        "data_description": {
+          "location_source": "Home Assistant konumunu (varsayılan) veya özel bir Bölgeyi seçin.",
+          "location_zone_entity": "Alternatif bir Bölge seçin veya Ev konumunu kullanın (varsayılan). Bölge yoksa ya da kullanılamıyorsa Ev konumu otomatik olarak kullanılır.",
+          "use_custom_angle": "Tam açı girmek için işaretleyin; pusula yönü seçmek için işareti kaldırın",
+          "direction": "Ön kapınızın baktığı pusula yönünü (N, NE, E vb.) seçin.",
+          "roof_direction": "Çatının evin hangi tarafına doğru alçaldığını seçin",
+          "roof_power_entity": "Çatı yüzdesinin altında gösterilecek güç sensörünü seçin (W/kW)",
+          "roof_power_enabled": "Çatı gücü değerini çatı yüzdesinin altında göster",
+          "roof_power_invert": "Güç değerlerini tersine çevir (sensör negatif değer veriyorsa kullanışlıdır)",
+          "fixed_sun_rotation_enabled": "Güneş azimutunu görsel olarak sabit tutup bunun yerine sahneyi döndür",
+          "force_sun_fallback": "Yedek güneş değerlerini zorla (test için)",
+          "force_sun_azimuth": "Yedek değerler zorlandığında kullanılacak azimut (0-359°)",
+          "force_sun_elevation": "Yedek değerler zorlandığında kullanılacak yükseklik (-90° ile 90° arası)",
+          "auto_rotate_speed": "Kartın varsayılan otomatik döndürme hızı (1-90 deg/sec)",
+          "house_angle": "Evin ön cephesinin kuzeye göre açısı (0-359°)",
+          "ceiling_tilt": "Tavanın/güneş panellerinin eğim açısı (0° = düz, 90° = dikey)",
+          "update_interval": "Güneş konumunun yeniden hesaplanma sıklığı (1-60 dakika)",
+          "radiation_enabled": "Open-Meteo'dan 15 dakikalık ışınım tahminini, güneş ufkun üzerindeyken 15 dakikada bir ve ufkun altındayken saatte bir alın. Duvar ve çatı ışınım sensörleri ekler. Harici bir API kullandığından varsayılan olarak devre dışıdır.",
+          "remove_radiation_entities_on_disable": "Open-Meteo ışınımı kapatıldığında Home Assistant'tan yalnızca Open-Meteo/ışınım varlıklarını kaldırır. Normal güneş ışığı sensörleri kalır.",
+          "weather_visuals_enabled": "Yalnızca 3D görünümde isteğe bağlı bulut, yağış, rüzgâr, sis ve ufuk şimşekleri için güncel hava durumunu Open-Meteo'dan alın. 2.5D işleyici hiçbir zaman değiştirilmez."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Seçenekleri ayarla",
+      "description": "Etkin yapılandırma girdisinin Sunlight Visualizer seçeneklerini güncelleyin.",
+      "fields": {
+        "entry_id": {
+          "name": "Yapılandırma girdisi kimliği",
+          "description": "İsteğe bağlıdır. Belirtilmezse ilk Sunlight Visualizer girdisi kullanılır."
+        },
+        "house_angle": {
+          "name": "Ev açısı",
+          "description": "Ön duvarın derece cinsinden yönü (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Tavan eğimi",
+          "description": "Çatının derece cinsinden eğim açısı (0-90)."
+        },
+        "roof_direction": {
+          "name": "Çatı yönü",
+          "description": "Çatının alçaldığı taraf."
+        },
+        "camera_rotation_h": {
+          "name": "Yatay kamera dönüşü",
+          "description": "Kameranın derece cinsinden yatay dönüşü (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Dikey kamera dönüşü",
+          "description": "Kameranın derece cinsinden dikey dönüşü (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Kamera yakınlaştırması",
+          "description": "Kaydedilmiş GLB kamera yakınlaştırma düzeyi (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Sabit güneş azimutu",
+          "description": "Kartın görsel sabit güneş modunda kullanılan sabit güneş azimutu (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Sabit güneş konumu ve azimutu (sahneyi döndür)",
+          "description": "Güneş azimutunu görsel olarak sabit tutup bunun yerine sahneyi döndür"
+        },
+        "auto_rotate_speed": {
+          "name": "Otomatik döndürme hızı",
+          "description": "Kartın saniye başına derece cinsinden otomatik döndürme hızı (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Çatı güç sensörü",
+          "description": "Çatı yüzdesinin altında gösterilen isteğe bağlı güç sensörü."
+        },
+        "roof_power_enabled": {
+          "name": "Çatı gücü etiketini etkinleştir",
+          "description": "Çatı gücü etiketini gösterin veya gizleyin."
+        },
+        "roof_power_invert": {
+          "name": "Çatı gücü değerini tersine çevir",
+          "description": "Güç değerini tersine çevirin (dışa aktarılan gücü negatif gösteren sensörler için kullanışlıdır)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Çatının güneşe göre hizalanma durumu",
+        "state": {
+          "at_peak": "En yüksek düzeyde",
+          "approaching": "Yaklaşıyor",
+          "declining": "Azalıyor",
+          "unknown": "Bilinmiyor"
+        }
+      }
+    }
+  }
+}

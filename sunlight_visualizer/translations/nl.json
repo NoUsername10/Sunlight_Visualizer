@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sunlight Visualizer configureren",
+        "description": "Configureer de integratie Sunlight Visualizer. Actieve locatie: {location_name} ({latitude}, {longitude}) via {location_source}",
+        "data": {
+          "location_source": "Locatiebron",
+          "location_zone_entity": "Afwijkende zone",
+          "use_custom_angle": "Aangepaste hoek gebruiken (in plaats van kompasrichting)",
+          "direction": "Kompasrichting (selecteer de richting waarin de voordeur wijst)",
+          "roof_direction": "Dakrichting (aflopende zijde)",
+          "roof_power_entity": "Dakvermogenssensor (optioneel)",
+          "roof_power_enabled": "Label voor dakvermogen inschakelen",
+          "roof_power_invert": "Dakvermogen omkeren (positieve waarde afdwingen)",
+          "fixed_sun_rotation_enabled": "Vaste zonneazimut (scène draaien)",
+          "auto_rotate_speed": "Snelheid automatisch draaien (deg/sec)",
+          "house_angle": "Huishoek (graden, 0° = voorzijde op het noorden)",
+          "ceiling_tilt": "Hellingshoek van het plafond (0-90°, 0 = horizontaal)",
+          "update_interval": "Bijwerkinterval (minuten)",
+          "radiation_enabled": "Stralingssensoren van Open-Meteo inschakelen",
+          "weather_visuals_enabled": "3D-weerseffecten inschakelen"
+        },
+        "data_description": {
+          "location_source": "Kies de locatie van Home Assistant (standaard) of een aangepaste zone.",
+          "location_zone_entity": "Selecteer een afwijkende zone of kies Thuis gebruiken (standaard). Als de zone ontbreekt of niet beschikbaar is, wordt automatisch de thuislocatie gebruikt.",
+          "use_custom_angle": "Schakel dit in om een exacte hoek in te voeren; schakel het uit om een kompasrichting te selecteren",
+          "direction": "Selecteer de kompasrichting (N, NO, O enz.) waarin de voordeur wijst.",
+          "roof_direction": "Selecteer de zijde van het huis waar het dak naartoe afloopt",
+          "roof_power_entity": "Selecteer een vermogenssensor die onder het dakpercentage (%) wordt weergegeven (W/kW)",
+          "roof_power_enabled": "Toon het dakvermogen onder het dakpercentage (%)",
+          "roof_power_invert": "Keer vermogenswaarden om (handig als de sensor negatieve waarden geeft)",
+          "fixed_sun_rotation_enabled": "Houd de zonneazimut visueel vast en draai in plaats daarvan de scène",
+          "auto_rotate_speed": "Standaardsnelheid voor automatisch draaien van de kaart (1-90 deg/sec)",
+          "house_angle": "Hoek van de voorzijde van het huis ten opzichte van het noorden (0-359°)",
+          "ceiling_tilt": "Hellingshoek van plafond/zonnepanelen (0° = vlak, 90° = verticaal)",
+          "update_interval": "Hoe vaak de zonnestand opnieuw wordt berekend (1-60 minuten)",
+          "radiation_enabled": "Haalt overdag elke 15 minuten en 's nachts elk uur een stralingsverwachting per 15 minuten op bij Open-Meteo. Voegt stralingssensoren voor muren en het dak toe. Standaard uitgeschakeld omdat hiervoor een externe API wordt gebruikt.",
+          "weather_visuals_enabled": "Haalt het actuele weer op bij Open-Meteo voor optionele wolken, neerslag, wind, mist en bliksem aan de horizon die alleen in 3D worden weergegeven. De 2.5D-renderer blijft ongewijzigd."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "De breedtegraad moet tussen -90 en 90 graden liggen",
+      "invalid_longitude": "De lengtegraad moet tussen -180 en 180 graden liggen",
+      "invalid_house_angle": "De huishoek moet tussen 0 en 360 graden liggen",
+      "invalid_ceiling_tilt": "De plafondhelling moet tussen 0 en 90 graden liggen",
+      "invalid_update_interval": "Het bijwerkinterval moet tussen 1 en 60 minuten liggen",
+      "invalid_auto_rotate_speed": "De snelheid voor automatisch draaien moet tussen 1 en 90 deg/sec liggen",
+      "invalid_force_sun_azimuth": "De afgedwongen zonneazimut moet tussen 0 en 359 graden liggen",
+      "invalid_force_sun_elevation": "De afgedwongen zonnehoogte moet tussen -90 en 90 graden liggen",
+      "invalid_coordinates": "Voer geldige decimale getallen in voor de coördinaten",
+      "latitude_out_of_range": "De breedtegraad moet tussen -90° en 90° liggen",
+      "longitude_out_of_range": "De lengtegraad moet tussen -180° en 180° liggen",
+      "direction_required": "Selecteer een kompasrichting wanneer er geen aangepaste hoek wordt gebruikt",
+      "unknown": "Er is een onverwachte fout opgetreden"
+    },
+    "abort": {
+      "single_instance_allowed": "Er is slechts één configuratie van Sunlight Visualizer toegestaan."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opties voor Sunlight Visualizer",
+        "description": "Werk de configuratie van Sunlight Visualizer bij. Actieve locatie: {location_name} ({current_lat}, {current_lon}) via {source}",
+        "data": {
+          "location_source": "Locatiebron",
+          "location_zone_entity": "Afwijkende zone",
+          "use_custom_angle": "Aangepaste hoek gebruiken (in plaats van kompasrichting)",
+          "direction": "Kompasrichting (selecteer de richting waarin de voordeur wijst)",
+          "roof_direction": "Dakrichting (aflopende zijde)",
+          "roof_power_entity": "Dakvermogenssensor (optioneel)",
+          "roof_power_enabled": "Label voor dakvermogen inschakelen",
+          "roof_power_invert": "Dakvermogen omkeren (positieve waarde afdwingen)",
+          "fixed_sun_rotation_enabled": "Vaste zonneazimut (scène draaien)",
+          "force_sun_fallback": "Alternatieve zonnestand afdwingen",
+          "force_sun_azimuth": "Zonneazimut afdwingen",
+          "force_sun_elevation": "Zonnehoogte afdwingen",
+          "auto_rotate_speed": "Snelheid automatisch draaien (deg/sec)",
+          "house_angle": "Huishoek (graden, 0° = voorzijde op het noorden)",
+          "ceiling_tilt": "Hellingshoek van het plafond (0-90°, 0 = horizontaal)",
+          "update_interval": "Bijwerkinterval (minuten)",
+          "radiation_enabled": "Stralingssensoren van Open-Meteo inschakelen",
+          "remove_radiation_entities_on_disable": "Open-Meteo-sensoren verwijderen bij uitschakelen",
+          "weather_visuals_enabled": "3D-weerseffecten inschakelen"
+        },
+        "data_description": {
+          "location_source": "Kies de locatie van Home Assistant (standaard) of een aangepaste zone.",
+          "location_zone_entity": "Selecteer een afwijkende zone of kies Thuis gebruiken (standaard). Als de zone ontbreekt of niet beschikbaar is, wordt automatisch de thuislocatie gebruikt.",
+          "use_custom_angle": "Schakel dit in om een exacte hoek in te voeren; schakel het uit om een kompasrichting te selecteren",
+          "direction": "Selecteer de kompasrichting (N, NO, O enz.) waarin de voordeur wijst.",
+          "roof_direction": "Selecteer de zijde van het huis waar het dak naartoe afloopt",
+          "roof_power_entity": "Selecteer een vermogenssensor die onder het dakpercentage (%) wordt weergegeven (W/kW)",
+          "roof_power_enabled": "Toon het dakvermogen onder het dakpercentage (%)",
+          "roof_power_invert": "Keer vermogenswaarden om (handig als de sensor negatieve waarden geeft)",
+          "fixed_sun_rotation_enabled": "Houd de zonneazimut visueel vast en draai in plaats daarvan de scène",
+          "force_sun_fallback": "Dwing alternatieve waarden voor de zonnestand af (test)",
+          "force_sun_azimuth": "Azimut voor de afgedwongen alternatieve waarden (0-359°)",
+          "force_sun_elevation": "Zonnehoogte voor de afgedwongen alternatieve waarden (-90° tot 90°)",
+          "auto_rotate_speed": "Standaardsnelheid voor automatisch draaien van de kaart (1-90 deg/sec)",
+          "house_angle": "Hoek van de voorzijde van het huis ten opzichte van het noorden (0-359°)",
+          "ceiling_tilt": "Hellingshoek van plafond/zonnepanelen (0° = vlak, 90° = verticaal)",
+          "update_interval": "Hoe vaak de zonnestand opnieuw wordt berekend (1-60 minuten)",
+          "radiation_enabled": "Haalt overdag elke 15 minuten en 's nachts elk uur een stralingsverwachting per 15 minuten op bij Open-Meteo. Voegt stralingssensoren voor muren en het dak toe. Standaard uitgeschakeld omdat hiervoor een externe API wordt gebruikt.",
+          "remove_radiation_entities_on_disable": "Verwijder bij het uitschakelen van Open-Meteo-straling alleen de Open-Meteo-/stralingsentiteiten uit Home Assistant. De gewone zonlichtsensoren blijven behouden.",
+          "weather_visuals_enabled": "Haalt het actuele weer op bij Open-Meteo voor optionele wolken, neerslag, wind, mist en bliksem aan de horizon die alleen in 3D worden weergegeven. De 2.5D-renderer blijft ongewijzigd."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Opties instellen",
+      "description": "Werk de opties van Sunlight Visualizer bij voor de actieve configuratie-invoer.",
+      "fields": {
+        "entry_id": {
+          "name": "ID van configuratie-invoer",
+          "description": "Optioneel. Als dit wordt weggelaten, wordt de eerste invoer van Sunlight Visualizer gebruikt."
+        },
+        "house_angle": {
+          "name": "Huishoek",
+          "description": "Richting van de voorgevel in graden (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Plafondhelling",
+          "description": "Hellingshoek van het dak in graden (0-90)."
+        },
+        "roof_direction": {
+          "name": "Dakrichting",
+          "description": "Zijde waar het dak naartoe afloopt."
+        },
+        "camera_rotation_h": {
+          "name": "Camerarotatie H",
+          "description": "Horizontale camerarotatie in graden (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Camerarotatie V",
+          "description": "Verticale camerarotatie in graden (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Camerazoom",
+          "description": "Opgeslagen zoomniveau van de GLB-camera (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Vaste zonneazimut",
+          "description": "Vaste zonneazimut voor de modus met een visueel vaste zon op de kaart (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Vaste zonneazimut (scène draaien)",
+          "description": "Houd de zonneazimut visueel vast en draai in plaats daarvan de scène"
+        },
+        "auto_rotate_speed": {
+          "name": "Snelheid automatisch draaien",
+          "description": "Snelheid voor automatisch draaien van de kaart in graden per seconde (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Dakvermogenssensor",
+          "description": "Optionele vermogenssensor die onder het dakpercentage wordt weergegeven."
+        },
+        "roof_power_enabled": {
+          "name": "Label voor dakvermogen inschakelen",
+          "description": "Toon of verberg het label voor dakvermogen."
+        },
+        "roof_power_invert": {
+          "name": "Waarde van dakvermogen omkeren",
+          "description": "Keer de vermogenswaarde om (handig voor sensoren die export als negatieve waarde meten)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Status van de uitlijning van het dak op de zon",
+        "state": {
+          "at_peak": "Op het maximum",
+          "approaching": "Nadert",
+          "declining": "Neemt af",
+          "unknown": "Onbekend"
+        }
+      }
+    }
+  }
+}

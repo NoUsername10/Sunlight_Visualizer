@@ -1,0 +1,19 @@
+{
+  "domain": "sunlight_visualizer",
+  "name": "Sunlight Visualizer",
+  "after_dependencies": [
+    "lovelace"
+  ],
+  "codeowners": [
+    "@NoUsername10"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "http"
+  ],
+  "documentation": "https://github.com/NoUsername10/Sunlight_Visualizer",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/NoUsername10/Sunlight_Visualizer/issues",
+  "version": "0.5.3"
+}

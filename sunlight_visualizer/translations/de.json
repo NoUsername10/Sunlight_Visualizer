@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sunlight Visualizer konfigurieren",
+        "description": "Konfiguriere die Integration Sunlight Visualizer. Aktiver Standort: {location_name} ({latitude}, {longitude}) über {location_source}",
+        "data": {
+          "location_source": "Standortquelle",
+          "location_zone_entity": "Abweichende Zone",
+          "use_custom_angle": "Benutzerdefinierten Winkel verwenden (statt Himmelsrichtung)",
+          "direction": "Himmelsrichtung (Richtung auswählen, in die die Haustür zeigt)",
+          "roof_direction": "Dachrichtung (Gefälleseite)",
+          "roof_power_entity": "Dachleistungssensor (optional)",
+          "roof_power_enabled": "Dachleistungsanzeige aktivieren",
+          "roof_power_invert": "Dachleistung umkehren (positiven Wert erzwingen)",
+          "fixed_sun_rotation_enabled": "Fester Sonnenazimut (Szene drehen)",
+          "auto_rotate_speed": "Geschwindigkeit der automatischen Drehung (deg/sec)",
+          "house_angle": "Hauswinkel (Grad, 0° = Vorderseite nach Norden)",
+          "ceiling_tilt": "Neigungswinkel der Decke (0-90°, 0 = waagerecht)",
+          "update_interval": "Aktualisierungsintervall (Minuten)",
+          "radiation_enabled": "Strahlungssensoren von Open-Meteo aktivieren",
+          "weather_visuals_enabled": "3D-Wettereffekte aktivieren"
+        },
+        "data_description": {
+          "location_source": "Wähle den Standort von Home Assistant (Standard) oder eine benutzerdefinierte Zone.",
+          "location_zone_entity": "Wähle eine abweichende Zone oder „Zuhause verwenden“ (Standard). Wenn sie fehlt oder nicht verfügbar ist, wird automatisch der Standort von Zuhause verwendet.",
+          "use_custom_angle": "Aktivieren, um einen genauen Winkel einzugeben; deaktivieren, um eine Himmelsrichtung auszuwählen",
+          "direction": "Wähle die Himmelsrichtung (N, NO, O usw.), in die deine Haustür zeigt.",
+          "roof_direction": "Wähle die Seite des Hauses aus, zu der das Dach abfällt",
+          "roof_power_entity": "Wähle einen Leistungssensor aus, der unter dem Dach-%-Wert angezeigt wird (W/kW)",
+          "roof_power_enabled": "Dachleistungswert unter dem Dach-%-Wert anzeigen",
+          "roof_power_invert": "Leistungswerte umkehren (nützlich, wenn der Sensor negative Werte liefert)",
+          "fixed_sun_rotation_enabled": "Den Sonnenazimut visuell fixieren und stattdessen die Szene drehen",
+          "auto_rotate_speed": "Standardgeschwindigkeit der automatischen Kartendrehung (1-90 deg/sec)",
+          "house_angle": "Winkel der Hausvorderseite relativ zu Norden (0-359°)",
+          "ceiling_tilt": "Neigungswinkel von Decke/Solarmodulen (0° = flach, 90° = senkrecht)",
+          "update_interval": "Intervall für die Neuberechnung des Sonnenstands (1-60 Minuten)",
+          "radiation_enabled": "Ruft bei Tageslicht alle 15 Minuten und nachts stündlich eine 15-Minuten-Prognose der Strahlung von Open-Meteo ab. Fügt Strahlungssensoren für Wände und Dach hinzu. Standardmäßig deaktiviert, da eine externe API verwendet wird.",
+          "weather_visuals_enabled": "Ruft das aktuelle Wetter von Open-Meteo für optionale Wolken, Niederschlag, Wind, Nebel und Blitze am Horizont ab, die nur in 3D dargestellt werden. Der 2.5D-Renderer bleibt unverändert."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Der Breitengrad muss zwischen -90 und 90 Grad liegen",
+      "invalid_longitude": "Der Längengrad muss zwischen -180 und 180 Grad liegen",
+      "invalid_house_angle": "Der Hauswinkel muss zwischen 0 und 360 Grad liegen",
+      "invalid_ceiling_tilt": "Die Deckenneigung muss zwischen 0 und 90 Grad liegen",
+      "invalid_update_interval": "Das Aktualisierungsintervall muss zwischen 1 und 60 Minuten liegen",
+      "invalid_auto_rotate_speed": "Die Geschwindigkeit der automatischen Drehung muss zwischen 1 und 90 deg/sec liegen",
+      "invalid_force_sun_azimuth": "Der erzwungene Sonnenazimut muss zwischen 0 und 359 Grad liegen",
+      "invalid_force_sun_elevation": "Die erzwungene Sonnenhöhe muss zwischen -90 und 90 Grad liegen",
+      "invalid_coordinates": "Gib gültige Dezimalzahlen für die Koordinaten ein",
+      "latitude_out_of_range": "Der Breitengrad muss zwischen -90° und 90° liegen",
+      "longitude_out_of_range": "Der Längengrad muss zwischen -180° und 180° liegen",
+      "direction_required": "Wähle eine Himmelsrichtung aus, wenn kein benutzerdefinierter Winkel verwendet wird",
+      "unknown": "Ein unerwarteter Fehler ist aufgetreten"
+    },
+    "abort": {
+      "single_instance_allowed": "Es ist nur eine Konfiguration von Sunlight Visualizer zulässig."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Optionen für Sunlight Visualizer",
+        "description": "Aktualisiere die Konfiguration von Sunlight Visualizer. Aktiver Standort: {location_name} ({current_lat}, {current_lon}) über {source}",
+        "data": {
+          "location_source": "Standortquelle",
+          "location_zone_entity": "Abweichende Zone",
+          "use_custom_angle": "Benutzerdefinierten Winkel verwenden (statt Himmelsrichtung)",
+          "direction": "Himmelsrichtung (Richtung auswählen, in die die Haustür zeigt)",
+          "roof_direction": "Dachrichtung (Gefälleseite)",
+          "roof_power_entity": "Dachleistungssensor (optional)",
+          "roof_power_enabled": "Dachleistungsanzeige aktivieren",
+          "roof_power_invert": "Dachleistung umkehren (positiven Wert erzwingen)",
+          "fixed_sun_rotation_enabled": "Fester Sonnenazimut (Szene drehen)",
+          "force_sun_fallback": "Ersatzwerte für den Sonnenstand erzwingen",
+          "force_sun_azimuth": "Sonnenazimut erzwingen",
+          "force_sun_elevation": "Sonnenhöhe erzwingen",
+          "auto_rotate_speed": "Geschwindigkeit der automatischen Drehung (deg/sec)",
+          "house_angle": "Hauswinkel (Grad, 0° = Vorderseite nach Norden)",
+          "ceiling_tilt": "Neigungswinkel der Decke (0-90°, 0 = waagerecht)",
+          "update_interval": "Aktualisierungsintervall (Minuten)",
+          "radiation_enabled": "Strahlungssensoren von Open-Meteo aktivieren",
+          "remove_radiation_entities_on_disable": "Open-Meteo-Sensoren beim Deaktivieren entfernen",
+          "weather_visuals_enabled": "3D-Wettereffekte aktivieren"
+        },
+        "data_description": {
+          "location_source": "Wähle den Standort von Home Assistant (Standard) oder eine benutzerdefinierte Zone.",
+          "location_zone_entity": "Wähle eine abweichende Zone oder „Zuhause verwenden“ (Standard). Wenn sie fehlt oder nicht verfügbar ist, wird automatisch der Standort von Zuhause verwendet.",
+          "use_custom_angle": "Aktivieren, um einen genauen Winkel einzugeben; deaktivieren, um eine Himmelsrichtung auszuwählen",
+          "direction": "Wähle die Himmelsrichtung (N, NO, O usw.), in die deine Haustür zeigt.",
+          "roof_direction": "Wähle die Seite des Hauses aus, zu der das Dach abfällt",
+          "roof_power_entity": "Wähle einen Leistungssensor aus, der unter dem Dach-%-Wert angezeigt wird (W/kW)",
+          "roof_power_enabled": "Dachleistungswert unter dem Dach-%-Wert anzeigen",
+          "roof_power_invert": "Leistungswerte umkehren (nützlich, wenn der Sensor negative Werte liefert)",
+          "fixed_sun_rotation_enabled": "Den Sonnenazimut visuell fixieren und stattdessen die Szene drehen",
+          "force_sun_fallback": "Ersatzwerte für den Sonnenstand erzwingen (Test)",
+          "force_sun_azimuth": "Bei erzwungenen Ersatzwerten zu verwendender Azimut (0-359°)",
+          "force_sun_elevation": "Bei erzwungenen Ersatzwerten zu verwendende Sonnenhöhe (-90° bis 90°)",
+          "auto_rotate_speed": "Standardgeschwindigkeit der automatischen Kartendrehung (1-90 deg/sec)",
+          "house_angle": "Winkel der Hausvorderseite relativ zu Norden (0-359°)",
+          "ceiling_tilt": "Neigungswinkel von Decke/Solarmodulen (0° = flach, 90° = senkrecht)",
+          "update_interval": "Intervall für die Neuberechnung des Sonnenstands (1-60 Minuten)",
+          "radiation_enabled": "Ruft bei Tageslicht alle 15 Minuten und nachts stündlich eine 15-Minuten-Prognose der Strahlung von Open-Meteo ab. Fügt Strahlungssensoren für Wände und Dach hinzu. Standardmäßig deaktiviert, da eine externe API verwendet wird.",
+          "remove_radiation_entities_on_disable": "Entfernt beim Deaktivieren der Open-Meteo-Strahlungsdaten nur die Open-Meteo-/Strahlungsentitäten aus Home Assistant. Reguläre Sonnenlichtsensoren bleiben erhalten.",
+          "weather_visuals_enabled": "Ruft das aktuelle Wetter von Open-Meteo für optionale Wolken, Niederschlag, Wind, Nebel und Blitze am Horizont ab, die nur in 3D dargestellt werden. Der 2.5D-Renderer bleibt unverändert."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Optionen festlegen",
+      "description": "Aktualisiert die Optionen von Sunlight Visualizer für den aktiven Konfigurationseintrag.",
+      "fields": {
+        "entry_id": {
+          "name": "ID des Konfigurationseintrags",
+          "description": "Optional. Wenn keine ID angegeben ist, wird der erste Eintrag von Sunlight Visualizer verwendet."
+        },
+        "house_angle": {
+          "name": "Hauswinkel",
+          "description": "Ausrichtung der Vorderwand in Grad (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Deckenneigung",
+          "description": "Neigungswinkel des Dachs in Grad (0-90)."
+        },
+        "roof_direction": {
+          "name": "Dachrichtung",
+          "description": "Seite, zu der das Dach abfällt."
+        },
+        "camera_rotation_h": {
+          "name": "Kameradrehung H",
+          "description": "Horizontale Kameradrehung in Grad (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Kameradrehung V",
+          "description": "Vertikale Kameradrehung in Grad (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Kamerazoom",
+          "description": "Gespeicherte Zoomstufe der GLB-Kamera (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Fester Sonnenazimut",
+          "description": "Fester Sonnenazimut für den Modus der Karte mit fixierter Sonne (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Fester Sonnenazimut (Szene drehen)",
+          "description": "Den Sonnenazimut visuell fixieren und stattdessen die Szene drehen"
+        },
+        "auto_rotate_speed": {
+          "name": "Geschwindigkeit der automatischen Drehung",
+          "description": "Geschwindigkeit der automatischen Kartendrehung in Grad pro Sekunde (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Dachleistungssensor",
+          "description": "Optionaler Leistungssensor, der unter dem Dach-Prozentwert angezeigt wird."
+        },
+        "roof_power_enabled": {
+          "name": "Dachleistungsanzeige aktivieren",
+          "description": "Dachleistungsanzeige ein- oder ausblenden."
+        },
+        "roof_power_invert": {
+          "name": "Dachleistungswert umkehren",
+          "description": "Leistungswert umkehren (nützlich für Sensoren, die den Export negativ ausgeben)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Ausrichtungsstatus des Dachs zur Sonne",
+        "state": {
+          "at_peak": "Am Höchstwert",
+          "approaching": "Nähert sich",
+          "declining": "Nimmt ab",
+          "unknown": "Unbekannt"
+        }
+      }
+    }
+  }
+}

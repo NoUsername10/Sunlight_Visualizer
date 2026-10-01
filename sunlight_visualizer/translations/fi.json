@@ -1,0 +1,186 @@
+{
+  "title": "Sunlight Visualizer",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sunlight Visualizerin määritys",
+        "description": "Määritä Sunlight Visualizer -integraatio. Aktiivinen sijainti: {location_name} ({latitude}, {longitude}), lähde: {location_source}",
+        "data": {
+          "location_source": "Sijainnin lähde",
+          "location_zone_entity": "Korvaava vyöhyke",
+          "use_custom_angle": "Käytä mukautettua kulmaa (kompassisuunnan sijaan)",
+          "direction": "Kompassisuunta (valitse suunta, johon etuovi osoittaa)",
+          "roof_direction": "Katon laskusuunta",
+          "roof_power_entity": "Katon tehoanturi (valinnainen)",
+          "roof_power_enabled": "Näytä katon teholukema",
+          "roof_power_invert": "Käännä katon tehon etumerkki (pakota positiiviseksi)",
+          "fixed_sun_rotation_enabled": "Kiinteä auringon sijainti ja atsimuutti (kierrä näkymää)",
+          "auto_rotate_speed": "Automaattisen kierron nopeus (astetta/s)",
+          "house_angle": "Talon kulma (astetta, 0° = etupuoli pohjoiseen)",
+          "ceiling_tilt": "Katon kallistuskulma (0-90°, 0 = vaakasuora)",
+          "update_interval": "Päivitysväli (minuuttia)",
+          "radiation_enabled": "Ota Open-Meteo-säteilyanturit käyttöön",
+          "weather_visuals_enabled": "Ota 3D-säätehosteet käyttöön"
+        },
+        "data_description": {
+          "location_source": "Valitse Home Assistantin sijainti (oletus) tai mukautettu vyöhyke.",
+          "location_zone_entity": "Valitse sijainnin korvaava vyöhyke tai Käytä kotia (oletus). Jos vyöhyke puuttuu tai ei ole käytettävissä, kodin sijaintia käytetään automaattisesti.",
+          "use_custom_angle": "Valitse tämä, jos haluat antaa tarkan kulman. Poista valinta, jos haluat valita kompassisuunnan.",
+          "direction": "Valitse kompassisuunta (N, NE, E jne.), johon etuovi osoittaa.",
+          "roof_direction": "Valitse, mille talon sivulle katto viettää.",
+          "roof_power_entity": "Valitse tehoanturi, joka näytetään katon prosenttiarvon alla (W/kW).",
+          "roof_power_enabled": "Näytä katon teholukema prosenttiarvon alla.",
+          "roof_power_invert": "Käännä tehoarvojen etumerkki (hyödyllinen, jos anturin arvot ovat negatiivisia).",
+          "fixed_sun_rotation_enabled": "Pidä auringon atsimuutti näkymässä kiinteänä ja kierrä sen sijaan näkymää.",
+          "auto_rotate_speed": "Kortin automaattisen kierron oletusnopeus (1-90 astetta/s).",
+          "house_angle": "Talon etupuolen kulma suhteessa pohjoiseen (0-359°).",
+          "ceiling_tilt": "Katon tai aurinkopaneelien kallistuskulma (0° = tasainen, 90° = pystysuora).",
+          "update_interval": "Kuinka usein auringon sijainti lasketaan uudelleen (1-60 minuuttia).",
+          "radiation_enabled": "Nouda 15 minuutin säteilyennuste Open-Meteosta 15 minuutin välein auringon ollessa horisontin yläpuolella ja tunnin välein auringon ollessa horisontin alapuolella. Lisää seinien ja katon säteilyanturit. Toiminto on oletusarvoisesti poissa käytöstä, koska se käyttää ulkoista API-rajapintaa.",
+          "weather_visuals_enabled": "Nouda nykyinen sää Open-Meteosta valinnaisia, vain 3D-näkymässä näkyviä pilviä, sateita, tuulta, sumua ja horisontin salamointia varten. 2.5D-renderöintiä ei muuteta koskaan."
+        }
+      }
+    },
+    "error": {
+      "invalid_latitude": "Leveysasteen on oltava välillä -90 ja 90 astetta",
+      "invalid_longitude": "Pituusasteen on oltava välillä -180 ja 180 astetta",
+      "invalid_house_angle": "Talon kulman on oltava välillä 0 ja 360 astetta",
+      "invalid_ceiling_tilt": "Katon kallistuksen on oltava välillä 0 ja 90 astetta",
+      "invalid_update_interval": "Päivitysvälin on oltava 1-60 minuuttia",
+      "invalid_auto_rotate_speed": "Automaattisen kierron nopeuden on oltava 1-90 astetta/s",
+      "invalid_force_sun_azimuth": "Pakotetun auringon atsimuutin on oltava välillä 0 ja 359 astetta",
+      "invalid_force_sun_elevation": "Pakotetun auringon korkeuskulman on oltava välillä -90 ja 90 astetta",
+      "invalid_coordinates": "Anna koordinaatit kelvollisina desimaalilukuina",
+      "latitude_out_of_range": "Leveysasteen on oltava välillä -90° ja 90°",
+      "longitude_out_of_range": "Pituusasteen on oltava välillä -180° ja 180°",
+      "direction_required": "Valitse kompassisuunta, kun mukautettua kulmaa ei käytetä",
+      "unknown": "Tapahtui odottamaton virhe"
+    },
+    "abort": {
+      "single_instance_allowed": "Vain yksi Sunlight Visualizer -määritys on sallittu."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Sunlight Visualizerin asetukset",
+        "description": "Päivitä Sunlight Visualizerin määritys. Aktiivinen sijainti: {location_name} ({current_lat}, {current_lon}), lähde: {source}",
+        "data": {
+          "location_source": "Sijainnin lähde",
+          "location_zone_entity": "Korvaava vyöhyke",
+          "use_custom_angle": "Käytä mukautettua kulmaa (kompassisuunnan sijaan)",
+          "direction": "Kompassisuunta (valitse suunta, johon etuovi osoittaa)",
+          "roof_direction": "Katon laskusuunta",
+          "roof_power_entity": "Katon tehoanturi (valinnainen)",
+          "roof_power_enabled": "Näytä katon teholukema",
+          "roof_power_invert": "Käännä katon tehon etumerkki (pakota positiiviseksi)",
+          "fixed_sun_rotation_enabled": "Kiinteä auringon sijainti ja atsimuutti (kierrä näkymää)",
+          "force_sun_fallback": "Pakota auringon vara-arvot",
+          "force_sun_azimuth": "Pakota auringon atsimuutti",
+          "force_sun_elevation": "Pakota auringon korkeuskulma",
+          "auto_rotate_speed": "Automaattisen kierron nopeus (astetta/s)",
+          "house_angle": "Talon kulma (astetta, 0° = etupuoli pohjoiseen)",
+          "ceiling_tilt": "Katon kallistuskulma (0-90°, 0 = vaakasuora)",
+          "update_interval": "Päivitysväli (minuuttia)",
+          "radiation_enabled": "Ota Open-Meteo-säteilyanturit käyttöön",
+          "remove_radiation_entities_on_disable": "Poista Open-Meteo-anturit, kun toiminto poistetaan käytöstä",
+          "weather_visuals_enabled": "Ota 3D-säätehosteet käyttöön"
+        },
+        "data_description": {
+          "location_source": "Valitse Home Assistantin sijainti (oletus) tai mukautettu vyöhyke.",
+          "location_zone_entity": "Valitse sijainnin korvaava vyöhyke tai Käytä kotia (oletus). Jos vyöhyke puuttuu tai ei ole käytettävissä, kodin sijaintia käytetään automaattisesti.",
+          "use_custom_angle": "Valitse tämä, jos haluat antaa tarkan kulman. Poista valinta, jos haluat valita kompassisuunnan.",
+          "direction": "Valitse kompassisuunta (N, NE, E jne.), johon etuovi osoittaa.",
+          "roof_direction": "Valitse, mille talon sivulle katto viettää.",
+          "roof_power_entity": "Valitse tehoanturi, joka näytetään katon prosenttiarvon alla (W/kW).",
+          "roof_power_enabled": "Näytä katon teholukema prosenttiarvon alla.",
+          "roof_power_invert": "Käännä tehoarvojen etumerkki (hyödyllinen, jos anturin arvot ovat negatiivisia).",
+          "fixed_sun_rotation_enabled": "Pidä auringon atsimuutti näkymässä kiinteänä ja kierrä sen sijaan näkymää.",
+          "force_sun_fallback": "Pakota auringon vara-arvot käyttöön (testaus).",
+          "force_sun_azimuth": "Pakotettujen vara-arvojen kanssa käytettävä atsimuutti (0-359°).",
+          "force_sun_elevation": "Pakotettujen vara-arvojen kanssa käytettävä korkeuskulma (-90° - 90°).",
+          "auto_rotate_speed": "Kortin automaattisen kierron oletusnopeus (1-90 astetta/s).",
+          "house_angle": "Talon etupuolen kulma suhteessa pohjoiseen (0-359°).",
+          "ceiling_tilt": "Katon tai aurinkopaneelien kallistuskulma (0° = tasainen, 90° = pystysuora).",
+          "update_interval": "Kuinka usein auringon sijainti lasketaan uudelleen (1-60 minuuttia).",
+          "radiation_enabled": "Nouda 15 minuutin säteilyennuste Open-Meteosta 15 minuutin välein auringon ollessa horisontin yläpuolella ja tunnin välein auringon ollessa horisontin alapuolella. Lisää seinien ja katon säteilyanturit. Toiminto on oletusarvoisesti poissa käytöstä, koska se käyttää ulkoista API-rajapintaa.",
+          "remove_radiation_entities_on_disable": "Kun Open-Meteo-säteily poistetaan käytöstä, Home Assistantista poistetaan vain Open-Meteoon ja säteilyyn liittyvät entiteetit. Tavalliset auringonvaloanturit säilytetään.",
+          "weather_visuals_enabled": "Nouda nykyinen sää Open-Meteosta valinnaisia, vain 3D-näkymässä näkyviä pilviä, sateita, tuulta, sumua ja horisontin salamointia varten. 2.5D-renderöintiä ei muuteta koskaan."
+        }
+      }
+    }
+  },
+  "services": {
+    "set_options": {
+      "name": "Määritä asetukset",
+      "description": "Päivitä Sunlight Visualizerin aktiivisen määrityskohteen asetukset.",
+      "fields": {
+        "entry_id": {
+          "name": "Määrityskohteen tunnus",
+          "description": "Valinnainen. Jos tunnusta ei anneta, käytetään ensimmäistä Sunlight Visualizer -määrityskohdetta."
+        },
+        "house_angle": {
+          "name": "Talon kulma",
+          "description": "Etuseinän suunta asteina (0-359)."
+        },
+        "ceiling_tilt": {
+          "name": "Katon kallistus",
+          "description": "Katon kallistuskulma asteina (0-90)."
+        },
+        "roof_direction": {
+          "name": "Katon laskusuunta",
+          "description": "Sivu, jota kohti katto viettää."
+        },
+        "camera_rotation_h": {
+          "name": "Kameran vaakakierto",
+          "description": "Kameran vaakasuuntainen kierto asteina (0-359)."
+        },
+        "camera_rotation_v": {
+          "name": "Kameran pystykierto",
+          "description": "Kameran pystysuuntainen kierto asteina (0-90)."
+        },
+        "camera_zoom": {
+          "name": "Kameran zoomaus",
+          "description": "GLB-kameran tallennettu zoomaustaso (1.15-4.5)."
+        },
+        "fixed_sun_azimuth": {
+          "name": "Kiinteä auringon atsimuutti",
+          "description": "Kortin kiinteän auringon tilassa käytettävä auringon atsimuutti (0-359)."
+        },
+        "fixed_sun_rotation_enabled": {
+          "name": "Kiinteä auringon sijainti ja atsimuutti (kierrä näkymää)",
+          "description": "Pidä auringon atsimuutti näkymässä kiinteänä ja kierrä sen sijaan näkymää."
+        },
+        "auto_rotate_speed": {
+          "name": "Automaattisen kierron nopeus",
+          "description": "Kortin automaattisen kierron nopeus asteina sekunnissa (1-90)."
+        },
+        "roof_power_entity": {
+          "name": "Katon tehoanturi",
+          "description": "Valinnainen tehoanturi, joka näytetään katon prosenttiarvon alla."
+        },
+        "roof_power_enabled": {
+          "name": "Näytä katon teholukema",
+          "description": "Näytä tai piilota katon teholukema."
+        },
+        "roof_power_invert": {
+          "name": "Käännä katon tehoarvon etumerkki",
+          "description": "Käännä tehoarvon etumerkki (hyödyllinen antureille, jotka näyttävät viennin negatiivisena)."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "solar_alignment_status": {
+        "name": "Katon aurinkosuuntauksen tila",
+        "state": {
+          "at_peak": "Huipussaan",
+          "approaching": "Lähestyy",
+          "declining": "Laskee",
+          "unknown": "Tuntematon"
+        }
+      }
+    }
+  }
+}
