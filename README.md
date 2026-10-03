@@ -27,8 +27,6 @@ Core sunlight sensors work without an external weather API. Optional Open-Meteo 
   </tr>
 </table>
 
-
-
 [<img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open Sunlight Visualizer in HACS" />](https://my.home-assistant.io/redirect/hacs_repository/?owner=NoUsername10&repository=Sunlight_Visualizer&category=integration)
 
 If you like this integration you can fuel the next update with caffeine :-)
