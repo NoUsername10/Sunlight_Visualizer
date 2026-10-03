@@ -29,6 +29,7 @@ from custom_components.sunlight_visualizer.const import (
 )
 from custom_components.sunlight_visualizer.sensor import (
     CoordinatesSensor,
+    RadiationSensorBase,
     SunAzimuthSensor,
     SunElevationSensor,
     SunWallIntensityCoordinator,
@@ -214,6 +215,32 @@ class CoordinatorSmokeTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(coordinator.latitude, self.hass.config.latitude)
         self.assertEqual(coordinator.longitude, self.hass.config.longitude)
+        coordinator.async_shutdown()
+
+    async def test_radiation_sensors_do_not_appear_as_map_locations(self) -> None:
+        entry = _config_entry(
+            **{
+                CONF_FORCE_SUN_FALLBACK: True,
+                CONF_FORCE_SUN_AZIMUTH: 180,
+                CONF_FORCE_SUN_ELEVATION: 45,
+                CONF_RADIATION_ENABLED: False,
+                CONF_WEATHER_VISUALS_ENABLED: False,
+            }
+        )
+        coordinator = SunWallIntensityCoordinator(self.hass, entry, integration.VERSION)
+        await coordinator.async_refresh()
+        coordinator.data["radiation"]["location"] = {
+            "source": "home_assistant",
+            "name": "Smoke Test Home",
+            "latitude": self.hass.config.latitude,
+            "longitude": self.hass.config.longitude,
+        }
+
+        attributes = RadiationSensorBase(coordinator, entry)._radiation_attrs()
+        self.assertNotIn("latitude", attributes)
+        self.assertNotIn("longitude", attributes)
+        self.assertEqual(attributes["location_name"], "Smoke Test Home")
+        self.assertEqual(coordinator.data["radiation"]["location"]["latitude"], self.hass.config.latitude)
         coordinator.async_shutdown()
 
 
