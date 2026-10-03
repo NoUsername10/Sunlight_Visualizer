@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Planned
 - Configurable placement for the 2.5D power pole and tree.
 
+## [0.5.4] - 2026-10-03
+
+### Changed
+- Added a lightweight static meadow texture to the 3D surroundings, extending its visible detail toward the house and compass ring while preserving the GLB garden texture and the distant terrain fade.
+
+### Fixed
+- Keep Open-Meteo rain-shower codes 80–82 from activating snow particles when reported snowfall is zero. Snowfall and actual snow codes still render snow; weather and sunlight sensor values are unchanged.
+- Removed top-level latitude and longitude attributes from the Sun Coordinates, Sun Azimuth and Sun Elevation sensors so Home Assistant no longer plots duplicate markers for them on the Map. The integration still uses the configured location for sunlight calculations, and the Sun Coordinates sensor still displays its location.
+
 ## [0.5.3] - 2026-10-01
 
 ### Added
@@ -14,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - An independent 3D windsock near the left end of the roof when weather visuals are enabled. Five orange/white bands use a custom 3 m/s per band scale, reaching full extension at 15 m/s. It follows weather wind direction and smoothly alternates steady wind with illustrative gusts, using a small cloth-like mesh and the existing offscreen-paused animation loop.
 
 ### Fixed
+- Use full raw GitHub URLs for all README asset images so they render in HACS as well as on GitHub.
 - Darken the 3D house and garden in daytime thunderstorms so they match the storm sky, while preserving the illustrative tree and house shadows and leaving sensor calculations unchanged.
 - Keep tree and house shadows legible at full cloud cover using a visual-only sun key; strengthen clear-day directional contrast and colour without changing calculated radiation or shading values.
 - Give fully overcast daylight a gentle directional sky fill so the unlit house wall remains darker, while keeping exposure and sunlight sensor values unchanged.

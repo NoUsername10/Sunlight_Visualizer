@@ -1,0 +1,103 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;background:#111820}sunlight-visualizer-card{display:block;width:450px;height:450px}</style><script type="module" src="/sunlight_visualizer/sunlight-visualizer-card.js"></script></head><body data-smoke="pending"><script type="module">
+await customElements.whenDefined('sunlight-visualizer-card');
+const card=document.createElement('sunlight-visualizer-card'); window.captureCard=card;
+const source={sunlight_visualizer_source:'sunlight_visualizer'};
+const e=(state,attributes={})=>({state:String(state),attributes});
+const states={
+ 'weather.sunlight_visualizer':e('lightning-rainy',{...source,weather_visuals_source:'open_meteo',temperature:22,temperature_unit:'°C',cloud_coverage:100,rain:10,precipitation:10,snowfall:0,wind_speed:25,wind_speed_unit:'km/h',wind_bearing:225,visibility:12000,is_day:true}),
+ 'sun.sun':e('below_horizon',{azimuth:340,elevation:-12}),
+ 'sensor.settings':e('ready',{...source,house_angle:0,camera_zoom:2.0}),
+ 'input_number.cube_rotation_h':e(135), 'input_number.cube_rotation_v':e(0),
+ 'sensor.roof_power':e(163,{device_class:'power',unit_of_measurement:'W'}),
+ 'sensor.roof_alignment':e(64,{...source,wall:'ceiling',ceiling_tilt:30,unit_of_measurement:'%'}),
+ 'sensor.roof_sunlight_alignment_status':e('Declining',{...source,alignment_percentage:64}),
+ 'sensor.roof_radiation':e(105,{...source,unit_of_measurement:'W/m²'})
+};
+for(const [wall,pct] of Object.entries({front:50,right:28,back:0,left:0})){
+ states['sensor.'+wall+'_alignment']=e(pct,{...source,wall,house_angle:0,unit_of_measurement:'%'});
+ states['sensor.'+wall+'_wall_shading_status']=e(pct?'Shade useful':'No direct sun',{...source,wall});
+ states['sensor.'+wall+'_wall_radiation_direct']=e(pct/5,{...source,wall,unit_of_measurement:'W/m²'});
+}
+card.setConfig({rendererMode:'three_d',cardWidth:450,cardHeight:450,autoScaleWidth:false,experimentalSurroundings:true,experimentalSurroundingsFog:false,weatherVisuals:'strong',weatherTestEnabled:true,weatherTestCloudCover:0,weatherTestRain:0,weatherTestSnowfall:0,weatherTestFog:0,weatherTestWindSpeed:3,weatherTestWindDirection:270,weatherTestThunder:false,useSunEntity:true,sunEntityId:'sun.sun',roofPowerEnabled:true,roofPowerEntity:'sensor.roof_power',energyHudEnabled:true,energyHudAutoCompact:false,cssFpsAutoLimitEnabled:false});
+card.hass={states,config:{time_zone:'UTC'},locale:{language:'en'},services:{},callService:async()=>{},callWS:async()=>({}),callApi:async()=>({})};
+document.body.append(card);
+const ready=setInterval(()=>{
+ if(card._threeHouseLoadPhase!=='ready'||!card._threeHouseRenderCache)return;
+ clearInterval(ready);
+ setTimeout(async()=>{try {
+  const assert=(value,message)=>{if(!value)throw new Error(message)};
+  const frame=()=>{card._stopThreeHouseVisualLoop();card._renderThreeHouseScene();card._stopThreeHouseVisualLoop();};
+  const scene=card._threeHouseScene, renderer=card._threeHouseRenderer, camera=card._threeHouseCamera;
+  const stars=scene.children.filter(object=>object.name.startsWith('SV_GLB_NIGHT_STARS_'));
+  const cloud=scene.getObjectByName('SV_GLB_WEATHER_CLOUD_DECK');
+  assert(stars.length===3 && stars.reduce((sum,group)=>sum+group.geometry.attributes.position.count,0)===190,'retain the star count and three draws');
+  assert(stars.every(group=>group.renderOrder<cloud.renderOrder && group.material.depthTest && !group.material.depthWrite),'stars must render behind weather clouds and respect model depth');
+  assert(card._threeHouseNightCloudGroup.children.every(group=>stars.every(star=>star.renderOrder<group.renderOrder)),'decorative night clouds must also render over the stars');
+  const projectedCounts=[];window.testFrames={};
+  for(const angle of [0,90,180,270]) {
+   states['input_number.cube_rotation_h']=e(angle);
+   card.hass={...card._hass,states:{...states}};await card.updateComplete;frame();
+   const point=camera.position.clone();let count=0;
+   for(const group of stars) {
+    const positions=group.geometry.attributes.position;
+    for(let i=0;i<positions.count;i++) {
+     point.fromBufferAttribute(positions,i).project(camera);
+     if(Math.abs(point.x)<1 && Math.abs(point.y)<1 && point.z>=-1 && point.z<=1)count++;
+    }
+   }
+   assert(count>0,'every quarter-turn must see stars on the upper dome: '+angle);
+   projectedCounts.push(count);
+   window.testFrames['night-'+angle]=renderer.domElement.toDataURL('image/png');
+   await new Promise(resolve=>setTimeout(resolve,0));
+  }
+  // Isolate the actual star material and weather-cloud shader. A controlled
+  // overlap tests GPU alpha blending, rather than merely checking draw order.
+  frame();
+  const testScene=new scene.constructor();testScene.background=stars[0].material.color.clone().set(0x000000);
+  const testCamera=new camera.constructor(50,1,0.1,100);
+  const testStar=stars[2].clone(false);testStar.geometry=testStar.geometry.clone();
+  const position=testStar.geometry.attributes.position;
+  testStar.geometry.setAttribute('position',new position.constructor(new Float32Array([0,0,-60]),3));
+  testStar.layers.set(0);testStar.frustumCulled=false;testScene.add(testStar);
+  const savedStarOpacity=testStar.material.opacity;testStar.material.opacity=1;
+  const testCloud=cloud.clone(false);testCloud.geometry=cloud.geometry.clone();testCloud.material=cloud.material.clone();
+  testCloud.geometry.instanceCount=1;
+  const attributes={svCluster:[0,0,-10],svOffset:[0,0,0],svScale:[1,1],svSeed:[0],svRank:[0],svPhase:[0.5]};
+  for(const [key,values] of Object.entries(attributes)) {
+   const attribute=testCloud.geometry.attributes[key];
+   testCloud.geometry.setAttribute(key,new attribute.constructor(new Float32Array(values),attribute.itemSize));
+  }
+  testCloud.layers.set(0);testCloud.visible=true;testScene.add(testCloud);
+  const uniforms=testCloud.material.uniforms;
+  uniforms.time.value=0;uniforms.cloudAmount.value=1;uniforms.direction.value.set(0,0);
+  uniforms.projectionScaleRatio.value=1;uniforms.lightningFlash.value=0;
+  uniforms.lightStrength.value=0.1;uniforms.lightColor.value.set(0xffffff);
+  const savedAutoClear=renderer.autoClear;renderer.autoClear=true;
+  const gl=renderer.getContext();const patchSize=7;
+  const read=()=>{
+   renderer.setRenderTarget(null);renderer.render(testScene,testCamera);
+   const pixels=new Uint8Array(patchSize*patchSize*4);
+   gl.readPixels(Math.floor(renderer.domElement.width/2)-3,Math.floor(renderer.domElement.height/2)-3,patchSize,patchSize,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
+   return pixels;
+  };
+  const contribution=opacity=>{
+   uniforms.opacity.value=opacity;testStar.visible=false;const withoutStars=read();
+   testStar.visible=true;const withStars=read();let total=0;
+   for(let i=0;i<withStars.length;i++)if(i%4!==3)total+=Math.abs(withStars[i]-withoutStars[i]);
+   return total;
+  };
+  const clear=contribution(0),partial=contribution(0.5),opaque=contribution(1);
+  testStar.material.opacity=savedStarOpacity;renderer.autoClear=savedAutoClear;
+  testStar.geometry.dispose();testCloud.geometry.dispose();testCloud.material.dispose();
+  assert(clear>30,'a visible star must contribute pixels to the clear sky');
+  assert(partial>clear*0.25 && partial<clear*0.75,'semi-transparent clouds must partially hide star light');
+  assert(opaque<=3,'opaque clouds must completely hide star light');
+  frame();
+  assert(renderer.info.programs.some(program=>program.cacheKey.includes('sv-night-stars-gpu-v1')),'twinkle shader must compile on the GPU');
+  window.testInfo={projectedCounts,starContributions:{clear,partial,opaque}};
+  card.remove();await Promise.resolve();
+  assert(!card._threeHouseRenderer,'disconnect must release the renderer and sky resources');
+  document.body.dataset.smoke='passed';document.body.dataset.detail='190 stars across four orbit views '+projectedCounts.join('/')+', retained depth tests/twinkling, GPU-verified cloud alpha occlusion at 0/50/100% opacity (star pixels '+clear+'/'+partial+'/'+opaque+') and sky cleanup';
+ }catch(error){document.body.dataset.smoke='failed';document.body.dataset.detail=error.stack||String(error);}},800);
+},100);
+</script></body></html>

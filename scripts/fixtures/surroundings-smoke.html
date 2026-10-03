@@ -1,0 +1,225 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;background:#111820}sunlight-visualizer-card{display:block;width:450px;height:450px}</style><script type="module" src="/sunlight_visualizer/sunlight-visualizer-card.js"></script></head><body data-smoke="pending"><script type="module">
+await customElements.whenDefined('sunlight-visualizer-card');
+const card=document.createElement('sunlight-visualizer-card'); window.captureCard=card;
+const source={sunlight_visualizer_source:'sunlight_visualizer'};
+const e=(state,attributes={})=>({state:String(state),attributes});
+const states={
+ 'weather.sunlight_visualizer':e('lightning-rainy',{...source,weather_visuals_source:'open_meteo',temperature:22,temperature_unit:'°C',cloud_coverage:100,rain:10,precipitation:10,snowfall:0,wind_speed:25,wind_speed_unit:'km/h',wind_bearing:225,visibility:12000,is_day:true}),
+ 'sun.sun':e('above_horizon',{azimuth:340,elevation:14}),
+ 'sensor.settings':e('ready',{...source,house_angle:0,camera_zoom:2.0}),
+ 'input_number.cube_rotation_h':e(135), 'input_number.cube_rotation_v':e(0),
+ 'sensor.roof_power':e(163,{device_class:'power',unit_of_measurement:'W'}),
+ 'sensor.roof_alignment':e(64,{...source,wall:'ceiling',ceiling_tilt:30,unit_of_measurement:'%'}),
+ 'sensor.roof_sunlight_alignment_status':e('Declining',{...source,alignment_percentage:64}),
+ 'sensor.roof_radiation':e(105,{...source,unit_of_measurement:'W/m²'})
+};
+for(const [wall,pct] of Object.entries({front:50,right:28,back:0,left:0})){
+ states['sensor.'+wall+'_alignment']=e(pct,{...source,wall,house_angle:0,unit_of_measurement:'%'});
+ states['sensor.'+wall+'_wall_shading_status']=e(pct?'Shade useful':'No direct sun',{...source,wall});
+ states['sensor.'+wall+'_wall_radiation_direct']=e(pct/5,{...source,wall,unit_of_measurement:'W/m²'});
+}
+card.setConfig({rendererMode:'three_d',cardWidth:450,cardHeight:450,autoScaleWidth:false,weatherVisuals:'off',weatherTestEnabled:false,weatherTestCloudCover:0,weatherTestRain:0,weatherTestSnowfall:0,weatherTestFog:0,weatherTestWindSpeed:3,weatherTestWindDirection:270,weatherTestThunder:false,useSunEntity:true,sunEntityId:'sun.sun',roofPowerEnabled:true,roofPowerEntity:'sensor.roof_power',energyHudEnabled:true,energyHudAutoCompact:false,cssFpsAutoLimitEnabled:false});
+card.hass={states,config:{time_zone:'UTC'},locale:{language:'en'},services:{},callService:async()=>{},callWS:async()=>({}),callApi:async()=>({})};
+document.body.append(card);
+const ready=setInterval(()=>{
+ if(card._threeHouseLoadPhase!=='ready'||!card._threeHouseRenderCache)return;
+ clearInterval(ready);
+ setTimeout(async()=>{
+ try {
+  const assert=(value,message)=>{if(!value)throw new Error(message)};
+  window.testFrames={};
+  const canvas=card.shadowRoot.querySelector('canvas.three-house-scene');
+  const renderer=card._threeHouseRenderer;
+  const model=card._threeHouseModel;
+  const weather=card._threeHouseWeatherVisuals;
+  const metrics=()=>{renderer.info.autoReset=false;renderer.info.reset();frame();const result={calls:renderer.info.render.calls,triangles:renderer.info.render.triangles};renderer.info.autoReset=true;return result;};
+  const frame=()=>{card._stopThreeHouseVisualLoop();card._renderThreeHouseScene();card._stopThreeHouseVisualLoop();};
+  const capture=()=>canvas.toDataURL('image/png');
+  assert(card._threeHouseSurroundings?.isActive() && !card._threeHouseGround.visible,'3D surroundings and haze must default to on');
+  frame();window.testFrames.defaultTerrain=capture();
+  card.setConfig({...card._config,experimentalSurroundings:false});
+  await card.updateComplete;frame();
+  assert(!card._threeHouseSurroundings && card._threeHouseGround.visible,'explicit off must restore original ground');
+  window.testFrames.original=capture();const baselineMetrics=metrics();
+  card.setConfig({...card._config,experimentalSurroundings:true,experimentalSurroundingsFog:false});
+  await card.updateComplete;frame();
+  const scenery=card._threeHouseSurroundings;
+  assert(scenery && !scenery.isActive() && !card._threeHouseGround.visible,'terrain on with haze off must replace the circular ground');
+  assert(card._threeHouseRenderer===renderer && card._threeHouseModel===model && card._threeHouseWeatherVisuals===weather,'existing scene must be retained');
+  const garden = card._threeHouseBakedNightMaterials.find(entry=>entry.material.userData.sv_ground_surface);
+  assert(garden && garden.material.isMeshLambertMaterial,'garden must retain baked night metadata and use shared diffuse shading');
+  const gardenTexture=garden.material.map;
+  const terrainTexture=scenery.terrainMaterial.map;
+  assert(gardenTexture && terrainTexture?.isDataTexture && terrainTexture!==gardenTexture && terrainTexture.image.width===256 && scenery.terrainMaterial.color.getHex()===0xffffff,'landscape must use its own small texture while the garden keeps its GLB texture');
+  const terrainTextureVersion=terrainTexture.version;
+  const terrainColours=scenery.group.getObjectByName('SV_TEST_TERRAIN').geometry.getAttribute('color');
+  const surfaceVersion=terrainColours.version;
+  assert(garden.material.aoMap && garden.material.emissiveMap,'garden contact AO and night bake must be preserved');
+  assert(garden.material.emissiveIntensity===0,'grass night lighting must stay off in daylight');
+  window.testFrames.terrain=capture();
+  let cachedRebuild=false;
+  const cache=card._threeHouseRenderCache;
+  const originalRender=cache.render;
+  cache.render=function(...args){const result=originalRender.apply(this,args);cachedRebuild=result.staticRebuilt;return result;};
+  frame();const terrainMetrics=metrics();assert(terrainMetrics.calls===baselineMetrics.calls,"static scenery must add no idle draws");assert(!cachedRebuild,'static scenery should reuse cached frame');
+  card.setConfig({...card._config,experimentalSurroundingsFog:true});
+  await card.updateComplete;frame();
+  assert(scenery.isActive(),'haze should enable independently');
+  assert(scenery.haze.renderOrder < card._threeHouseWeatherClouds.mesh.renderOrder,'haze must composite behind foreground clouds');
+  assert(scenery.hazeUniforms.useSkyTexture.value===1 && scenery.hazeUniforms.skyTexture.value===card._threeHouseSkyTexture,'haze must use the rendered sky palette and texture');
+  const compassRing=card._threeHouseCompassGroup.children[0];
+  compassRing.geometry.computeBoundingBox();
+  const compassOuterRadius=compassRing.geometry.boundingBox.max.x * card._threeHouseCompassGroup.scale.x;
+  assert(Math.abs(scenery.hazeUniforms.clearRadius.value-compassOuterRadius)<0.00001,'background haze must begin at the actual scaled compass ring boundary');
+  assert(!cachedRebuild,'haze toggle should retain static scenery cache');
+  const skyAt=async(elevation)=>{
+    states['sun.sun']=e(elevation>0?'above_horizon':'below_horizon',{azimuth:340,elevation});
+    card.hass={...card._hass,states:{...states}};
+    await card.updateComplete;frame();
+    await new Promise(resolve=>setTimeout(resolve,0));
+    const palette=card._threeHouseSkyTextureKey.split('|').map(band=>band.split(',').map(Number));
+    const uniformBands=['skyTop','skyBand','skyBottom'];
+    uniformBands.forEach((key,index)=>{
+      const actual=scenery.hazeUniforms[key].value;
+      const expected=palette[index];
+      const linear=channel=>{const value=channel/255;return value<=0.04045?value/12.92:Math.pow((value+0.055)/1.055,2.4);};
+      assert(Math.abs(actual.r-linear(expected[0]))<0.012 && Math.abs(actual.g-linear(expected[1]))<0.012 && Math.abs(actual.b-linear(expected[2]))<0.012,'haze must follow evolving sky colours: '+JSON.stringify({elevation,key,actual:actual.toArray(),expected}));
+    });
+    return palette;
+  };
+  const skyDay=await skyAt(16);
+  assert(JSON.stringify(skyDay)===JSON.stringify([[80,151,211],[247,200,130],[58,82,76]]),'full daytime palette must be preserved');
+  const skySunset=await skyAt(3);
+  assert(skySunset[1][1]<skyDay[1][1] && skySunset[1][2]<skyDay[1][2],'sunset must warm the sky before the sun reaches the horizon');
+  const beforeThreshold=await skyAt(0.6),afterThreshold=await skyAt(0.5);
+  assert(beforeThreshold.every((band,index)=>band.every((channel,c)=>Math.abs(channel-afterThreshold[index][c])<=5)),'sky must not jump at sun visibility threshold');
+  await skyAt(0);
+  const skyNight=await skyAt(-6);
+  assert(garden.material.emissiveIntensity>0,'grass baked light must activate at night');
+  assert(JSON.stringify(skyNight)===JSON.stringify([[12,20,42],[32,44,82],[6,10,22]]),'night palette must be reached by minus six degrees');
+  await skyAt(3);
+  assert(card._skyTrend>0,'rising sun must select sunrise colours');
+  await skyAt(14);
+  assert(garden.material.emissiveIntensity===0,'grass baked light must switch off again in daylight');
+  assert(garden.material.map===gardenTexture && scenery.terrainMaterial.map===terrainTexture && terrainTexture.version===terrainTextureVersion && terrainColours.version===surfaceVersion,'day/night updates must retain the separate GLB garden and static landscape surface');
+
+  window.testFrames.haze=capture();const hazeMetrics=metrics();assert(hazeMetrics.calls===baselineMetrics.calls+1 && hazeMetrics.triangles===baselineMetrics.triangles+2,"haze should add one fullscreen draw and two triangles");
+  assert(renderer.info.programs.some(p=>p.cacheKey.includes('sv-test-surroundings-height-haze-v3')),'haze shader must compile');
+  window.testInfo={baselineMetrics,terrainMetrics,hazeMetrics,trees:scenery.group.getObjectByName('SV_TEST_TREES').count,shrubs:scenery.group.getObjectByName('SV_TEST_SHRUBS').count,triangles:renderer.info.render.triangles,drawCalls:renderer.info.render.calls};
+  for (let angle=0;angle<4;angle++) {
+    card._autoRotateOffsetDeg=angle*90;card.requestUpdate();await card.updateComplete;frame();
+    assert(card._threeHouseLoadPhase==='ready' && scenery.isActive(),'surroundings must render from every orbit direction');
+  }
+  card._autoRotateOffsetDeg=0;card.requestUpdate();await card.updateComplete;frame();
+  card.setConfig({...card._config,weatherVisuals:'strong',weatherTestEnabled:true,weatherTestFog:90,weatherTestCloudCover:70,weatherTestSnowfall:5});await card.updateComplete;frame();
+  assert(card._threeHouseWeatherVisuals.fog.isActive() && scenery.isActive(),'existing weather fog and background haze must coexist');
+  assert(card._threeHouseWeatherVisuals.fog.uniforms.sceneDepth.value===scenery.hazeUniforms.sceneDepth.value,'both haze consumers must share opaque depth');
+  card.setConfig({...card._config,weatherVisuals:'strong',weatherTestEnabled:true,weatherTestFog:0,weatherTestCloudCover:100,weatherTestRain:0,weatherTestSnowfall:0,weatherTestThunder:false});await card.updateComplete;frame();
+  const cloud=card._threeHouseWeatherClouds;
+  const lightState=()=>({fill:card._threeHouseHemisphereLight.intensity,ambient:card._threeHouseAmbientLight.intensity,cloud:cloud.uniforms.lightStrength.value,overcastKey:card._threeHouseOvercastKeyLight.intensity,opacity:cloud.uniforms.opacity.value,exposure:renderer.toneMappingExposure});
+  await skyAt(30); const cloudyDay=lightState(); frame();window.testFrames.cloudyDay=capture();
+  const cloudyBeam=card._threeHouseSunLight.intensity;
+  const cloudySaturation=Number(canvas.style.getPropertyValue('--glb-scene-saturation'));
+  const cloudyShadowOpacity=card._threeHouseShadowReceiver.material.opacity;
+  card.setConfig({...card._config,weatherTestThunder:true});await card.updateComplete;
+  await skyAt(30);const stormDay=lightState();frame();window.testFrames.thunderDay=capture();
+  const stormBeam=card._threeHouseSunLight.intensity;
+  const stormShadowOpacity=card._threeHouseShadowReceiver.material.opacity;
+  assert(stormDay.exposure<cloudyDay.exposure*0.92 && stormDay.fill<cloudyDay.fill*0.85 && stormDay.ambient<cloudyDay.ambient*0.85,'thunder must darken the day scene, not just the sky');
+  assert(Math.abs(stormBeam-cloudyBeam)<0.001 && stormShadowOpacity>=cloudyShadowOpacity-0.01,'thunder must preserve the visible sun-direction shadow: '+JSON.stringify({cloudyBeam,stormBeam,cloudyShadowOpacity,stormShadowOpacity}));
+  card.setConfig({...card._config,weatherTestThunder:false});await card.updateComplete;
+  await skyAt(30);
+  let gardenMesh;
+  model.traverse(object=>{if(object.isMesh && object.userData.sv_ground_surface)gardenMesh=object});
+  assert(gardenMesh,'baked garden mesh must exist');
+  const gardenTop=new card._threeHouseModelBoxLocal.constructor().setFromObject(gardenMesh).max.y;
+  const receiverY=card._threeHouseShadowReceiver.position.y;
+  assert(receiverY>gardenTop && receiverY<gardenTop+0.01,'projected shadow must render immediately above the baked garden');
+  card.setConfig({...card._config,weatherTestCloudCover:0});await card.updateComplete;
+  await skyAt(30);
+  const clearBeam=card._threeHouseSunLight.intensity;
+  const clearSaturation=Number(canvas.style.getPropertyValue('--glb-scene-saturation'));
+  frame();window.testFrames.clearDay=capture();
+  const clearShadowOpacity=card._threeHouseShadowReceiver.material.opacity;
+  assert(cloudyShadowOpacity>clearShadowOpacity+0.01,'full-cloud projected shadow must remain visible while direct sunlight softens');
+  assert(cloudyDay.overcastKey>0.08 && card._threeHouseOvercastKeyLight.castShadow===false,'overcast sky key must add wall direction without a shadow map');
+  assert(clearBeam>0 && card._threeHouseOvercastKeyLight.intensity===0,'clear sky must not use the overcast key');
+  assert(cloudyBeam>0.7 && clearBeam>cloudyBeam*1.25 && clearSaturation>cloudySaturation+0.07,'shadow-casting sun direction must read under full clouds and clear sky must gain contrast and colour');
+  card.setConfig({...card._config,weatherTestCloudCover:100});await card.updateComplete;
+  await skyAt(30);
+  window.testInfo.cloudBeamContrast={clearBeam,cloudyBeam};
+  await skyAt(4); const cloudySunset=lightState(); frame();window.testFrames.cloudySunset=capture();
+  assert(cloudySunset.fill+cloudySunset.overcastKey>0.75 && cloudySunset.ambient>0.13,'bright twilight sky must still illuminate the house and terrain diffusely: '+JSON.stringify(cloudySunset));
+  assert(cloudyDay.fill>cloudySunset.fill && cloudyDay.cloud>cloudySunset.cloud,'scene and clouds must dim together as the sky darkens');
+  await skyAt(0.6); const beforeLight=lightState();
+  await skyAt(0.5); const afterLight=lightState();
+  for(const key of Object.keys(beforeLight)) assert(Math.abs(beforeLight[key]-afterLight[key])<0.025,'diffuse lighting, exposure and clouds must not jump at the horizon switch: '+key);
+  await skyAt(-12); const cloudyNight=lightState(); window.testFrames.cloudyNight=capture();
+  assert(cloudyNight.cloud<0.15 && cloudyNight.cloud<cloudySunset.cloud*0.3,'night clouds must stop glowing at daytime brightness');
+  assert(cloud.material.fragmentShader.includes('#include <tonemapping_fragment>') && cloud.material.fragmentShader.includes('#include <colorspace_fragment>'),'clouds must share renderer tone mapping and output colour conversion');
+  assert(renderer.info.programs.some(p=>p.cacheKey.includes('sv-weather-cloud-deck-v8')),'sky-lit cloud shader must compile');
+  window.testInfo.lighting={cloudyDay,cloudySunset,cloudyNight,beforeLight,afterLight};
+  card.setConfig({...card._config,weatherVisuals:'off',weatherTestEnabled:false});await card.updateComplete;frame();
+  await skyAt(30);
+  const clearDayTint=card._threeHouseHemisphereLight.color.r/card._threeHouseHemisphereLight.color.b;
+  await skyAt(4); const clearSunset=lightState(); window.testFrames.clearSunset=capture();
+  const sunsetTint=card._threeHouseHemisphereLight.color.r/card._threeHouseHemisphereLight.color.b;
+  assert(sunsetTint>clearDayTint*1.1,'clear golden hour must retain warmer diffuse light than midday');
+  assert(card._threeHouseSunLight.color.r>card._threeHouseSunLight.color.b*3,'low-angle sunlight must retain its warm highlights');
+  assert(clearSunset.fill>cloudySunset.fill,'clear sky must provide stronger fill than overcast sky at the same elevation');
+  // Exercise the integration's manual sun override while sun.sun disagrees.
+  card.setConfig({...card._config,weatherVisuals:'strong',weatherTestEnabled:true,weatherTestCloudCover:100});
+  states['sensor.settings']=e('ready',{...source,house_angle:0,camera_zoom:2,force_sun_fallback:true,force_sun_elevation:5,force_sun_azimuth:264});
+  card._prevSunEl=6;
+  await skyAt(30);
+  const manualSunset=lightState();
+  // Baseline energies from the balanced renderer before the colour-only change.
+  assert(manualSunset.overcastKey>0.08 && Math.abs(manualSunset.fill+manualSunset.ambient+manualSunset.overcastKey-1.1509614748)<0.06 && Math.abs(manualSunset.exposure-0.9701106667)<0.00001,'overcast wall contrast must redistribute balanced fill without changing exposure');
+  assert(card._threeHouseSunLight.intensity>0.3 && card._threeHouseSunLight.intensity<0.7 && Math.abs(manualSunset.cloud-0.9422520039)<0.00001,'low overcast sun must keep an illustrative shadow without changing cloud brightness');
+  const tint=card._threeHouseHemisphereLight.color;
+  assert(tint.r/tint.b>1.25,'overcast golden hour must retain warm house and cloud colours');
+  const sunsetPalette=card._threeHouseSkyTextureKey;
+  card._prevSunEl=4;
+  states['sensor.settings'].attributes.force_sun_azimuth=70;
+  await skyAt(30);
+  assert(card._skyTrend>0 && card._threeHouseSkyTextureKey!==sunsetPalette,'manual sunrise must use its own low-sun colour palette');
+  states['sensor.open_meteo_direct_normal_irradiance']=e(0,{...source,unit_of_measurement:'W/m²'});
+  states['sensor.open_meteo_direct_radiation']=e(0,{...source,unit_of_measurement:'W/m²'});
+  states['sensor.open_meteo_shortwave_radiation']=e(352,{...source,unit_of_measurement:'W/m²'});
+  await skyAt(30);
+  assert(card._threeHouseSunLight.intensity>0.3 && card._threeHouseSunLight.intensity<0.7,'zero measured DNI must retain only the low-sun visual shadow-direction cue');
+  delete states['sensor.open_meteo_direct_normal_irradiance'];
+  delete states['sensor.open_meteo_direct_radiation'];
+  delete states['sensor.open_meteo_shortwave_radiation'];
+  window.testInfo.manualGoldenHour={sunset:manualSunset,sunrise:lightState()};
+  states['sensor.settings']=e('ready',{...source,house_angle:0,camera_zoom:2});
+  card.setConfig({...card._config,weatherVisuals:'off',weatherTestEnabled:false});
+  await skyAt(14);
+  const time=scenery.hazeUniforms.time.value;
+  card.style.display='none'; await new Promise(r=>setTimeout(r,150));
+  const paused=scenery.hazeUniforms.time.value;
+  await new Promise(r=>setTimeout(r,150));
+  assert(scenery.hazeUniforms.time.value===paused && card._threeHouseVisualWakeTimer===null,'haze must pause when card hidden');
+  card.style.display='';
+  const resumeDeadline=performance.now()+4000;
+  while(scenery.hazeUniforms.time.value<=paused && performance.now()<resumeDeadline) await new Promise(r=>setTimeout(r,40));
+  assert(scenery.hazeUniforms.time.value>paused,'haze must resume when visible');
+  frame();
+  const resources=new Set();scenery.group.traverse(o=>{if(o.geometry)resources.add(o.geometry)});resources.add(scenery.haze.geometry);resources.add(scenery.terrainMaterial);resources.add(scenery.foliageMaterial);resources.add(scenery.haze.material);
+  let disposed=0;resources.forEach(r=>r.addEventListener('dispose',()=>disposed++));
+  card.setConfig({...card._config,experimentalSurroundings:false});await card.updateComplete;frame();
+  assert(!card._threeHouseSurroundings && !scenery.group.parent && !scenery.haze.parent && card._threeHouseGround.visible,'test objects should be removed and original ground restored');
+  assert(disposed===resources.size,'all owned geometry and materials should be disposed once');
+  assert(card._threeHouseRenderer===renderer && card._threeHouseModel===model && card._threeHouseWeatherVisuals===weather,'toggle off must retain existing modules');
+  window.testFrames.restored=capture();
+  card.setConfig({...card._config,experimentalSurroundings:true,experimentalSurroundingsFog:true});await card.updateComplete;frame();
+  cache.render=originalRender;
+  const sceneBeforeSwitch=card._threeHouseScene;
+  card.setConfig({...card._config,rendererMode:'two_point_five_d'});await card.updateComplete;
+  assert(!card._threeHouseRenderer && !card._threeHouseSurroundings,'2.5D switch must dispose scenery and renderer');
+  assert(!sceneBeforeSwitch.getObjectByName('SV_TEST_SURROUNDINGS'),'no scenery should survive disposal');
+  document.body.dataset.smoke='passed';document.body.dataset.detail='Surroundings on/off, original ground restoration, independent haze, four orbit directions, weather-fog coexistence, gradual sunset/sunrise, separate GLB/landscape surfaces, shared sky/cloud/scene lighting and matching haze, cache reuse, one-draw haze budget, hidden pause/resume, resource cleanup and 2.5D disposal verified';
+ } catch(error){document.body.dataset.smoke='failed';document.body.dataset.detail=error.stack||String(error);}
+ },800);
+},100);
+</script></body></html>
