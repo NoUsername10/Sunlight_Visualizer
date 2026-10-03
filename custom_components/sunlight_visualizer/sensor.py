@@ -625,11 +625,10 @@ class CoordinatesSensor(CoordinatorEntity, SensorEntity):
         """Return extra state attributes."""
         settings = self.coordinator.settings_summary
         
-        # Add raw numeric values for automation use
+        # Keep location in the descriptive state/configuration, not as top-level
+        # latitude/longitude attributes that Home Assistant plots on the map.
         return {
             CARD_SOURCE_ATTR: CARD_SOURCE_VALUE,
-            'latitude': round(self.coordinator.latitude, 6),
-            'longitude': round(self.coordinator.longitude, 6),
             'latitude_with_direction': self._format_latitude(),
             'longitude_with_direction': self._format_longitude(),
             'source': _location_source_label(self.coordinator.location_source_effective),
@@ -2623,8 +2622,6 @@ class SunAzimuthSensor(CoordinatorEntity, SensorEntity):
         return {
             CARD_SOURCE_ATTR: CARD_SOURCE_VALUE,
             'sun_elevation': round(sun_pos['elevation'], 2),
-            'latitude': self.coordinator.latitude,
-            'longitude': self.coordinator.longitude,
             'data_source': _location_source_label(self.coordinator.location_source_effective),
             'location_source': self.coordinator.location_source,
             'location_zone_entity': self.coordinator.location_zone_entity,
@@ -2741,8 +2738,6 @@ class SunElevationSensor(CoordinatorEntity, SensorEntity):
         return {
             CARD_SOURCE_ATTR: CARD_SOURCE_VALUE,
             'sun_azimuth': round(sun_pos['azimuth'], 2),
-            'latitude': self.coordinator.latitude,
-            'longitude': self.coordinator.longitude,
             'last_updated': self.coordinator.data.get('last_updated', ''),
             'system_info': {
                 'update_interval': f"{self.coordinator.update_interval_min} minutes",

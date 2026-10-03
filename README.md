@@ -35,7 +35,7 @@ If you like this integration you can fuel the next update with caffeine :-)
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
-[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.3](https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/CHANGELOG.md)
+[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.4](https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/CHANGELOG.md)
 
 ## ☀️ Sunlight and shading at the centre
 
@@ -125,10 +125,10 @@ For normal HACS installs, the integration registers the Lovelace card resource a
 If you do not use HACS, copy `custom_components/sunlight_visualizer` into your Home Assistant `custom_components` folder, restart Home Assistant, then add the Lovelace resource manually as a JavaScript module:
 
 ```text
-/sunlight_visualizer/sunlight-visualizer-card.js?v=0.5.3
+/sunlight_visualizer/sunlight-visualizer-card.js?v=0.5.4
 ```
 
-The `?v=0.5.3` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
+The `?v=0.5.4` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
 
 </details>
 
@@ -519,7 +519,7 @@ cssFpsAutoLimitEnabled: true
 </details>
 
 ## Validation / Localization / Notes
-- Release version: `0.5.3`; requires Home Assistant `2026.1.0` or newer.
+- Release version: `0.5.4`; requires Home Assistant `2026.1.0` or newer.
 - HACS-friendly resource registration is handled by the integration.
 - In Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED` and disables live solar-alignment calculation for testing.
 - The [Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) has the deeper setup guide, automation examples, troubleshooting steps, and sensor explanations.
