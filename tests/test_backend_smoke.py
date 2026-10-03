@@ -28,6 +28,9 @@ from custom_components.sunlight_visualizer.const import (
     MIN_CAMERA_ZOOM,
 )
 from custom_components.sunlight_visualizer.sensor import (
+    CoordinatesSensor,
+    SunAzimuthSensor,
+    SunElevationSensor,
     SunWallIntensityCoordinator,
     _wall_shading_status,
 )
@@ -188,6 +191,29 @@ class CoordinatorSmokeTests(unittest.IsolatedAsyncioTestCase):
 
         await coordinator.async_refresh()
         self.assertEqual(coordinator.general_cache_hits, 1)
+        coordinator.async_shutdown()
+
+    async def test_sun_sensors_do_not_appear_as_map_locations(self) -> None:
+        entry = _config_entry(
+            **{
+                CONF_FORCE_SUN_FALLBACK: True,
+                CONF_FORCE_SUN_AZIMUTH: 180,
+                CONF_FORCE_SUN_ELEVATION: 45,
+                CONF_RADIATION_ENABLED: False,
+                CONF_WEATHER_VISUALS_ENABLED: False,
+            }
+        )
+        coordinator = SunWallIntensityCoordinator(self.hass, entry, integration.VERSION)
+        await coordinator.async_refresh()
+
+        for sensor_type in (CoordinatesSensor, SunAzimuthSensor, SunElevationSensor):
+            with self.subTest(sensor=sensor_type.__name__):
+                attributes = sensor_type(coordinator, entry).extra_state_attributes
+                self.assertNotIn("latitude", attributes)
+                self.assertNotIn("longitude", attributes)
+
+        self.assertEqual(coordinator.latitude, self.hass.config.latitude)
+        self.assertEqual(coordinator.longitude, self.hass.config.longitude)
         coordinator.async_shutdown()
 
 
