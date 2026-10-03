@@ -30459,7 +30459,7 @@ function GR(r, e, t, n, i) {
   const o = -pe.degToRad(i.vertDeg), a = pe.degToRad(i.effectiveHorizDeg);
   r.updateMatrixWorld(!0), gm.makeRotationX(o), J0.makeRotationY(a), gm.multiply(J0).invert(), Q0.multiplyMatrices(gm, r.matrixWorld), Q0.decompose(r.position, r.quaternion, r.scale), r.updateMatrixWorld(!0), e.rotation.set(0, 0, 0), t.rotation.set(0, 0, 0), n.scale.x = 1, n.rotation.y = -pe.degToRad(i.houseAngleDeg);
 }
-const $R = "0.5.4";
+const $R = "0.5.5";
 function WR(r) {
   let e = r >>> 0;
   return () => (e = e * 1664525 + 1013904223 >>> 0, e / 4294967296);

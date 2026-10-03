@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Planned
 - Configurable placement for the 2.5D power pole and tree.
 
+## [0.5.5] - 2026-10-03
+
+### Fixed
+- Removed top-level latitude and longitude attributes from all 23 radiation and shading sensors. Home Assistant no longer plots them as duplicate Map locations; the configured position remains available internally for sunlight and radiation calculations.
+
 ## [0.5.4] - 2026-10-03
 
 ### Changed
@@ -14,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 - Keep Open-Meteo rain-shower codes 80–82 from activating snow particles when reported snowfall is zero. Snowfall and actual snow codes still render snow; weather and sunlight sensor values are unchanged.
-- Removed top-level latitude and longitude attributes from the Sun Coordinates, Sun Azimuth and Sun Elevation sensors so Home Assistant no longer plots duplicate markers for them on the Map. The integration still uses the configured location for sunlight calculations, and the Sun Coordinates sensor still displays its location.
+- Removed top-level latitude and longitude attributes from the Sun Coordinates, Sun Azimuth and Sun Elevation sensors so Home Assistant no longer plots these three as duplicate Map locations. The integration still uses the configured location for sunlight calculations, and the Sun Coordinates sensor still displays its location.
 
 ## [0.5.3] - 2026-10-01
 

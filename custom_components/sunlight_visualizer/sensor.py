@@ -2199,8 +2199,6 @@ class RadiationSensorBase(CoordinatorEntity, SensorEntity):
             "ground_albedo": radiation.get("ground_albedo"),
             "location_source": location.get("source"),
             "location_name": location.get("name"),
-            "latitude": location.get("latitude"),
-            "longitude": location.get("longitude"),
             "last_updated": self.coordinator.data.get("last_updated", "") if self.coordinator.data else "",
         }
 
