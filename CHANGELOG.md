@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added a lightweight static meadow texture to the 3D surroundings, extending its visible detail toward the house and compass ring while preserving the GLB garden texture and the distant terrain fade.
 
 ### Fixed
+- Keep Open-Meteo rain-shower codes 80–82 from activating snow particles when reported snowfall is zero. Snowfall and actual snow codes still render snow; weather and sunlight sensor values are unchanged.
 - Removed top-level latitude and longitude attributes from the Sun Coordinates, Sun Azimuth and Sun Elevation sensors so Home Assistant no longer plots duplicate markers for them on the Map. The integration still uses the configured location for sunlight calculations, and the Sun Coordinates sensor still displays its location.
 
 ## [0.5.3] - 2026-10-01
