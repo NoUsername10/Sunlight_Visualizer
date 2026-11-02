@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta, timezone
 import asyncio
 import logging
 import math
@@ -11,6 +11,7 @@ from typing import Any
 from aiohttp import ClientError, ClientTimeout
 from astral.sun import azimuth as astral_azimuth
 from astral.sun import elevation as astral_elevation
+from astral import Observer
 
 from homeassistant.components.sensor import (
     SensorEntity,
@@ -639,6 +640,7 @@ class CoordinatesSensor(CoordinatorEntity, SensorEntity):
             'ceiling_tilt': self.coordinator.ceiling_tilt,
             'roof_direction': self.coordinator.roof_direction,
             'update_interval_min': self.coordinator.update_interval_min,
+            'today_sun_profile': self.coordinator.today_sun_profile,
             'configuration': {
                 'house_angle': settings['angles']['house_angle'],
                 'ceiling_tilt': settings['angles']['ceiling_tilt'],
@@ -771,6 +773,8 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         # Caching for optimal alignment (calculate once per day per mode/settings)
         self._optimal_cache_key = None
         self._optimal_cache_data = None
+        self._sun_profile_cache_key = None
+        self.today_sun_profile = None
         
         # Cache for all calculations to prevent redundant work
         self._last_calculation_time = None
@@ -905,6 +909,43 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         except Exception as err:
             _LOGGER.debug("Astral position failed: %s", err)
             return None
+
+    def _build_today_sun_profile(
+        self, local_day, surface_azimuths: dict[str, float]
+    ) -> dict[str, Any]:
+        """Calculate a compact civil-day preview without weather or sensor writes."""
+        observer = Observer(
+            latitude=self.latitude,
+            longitude=self.longitude,
+            elevation=self.hass.config.elevation,
+        )
+        start = datetime.combine(local_day, time.min, tzinfo=self._tz)
+        rows = []
+        for step in range(289):
+            # The slider follows local clock time. Round-trip through UTC so a
+            # nonexistent spring-forward hour moves to its first valid instant.
+            wall_time = start + timedelta(minutes=5 * step)
+            target = wall_time.astimezone(timezone.utc).astimezone(self._tz)
+            azimuth = float(astral_azimuth(observer, target))
+            elevation = float(astral_elevation(observer, target))
+            rows.append([
+                round(azimuth, 1),
+                round(elevation, 1),
+                *[
+                    round(angle_to_percentage(
+                        azimuth, surface_azimuths[surface], surface, elevation,
+                        self.ceiling_tilt if surface == "ceiling" else 0,
+                    ), 1)
+                    for surface in ("front", "right", "back", "left", "ceiling")
+                ],
+            ])
+        return {
+            "date": local_day.isoformat(),
+            "time_zone": str(self._tz),
+            "step_minutes": 5,
+            "columns": ["azimuth", "elevation", "front", "right", "back", "left", "roof"],
+            "rows": rows,
+        }
 
     def async_shutdown(self) -> None:
         """Clean up coordinator-owned listeners/timers."""
@@ -1677,6 +1718,11 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                 self._last_calculation_time = None
                 self._clear_radiation_cache()
 
+            local_day = dt_util.now().astimezone(self._tz).date()
+            if self.today_sun_profile is not None and self.today_sun_profile["date"] != local_day.isoformat():
+                self._last_calculation_result = None
+                self._last_calculation_time = None
+
             # Check cache first (prevent redundant calculations)
             now = dt_util.now()
             if (self._last_calculation_time and 
@@ -1708,6 +1754,21 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                 raise UpdateFailed("Sun position unavailable")
 
             surface_azimuths = self._get_surface_azimuths()
+            profile_key = (
+                local_day, str(self._tz), self.latitude, self.longitude,
+                self.house_angle, self.roof_direction, self.ceiling_tilt,
+                self.hass.config.elevation,
+            )
+            if self._sun_profile_cache_key != profile_key or self.today_sun_profile is None:
+                try:
+                    self.today_sun_profile = await self.hass.async_add_executor_job(
+                        self._build_today_sun_profile, local_day, surface_azimuths
+                    )
+                    self._sun_profile_cache_key = profile_key
+                except Exception as err:
+                    # A missing preview must never interrupt live sensor updates.
+                    _LOGGER.warning("Unable to calculate today's sun preview: %s", err)
+                    self.today_sun_profile = None
 
             # Calculate wall intensities (inline, lightweight math)
             wall_data = {}

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 import tempfile
 import unittest
@@ -192,6 +192,71 @@ class CoordinatorSmokeTests(unittest.IsolatedAsyncioTestCase):
 
         await coordinator.async_refresh()
         self.assertEqual(coordinator.general_cache_hits, 1)
+        coordinator.async_shutdown()
+
+    async def test_today_profile_matches_astral_and_alignment_geometry(self) -> None:
+        entry = _config_entry(
+            **{CONF_RADIATION_ENABLED: False, CONF_WEATHER_VISUALS_ENABLED: False}
+        )
+        coordinator = SunWallIntensityCoordinator(self.hass, entry, integration.VERSION)
+        await coordinator.async_refresh()
+        profile = coordinator._build_today_sun_profile(
+            date(2026, 6, 21), coordinator._get_surface_azimuths()
+        )
+        self.assertEqual(profile["step_minutes"], 5)
+        self.assertEqual(len(profile["rows"]), 289)
+        self.assertEqual(profile["date"], "2026-06-21")
+        for hour in (2, 8, 12, 18, 23):
+            with self.subTest(hour=hour):
+                sample = profile["rows"][hour * 12]
+                target = datetime(2026, 6, 21, hour, tzinfo=coordinator._tz)
+                sun = coordinator._astral_sun_for_time(target)
+                self.assertIsNotNone(sun)
+                assert sun is not None
+                self.assertAlmostEqual(sample[0], sun["azimuth"], delta=0.06)
+                self.assertAlmostEqual(sample[1], sun["elevation"], delta=0.06)
+                for index, surface in enumerate(("front", "right", "back", "left", "ceiling"), 2):
+                    expected = angle_to_percentage(
+                        sun["azimuth"], coordinator._get_surface_azimuths()[surface],
+                        surface, sun["elevation"],
+                        coordinator.ceiling_tilt if surface == "ceiling" else 0,
+                    )
+                    self.assertAlmostEqual(sample[index], expected, delta=0.06)
+        self.assertEqual(profile["rows"][2 * 12][2:], [0, 0, 0, 0, 0])
+        self.assertIs(
+            CoordinatesSensor(coordinator, entry).extra_state_attributes["today_sun_profile"],
+            coordinator.today_sun_profile,
+        )
+        coordinator.async_shutdown()
+
+    async def test_today_profile_handles_clock_change_and_is_cached(self) -> None:
+        entry = _config_entry(
+            **{CONF_RADIATION_ENABLED: False, CONF_WEATHER_VISUALS_ENABLED: False}
+        )
+        coordinator = SunWallIntensityCoordinator(self.hass, entry, integration.VERSION)
+        await coordinator.async_refresh()
+        original = coordinator.today_sun_profile
+        coordinator._last_calculation_time = None
+        await coordinator.async_refresh()
+        self.assertIs(coordinator.today_sun_profile, original)
+        coordinator.update_settings(house_angle=(coordinator.house_angle + 90) % 360)
+        await coordinator.async_refresh()
+        self.assertIsNot(coordinator.today_sun_profile, original)
+
+        spring = coordinator._build_today_sun_profile(
+            date(2026, 3, 29), coordinator._get_surface_azimuths()
+        )
+        self.assertEqual(spring["rows"][24], spring["rows"][36])
+        autumn = coordinator._build_today_sun_profile(
+            date(2026, 10, 25), coordinator._get_surface_azimuths()
+        )
+        self.assertEqual(len(autumn["rows"]), 289)
+        first_occurrence = coordinator._astral_sun_for_time(
+            datetime(2026, 10, 25, 2, 0, tzinfo=coordinator._tz, fold=0)
+        )
+        self.assertIsNotNone(first_occurrence)
+        assert first_occurrence is not None
+        self.assertAlmostEqual(autumn["rows"][24][0], first_occurrence["azimuth"], delta=0.06)
         coordinator.async_shutdown()
 
     async def test_sun_sensors_do_not_appear_as_map_locations(self) -> None:

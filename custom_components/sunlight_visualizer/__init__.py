@@ -5,6 +5,7 @@ import json
 import os
 import logging
 import asyncio
+import hashlib
 from pathlib import Path
 from urllib.parse import urlsplit
 import voluptuous as vol
@@ -55,15 +56,19 @@ PLATFORMS: list[Platform] = [
 
 # Local resource URL for the bundled card.
 #
-# The version query is intentional: Home Assistant/browser module caching can keep
-# an older card editor alive after a HACS update. Bumping this URL makes Lovelace
-# import the freshly rebuilt bundle for the current integration version.
+# Home Assistant caches static modules for a month. Include the bundle digest so
+# a rebuilt card is fetched even while testing within the same release version.
 CARD_RESOURCE_PATH = "/sunlight_visualizer/sunlight-visualizer-card.js"
-CARD_RESOURCE_URL = f"{CARD_RESOURCE_PATH}?v={VERSION}"
 CARD_STATIC_PATH = "/sunlight_visualizer"
 CARD_STATIC_DIR = Path(__file__).parent / "www"
 CARD_JS_PATH = CARD_STATIC_DIR / "sunlight-visualizer-card.js"
 CARD_MODEL_PATH = CARD_STATIC_DIR / "models" / "experimental-house.glb"
+CARD_ASSET_REVISION = (
+    hashlib.sha256(CARD_JS_PATH.read_bytes()).hexdigest()[:12]
+    if CARD_JS_PATH.is_file()
+    else VERSION
+)
+CARD_RESOURCE_URL = f"{CARD_RESOURCE_PATH}?v={VERSION}&asset={CARD_ASSET_REVISION}"
 CARD_RESOURCE_URL_ALIASES = {
     CARD_RESOURCE_PATH,
     CARD_RESOURCE_URL,

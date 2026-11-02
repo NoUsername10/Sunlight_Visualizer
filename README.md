@@ -35,7 +35,7 @@ If you like this integration you can fuel the next update with caffeine :-)
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
-[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.5](https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/CHANGELOG.md)
+[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.6](https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/CHANGELOG.md)
 
 ## ☀️ Sunlight and shading at the centre
 
@@ -49,6 +49,7 @@ If you like this integration you can fuel the next update with caffeine :-)
 ## 🏡 A visual companion to your sunlight sensors
 
 - **3D or 2.5D** — use the bundled 3D house, the lightweight SVG view, or Automatic mode with fallback when 3D is unavailable.
+- **Preview today's sun and shadows** — tap the clock and drag through 00:00–24:00 in five-minute steps. The house and wall/roof Sun Alignment signs follow the chosen time; **Now** returns to the live view. Preview uses the integration's cached sun calculations, makes no extra requests, and does not change sensor values.
 - **Touch and mouse controls** — drag to rotate, pinch or scroll to zoom, and save your favourite camera view. Camera buttons fade after three idle seconds and return on touch, mouse movement or keyboard focus.
 - **Visual setup** — add the integration through Home Assistant and the card from the dashboard card picker.
 - **Pauses when out of view** — 3D rendering and weather stop when the whole card is offscreen and resume when it returns.
@@ -125,10 +126,10 @@ For normal HACS installs, the integration registers the Lovelace card resource a
 If you do not use HACS, copy `custom_components/sunlight_visualizer` into your Home Assistant `custom_components` folder, restart Home Assistant, then add the Lovelace resource manually as a JavaScript module:
 
 ```text
-/sunlight_visualizer/sunlight-visualizer-card.js?v=0.5.5
+/sunlight_visualizer/sunlight-visualizer-card.js?v=0.5.6
 ```
 
-The `?v=0.5.5` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
+The `?v=0.5.6` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
 
 </details>
 
@@ -144,7 +145,7 @@ During setup/options you configure:
 - **Zone override:** `Use Home (default)` or a custom `zone.*`.
 - **House direction:** compass direction or exact angle for the front door.
 - **Roof direction:** which side the roof slopes toward.
-- **Ceiling/roof tilt:** used for roof sun and radiation calculations.
+- **Ceiling/roof tilt:** used for roof sun and radiation calculations. The bundled 3D roof and panels also tilt visually, up to 75°; calculation settings remain available through 90°.
 - **Update interval:** how often geometric sun values update.
 - **Open-Meteo radiation sensors:** optional and disabled by default.
 - **3D weather visuals:** optional Open-Meteo current-weather data for the GLB renderer, disabled by default.
@@ -519,7 +520,7 @@ cssFpsAutoLimitEnabled: true
 </details>
 
 ## Validation / Localization / Notes
-- Release version: `0.5.5`; requires Home Assistant `2026.1.0` or newer.
+- Release version: `0.5.6`; requires Home Assistant `2026.1.0` or newer.
 - HACS-friendly resource registration is handled by the integration.
 - In Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED` and disables live solar-alignment calculation for testing.
 - The [Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) has the deeper setup guide, automation examples, troubleshooting steps, and sensor explanations.

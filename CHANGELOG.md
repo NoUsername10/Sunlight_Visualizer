@@ -7,6 +7,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Planned
 - Configurable placement for the 2.5D power pole and tree.
 
+## [0.5.6] - 2026-10-26
+
+### Added
+- A clock control for previewing today's sun position, scene shadows and wall/roof Sun Alignment in five-minute steps in both 3D and 2.5D. The profile is calculated during normal integration updates and reused without requests while dragging; **Now** restores live weather and sensor-backed signs without changing Home Assistant sensor states.
+- A modular flat-roof GLB for the 3D card. Its roof and attached panels tilt toward the configured downhill side; the roof keeps its authored length, while slanted brick walls close the space to the fixed house. The 3D tilt is visually capped at 75°, and the integration's 0–90° calculations remain unchanged.
+
+### Fixed
+- Refresh the dashboard card resource when its bundled JavaScript changes within the same integration version, avoiding a stale browser-cached card during local updates.
+- Match the sun preview clock to the camera controls. It fades when the preview is closed but stays visible while the preview panel is open, so the same button can close it.
+- Restore the baked grass, wall/window lighting and ambient occlusion in the new house model. Close the roof-to-wall seams at steep tilt and align the 3D front/back roof direction with the 2.5D house.
+- Exclude the movable roof and solar panels from the fixed-wall light/AO bake so their old contact shadow does not remain as a dark stripe when the roof moves. Rotate the roof and attached panels toward the configured downhill side before tilting it.
+- Let sunlight and scene shadows affect the new brick roof-wall infill. Keep its outward-facing shadow casting without self-shadowing, and render the thin infill from both sides so it remains visible at low camera angles.
+- Keep the roof values sign visible in front of a tilted roof and within the card at steep angles; tapping it still opens the roof graph.
+
 ## [0.5.5] - 2026-10-03
 
 ### Fixed
