@@ -19,7 +19,7 @@ Core sunlight sensors work without an external weather API. Optional Open-Meteo 
   <tr>
     <th>🖼️ House Overview</th>
     <th>🎞️ GIF Animation (Right click, select Play animation)</th>
-    <th>🕒 Sun and shadow preview</th>
+    <th>🕒 Sun and shadow preview (Right click, select Play animation)</th>
   </tr>
   <tr>
     <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/house-3d-day1.png" width="300" alt="3D house overview"></td>
