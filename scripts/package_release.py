@@ -8,14 +8,17 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 integration = ROOT / 'custom_components/sunlight_visualizer'
 version = json.loads((integration / 'manifest.json').read_text())['version']
+AUTHORING = ROOT / 'Underlag'
+FRONTEND = AUTHORING / 'frontend'
+DIST = AUTHORING / 'dist'
 # Development builds keep their source/version checks locally. The public
-# repository can package and test the shipped integration without frontend/.
-if (ROOT / 'frontend').exists():
-    package = json.loads((ROOT / 'frontend/package.json').read_text())
-    lock = json.loads((ROOT / 'frontend/package-lock.json').read_text())
+# repository can package and test the shipped integration without Underlag/.
+if FRONTEND.exists():
+    package = json.loads((FRONTEND / 'package.json').read_text())
+    lock = json.loads((FRONTEND / 'package-lock.json').read_text())
     if package['version'] != version or lock['version'] != version:
         raise SystemExit('Integration/frontend version mismatch')
-    if (integration/'www/sunlight-visualizer-card.js').read_bytes() != (ROOT/'dist/sunlight-visualizer-card.js').read_bytes():
+    if (integration/'www/sunlight-visualizer-card.js').read_bytes() != (DIST/'sunlight-visualizer-card.js').read_bytes():
         raise SystemExit('Integration/dist bundle mismatch')
 if not (integration/'www/sunlight-visualizer-card.js').is_file():
     raise SystemExit('Packaged card bundle missing')
@@ -28,9 +31,9 @@ for required in [
 if not (integration/'www/models/experimental-house.glb').is_file():
     raise SystemExit('Bundled model missing')
 
-OUTPUT = ROOT/'release-artifacts'
+OUTPUT = (AUTHORING if AUTHORING.is_dir() else ROOT) / 'release-artifacts'
 OUTPUT.mkdir(exist_ok=True)
-EXCLUDED = {'frontend', 'dist', 'node_modules', '__pycache__', '.git', '_archive', 'release-artifacts', 'releases', '.venv'}
+EXCLUDED = {'Underlag', 'node_modules', '__pycache__', '.git', '_archive', 'release-artifacts', 'releases', '.venv'}
 def allowed(path):
     rel = path.relative_to(ROOT)
     if any(part in EXCLUDED for part in rel.parts):
@@ -38,8 +41,6 @@ def allowed(path):
     if path.is_symlink():
         return False
     if path.name.startswith('.env') or path.name == '.DS_Store' or path.suffix in {'.pyc', '.pyo', '.blend', '.afdesign', '.ts', '.tsx', '.map'}:
-        return False
-    if rel.parts[:2] in {('assets','Blender'), ('assets','Car'), ('assets','GLB')}:
         return False
     return path.is_file()
 
@@ -68,9 +69,9 @@ files = [p for p in integration.rglob('*') if allowed(p)]
 inventory = write_archive(installation,files)
 (OUTPUT/'file-sha256.json').write_text(json.dumps(inventory,indent=2)+'\n')
 github = OUTPUT/f'Sunlight_Visualizer-{version}-github.zip'
-roots = ['.github','custom_components','tests','scripts','wiki','assets','Icons']
+roots = ['.github','custom_components','tests','scripts','assets','Icons']
 github_files = [p for name in roots for p in (ROOT/name).rglob('*') if allowed(p)]
-github_files += [p for p in ROOT.iterdir() if allowed(p) and (p.suffix in {'.md','.json','.command'} or p.name in {'LICENSE','.gitignore'})]
+github_files += [p for p in ROOT.iterdir() if allowed(p) and (p.suffix in {'.md','.json'} or p.name in {'LICENSE','.gitignore'})]
 github_inventory = write_archive(github,set(github_files),prefix='sunlight_visualizer/')
 # Keep the loose drag-and-drop upload folder in sync with the verified GitHub ZIP.
 staged = OUTPUT/'sunlight_visualizer'

@@ -19,11 +19,12 @@ Core sunlight sensors work without an external weather API. Optional Open-Meteo 
   <tr>
     <th>🖼️ House Overview</th>
     <th>🎞️ GIF Animation (Right click, select Play animation)</th>
-
+    <th>🕒 Sun and shadow preview</th>
   </tr>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/house-3d-day1.png" width="450" alt="House view"></td>
-    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/rotation1.gif" width="450" alt="House animation"></td>
+    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/house-3d-day1.png" width="300" alt="3D house overview"></td>
+    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/rotation1.gif" width="300" alt="Animated 3D house rotation"></td>
+    <td><img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/readme/sun-preview.gif" width="300" alt="Sun and shadow preview slider moving through the day"></td>
   </tr>
 </table>
 
@@ -35,7 +36,7 @@ If you like this integration you can fuel the next update with caffeine :-)
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
-[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.6](https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/CHANGELOG.md)
+[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.7](https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/CHANGELOG.md)
 
 ## ☀️ Sunlight and shading at the centre
 
@@ -72,7 +73,7 @@ The interface follows your Home Assistant language, with English as the fallback
 
 **Ready to try it?** Install through HACS, add the integration, then add the Sunlight Visualizer card to your dashboard. Home Assistant **2026.1.0 or newer** is required.
 
-> **Want the full guide?** Find setup instructions, sensor explanations, automation examples and troubleshooting in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki). See the [release notes](https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/RELEASE_NOTES.md) for upgrade instructions and known limitations.
+> **Want the full guide?** Find setup instructions, sensor explanations, automation examples and troubleshooting in the [Sunlight Visualizer Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki). See the [changelog](https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/CHANGELOG.md) for release updates.
 
 
 ## Optional 3D Weather Visuals
@@ -126,10 +127,10 @@ For normal HACS installs, the integration registers the Lovelace card resource a
 If you do not use HACS, copy `custom_components/sunlight_visualizer` into your Home Assistant `custom_components` folder, restart Home Assistant, then add the Lovelace resource manually as a JavaScript module:
 
 ```text
-/sunlight_visualizer/sunlight-visualizer-card.js?v=0.5.6
+/sunlight_visualizer/sunlight-visualizer-card.js?v=0.5.7
 ```
 
-The `?v=0.5.6` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
+The `?v=0.5.7` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
 
 </details>
 
@@ -520,7 +521,7 @@ cssFpsAutoLimitEnabled: true
 </details>
 
 ## Validation / Localization / Notes
-- Release version: `0.5.6`; requires Home Assistant `2026.1.0` or newer.
+- Release version: `0.5.7`; requires Home Assistant `2026.1.0` or newer.
 - HACS-friendly resource registration is handled by the integration.
 - In Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED` and disables live solar-alignment calculation for testing.
 - The [Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) has the deeper setup guide, automation examples, troubleshooting steps, and sensor explanations.

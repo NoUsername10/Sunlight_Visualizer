@@ -1,0 +1,13 @@
+node_modules/
+__pycache__/
+*.py[cod]
+.DS_Store
+release-artifacts/
+.venv/
+.env
+.env.*
+
+# Local project sources, Blender assets, generated builds and release ZIPs.
+/Underlag/
+
+
