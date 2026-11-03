@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Planned
 - Configurable placement for the 2.5D power pole and tree.
 
+## [0.5.7] - 2026-11-03
+
+### Fixed
+- Match the bundled 3D roof and attached solar panels to the configured left/right downhill side. The GLB model's X axis is mirrored relative to the 2.5D view; the roof now uses the same side mapping as the 3D wall labels. Sun alignment and radiation calculations are unchanged.
+
 ## [0.5.6] - 2026-10-26
 
 ### Added
