@@ -1,0 +1,159 @@
+name: Create Draft Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing version tag on main, for example 0.5.8"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: draft-release-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    outputs:
+      sha: ${{ steps.verify.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Verify existing tag, main HEAD, version and changelog
+        id: verify
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            echo "Run this workflow from the main branch." >&2
+            exit 1
+          fi
+          if [[ ! "$RELEASE_TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Enter an existing tag such as 0.5.8." >&2
+            exit 1
+          fi
+          git ls-remote --exit-code --refs origin "refs/tags/$RELEASE_TAG" >/dev/null
+          git fetch origin main:refs/remotes/origin/main
+          git fetch origin "refs/tags/$RELEASE_TAG:refs/tags/$RELEASE_TAG"
+          python3 scripts/check_release_tag.py --tag "$RELEASE_TAG"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  backend:
+    needs: preflight
+    name: Backend and coverage / Home Assistant ${{ matrix.ha }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ha: ['2026.1.0', 'stable']
+    container: ghcr.io/home-assistant/home-assistant:${{ matrix.ha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.preflight.outputs.sha }}
+      - name: Install pinned linter
+        run: pip install --quiet ruff==0.14.7
+      - name: Compile Python
+        run: python -m compileall -q custom_components/sunlight_visualizer tests scripts
+      - name: Lint Python
+        run: ruff check --select E4,E7,E9,F custom_components/sunlight_visualizer tests scripts
+      - name: Full backend suite with measured coverage
+        run: |
+          python -m coverage run --source=custom_components/sunlight_visualizer -m unittest discover -s tests -v
+          python -m coverage json -o coverage.json
+          python -m coverage report --fail-under=40
+      - uses: actions/upload-artifact@v7
+        if: matrix.ha == '2026.1.0'
+        with:
+          name: release-coverage
+          path: coverage.json
+          if-no-files-found: error
+
+  packaged-card:
+    needs: preflight
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.preflight.outputs.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Validate shipped card and model
+        run: |
+          node --check custom_components/sunlight_visualizer/www/sunlight-visualizer-card.js
+          node scripts/validate-package.mjs
+          SV_EXPECT_BAKED_NIGHT_LIGHTING=1 node scripts/validate-webgl-shaders.mjs
+          SV_EXPECT_BAKED_NIGHT_LIGHTING=0 node scripts/validate-webgl-shaders.mjs
+
+  validate-hacs:
+    needs: preflight
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.preflight.outputs.sha }}
+      - name: HACS validation
+        uses: hacs/action@main
+        with:
+          category: integration
+
+  hassfest:
+    needs: preflight
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.preflight.outputs.sha }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Hassfest validation
+        uses: home-assistant/actions/hassfest@master
+
+  draft-release:
+    needs: [preflight, backend, packaged-card, validate-hacs, hassfest]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.preflight.outputs.sha }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-coverage
+      - name: Recheck tag and main before creating a draft
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          git fetch origin main:refs/remotes/origin/main
+          git ls-remote --exit-code --refs origin "refs/tags/$RELEASE_TAG" >/dev/null
+          git fetch origin "refs/tags/$RELEASE_TAG:refs/tags/$RELEASE_TAG"
+          python3 scripts/check_release_tag.py --tag "$RELEASE_TAG"
+      - name: Build verified HACS release asset and draft notes
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: python3 scripts/prepare_release.py --tag "$RELEASE_TAG" --coverage coverage.json --output-dir dist
+      - name: Create unpublished draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_PROMPT_DISABLED: '1'
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "A GitHub release already exists for $RELEASE_TAG." >&2
+            exit 1
+          fi
+          gh release create "$RELEASE_TAG" \
+            dist/sunlight_visualizer.zip dist/SHA256SUMS \
+            --draft --verify-tag \
+            --title "Sunlight Visualizer $RELEASE_TAG" \
+            --notes-file dist/release-notes.md

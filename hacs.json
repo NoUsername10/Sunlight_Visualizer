@@ -2,5 +2,7 @@
   "name": "Sunlight Visualizer",
   "homeassistant": "2026.1.0",
   "content_in_root": false,
-  "render_readme": true
+  "render_readme": true,
+  "zip_release": true,
+  "filename": "sunlight_visualizer.zip"
 }

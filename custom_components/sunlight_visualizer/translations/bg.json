@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Изберете сензор с мерна единица W/m².",
+      "local_ghi_self_reference": "Изберете сензор извън Sunlight Visualizer."
+    },
     "step": {
       "init": {
         "title": "Опции на Sunlight Visualizer",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Активиране на сензорите за слънчева радиация от Open-Meteo",
           "remove_radiation_entities_on_disable": "Премахване на сензорите Open-Meteo при изключване",
           "weather_visuals_enabled": "Активиране на 3D визуализациите за времето"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Локален сензор за слънчева радиация",
+            "description": "Използвайте глобалната хоризонтална слънчева радиация, измерена от метеостанция.",
+            "data": {
+              "local_ghi_entity": "GHI сензор на метеостанцията (W/m²)",
+              "local_ghi_smoothing": "Период на усредняване (минути)",
+              "local_ghi_stale": "Данните остаряват след (минути)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Изберете сензор за хоризонтална слънчева радиация в W/m². Оставете празно, за да използвате само Open-Meteo.",
+              "local_ghi_smoothing": "Изглажда промените в измерванията за 5–60 минути. По подразбиране: 10 минути.",
+              "local_ghi_stale": "Ако станцията не изпрати измерване в този срок, се използва Open-Meteo, ако е включен. По подразбиране: 15 минути."
+            }
+          }
         },
         "data_description": {
           "location_source": "Изберете местоположението от Home Assistant (по подразбиране) или потребителска зона.",

@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Birimi W/m² olan bir sensör seçin.",
+      "local_ghi_self_reference": "Sunlight Visualizer dışından bir sensör seçin."
+    },
     "step": {
       "init": {
         "title": "Sunlight Visualizer Seçenekleri",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Open-Meteo ışınım sensörlerini etkinleştir",
           "remove_radiation_entities_on_disable": "Devre dışı bırakırken Open-Meteo sensörlerini kaldır",
           "weather_visuals_enabled": "3D hava durumu görsellerini etkinleştir"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Yerel güneş ışınımı sensörü",
+            "description": "Hava istasyonunun ölçtüğü küresel yatay güneş ışınımını kullanın.",
+            "data": {
+              "local_ghi_entity": "Hava istasyonu GHI sensörü (W/m²)",
+              "local_ghi_smoothing": "Ortalama alma süresi (dakika)",
+              "local_ghi_stale": "Okuma şu sürede bayatlar (dakika)"
+            },
+            "data_description": {
+              "local_ghi_entity": "W/m² cinsinden yatay güneş ışınımı bildiren bir sensör seçin. Yalnızca Open-Meteo kullanmak için boş bırakın.",
+              "local_ghi_smoothing": "Değişken ölçümleri 5–60 dakika boyunca yumuşatır. Varsayılan: 10 dakika.",
+              "local_ghi_stale": "İstasyon bu süre içinde yeni bir ölçüm bildirmezse, etkinse Open-Meteo kullanılır. Varsayılan: 15 dakika."
+            }
+          }
         },
         "data_description": {
           "location_source": "Home Assistant konumunu (varsayılan) veya özel bir Bölgeyi seçin.",

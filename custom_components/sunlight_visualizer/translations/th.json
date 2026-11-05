@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "เลือกเซ็นเซอร์ที่ใช้หน่วย W/m²",
+      "local_ghi_self_reference": "เลือกเซ็นเซอร์ที่ไม่ได้มาจาก Sunlight Visualizer"
+    },
     "step": {
       "init": {
         "title": "ตัวเลือก Sunlight Visualizer",
@@ -85,6 +89,22 @@
           "radiation_enabled": "เปิดใช้เซ็นเซอร์รังสีดวงอาทิตย์จาก Open-Meteo",
           "remove_radiation_entities_on_disable": "นำเซ็นเซอร์ Open-Meteo ออกเมื่อปิดใช้",
           "weather_visuals_enabled": "เปิดใช้เอฟเฟกต์สภาพอากาศ 3D"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "เซ็นเซอร์รังสีอาทิตย์ในพื้นที่",
+            "description": "ใช้ค่ารังสีอาทิตย์รวมบนพื้นราบที่สถานีอากาศวัดได้",
+            "data": {
+              "local_ghi_entity": "เซ็นเซอร์ GHI ของสถานีอากาศ (W/m²)",
+              "local_ghi_smoothing": "ช่วงเวลาเฉลี่ย (นาที)",
+              "local_ghi_stale": "ค่าที่อ่านหมดอายุหลัง (นาที)"
+            },
+            "data_description": {
+              "local_ghi_entity": "เลือกเซ็นเซอร์รังสีอาทิตย์บนพื้นราบที่รายงานค่าเป็น W/m² เว้นว่างไว้หากต้องการใช้ Open-Meteo เท่านั้น",
+              "local_ghi_smoothing": "ปรับค่าที่ผันผวนให้เรียบด้วยค่าเฉลี่ยช่วง 5–60 นาที ค่าเริ่มต้น: 10 นาที",
+              "local_ghi_stale": "หากสถานีไม่ส่งค่าใหม่ภายในเวลานี้ ระบบจะใช้ Open-Meteo เมื่อเปิดใช้งาน ค่าเริ่มต้น: 15 นาที"
+            }
+          }
         },
         "data_description": {
           "location_source": "เลือกตำแหน่งของ Home Assistant (ค่าเริ่มต้น) หรือโซนที่กำหนดเอง",

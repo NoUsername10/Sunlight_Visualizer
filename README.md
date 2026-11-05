@@ -11,7 +11,7 @@ See which surfaces face the sun, follow the sun's angle through the day, and use
 
 The house card brings those values together visually. 
 Choose an interactive **3D house** or a lightweight **2.5D view**, and tap wall or roof signs to explore their values. 
-Core sunlight sensors work without an external weather API. Optional Open-Meteo radiation and shading sensors add forecast-based context when you need it.
+Core sunlight sensors work without an external weather API. Optional radiation and shading sensors can use a local weather-station GHI sensor, Open-Meteo, or both.
 
 **Sunlight is the foundation.** Weather effects and an energy overview are optional additions to the visualization. You can use the sunlight sensors and card without setting up weather or power sensors.
 
@@ -36,7 +36,7 @@ If you like this integration you can fuel the next update with caffeine :-)
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-orange.svg)](https://www.buymeacoffee.com/DefaultLogin)
 
-[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.7](https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/CHANGELOG.md)
+[Installation](#installation) · [Full setup guide](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) · [What's new in 0.5.8](https://github.com/NoUsername10/Sunlight_Visualizer/blob/main/CHANGELOG.md)
 
 ## ☀️ Sunlight and shading at the centre
 
@@ -45,7 +45,7 @@ If you like this integration you can fuel the next update with caffeine :-)
 - 🪟 **Build your own shading automations** — use the sensors to decide when blinds, awnings or heating and cooling should react. Enable optional radiation and shading-demand sensors for additional context.
 - 📈 **Explore the values behind the view** — tap wall and roof signs to open graphs for alignment, radiation and shading information.
 - 🧭 **Configure it for your home** — set your location, house direction, roof direction and roof tilt through Home Assistant.
-- 🔌 **Core sunlight calculations without a weather API** — Open-Meteo radiation and weather are separate options, disabled by default.
+- 🔌 **Core sunlight calculations without a weather API** — add a local GHI sensor for radiation and shading, or enable Open-Meteo radiation and weather separately.
 
 ## 🏡 A visual companion to your sunlight sensors
 
@@ -127,10 +127,10 @@ For normal HACS installs, the integration registers the Lovelace card resource a
 If you do not use HACS, copy `custom_components/sunlight_visualizer` into your Home Assistant `custom_components` folder, restart Home Assistant, then add the Lovelace resource manually as a JavaScript module:
 
 ```text
-/sunlight_visualizer/sunlight-visualizer-card.js?v=0.5.7
+/sunlight_visualizer/sunlight-visualizer-card.js?v=0.5.8
 ```
 
-The `?v=0.5.7` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
+The `?v=0.5.8` query string is a cache-busting version marker. It helps browsers load the new card bundle after updates.
 
 </details>
 
@@ -149,6 +149,7 @@ During setup/options you configure:
 - **Ceiling/roof tilt:** used for roof sun and radiation calculations. The bundled 3D roof and panels also tilt visually, up to 75°; calculation settings remain available through 90°.
 - **Update interval:** how often geometric sun values update.
 - **Open-Meteo radiation sensors:** optional and disabled by default.
+- **Local sunlight sensor:** optionally select a weather-station GHI sensor in W/m², its averaging time (5–60 minutes; default 10), and when a reading becomes stale (default 15 minutes).
 - **3D weather visuals:** optional Open-Meteo current-weather data for the GLB renderer, disabled by default.
 - **Roof power sensor:** optional power value for the roof/card/HUD.
 
@@ -169,24 +170,26 @@ These sensors are always available without any external weather API:
 
 A simple blind/awning automation can start with **Wall Sun Alignment** and **Wall Sun Angle**. For example: close when a wall has alignment above `20%` and sun angle above `45°`.
 
-## Optional Open-Meteo Sensors
+## Optional radiation and shading sensors
 <p>
   <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/sensors-extended_1.png" width="31%" alt="Open-Meteo wall radiation sensors part 1">
   <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/sensors-extended_2.png" width="31%" alt="Open-Meteo wall radiation sensors part 2">
   <img src="https://raw.githubusercontent.com/NoUsername10/Sunlight_Visualizer/main/assets/sensors-extended_3.png" width="31%" alt="Open-Meteo roof radiation sensors">
 </p>
 
-Open-Meteo support is opt-in because it uses an external API. When enabled, the integration adds radiation and shading sensors while keeping the default sun-alignment sensors unchanged.
+Select a local horizontal solar radiation (GHI) sensor in W/m², enable Open-Meteo, or use both. Either source adds wall and roof radiation and shading sensors while leaving sun-alignment sensors unchanged. The local reading is averaged over the selected time and split into estimated direct and diffuse components using the Erbs model; it is not a direct-beam measurement. When the local report becomes stale or invalid, the integration uses Open-Meteo if enabled. The radiation sensors expose `radiation_source` so you can see which source is active. With neither source available, radiation and shading sensors are unavailable.
+
+Open-Meteo is optional and uses an external API. Its forecast continues to provide the four-hour preview and today's roof radiation peak when enabled. A local sensor alone needs no Open-Meteo radiation request, but also has no forecast peak: **Roof Radiation Percentage** remains unavailable. Weather animations still require their separate Open-Meteo weather option.
 
 For each wall:
 - **Wall Radiation Direct:** direct beam radiation hitting that wall (`W/m²`). This is `0` when the wall has no direct sun.
 - **Wall Radiation Total:** direct + diffuse sky + reflected ground radiation (`W/m²`). This can be non-zero even when a wall is not directly lit.
-- **Wall Shading Demand:** automation-friendly `%` based on direct radiation and a comfort/elevation curve.
+- **Wall Shading Demand:** automation-friendly `%` based on horizontal GHI multiplied by the sun-to-wall incidence factor, which includes sun direction and elevation. It reaches 100% when that scaled value reaches 400 W/m². The scaled value is not a measurement of actual wall irradiance or a proven comfort threshold.
 - **Wall Shading Status:** text guidance such as `No direct sun`, `Shade useful`, or `Strong low sun`.
 
 For the roof:
-- **Roof Radiation:** forecast-adjusted radiation currently hitting the roof (`W/m²`).
-- **Roof Radiation Percentage:** roof radiation relative to today’s forecast peak for that roof.
+- **Roof Radiation:** estimated radiation currently hitting the roof (`W/m²`) from the active source.
+- **Roof Radiation Percentage:** roof radiation relative to today’s Open-Meteo forecast peak for that roof; unavailable with a local source alone.
 
 Open-Meteo can also clean up its own radiation entities when you disable it. In options, uncheck **Remove Open-Meteo sensors when disabling** if you want to keep those entity IDs for later.
 
@@ -273,9 +276,9 @@ When a valid car charger power sensor is selected, the HUD can show `CAR`, and t
 The card tries to bind integration entities automatically. In most installations you can add the card and it will find the Sunlight Visualizer sensors by their integration source attributes.
 
 Wall percentage source options:
-- `auto` — default. Uses `Wall Shading Demand` when Open-Meteo shading sensors are valid; otherwise uses `Wall Sun Alignment`.
+- `auto` — default. Uses `Wall Shading Demand` when local or Open-Meteo radiation is valid; otherwise uses `Wall Sun Alignment`.
 - `sun_alignment` — always uses geometric wall sun alignment.
-- `shading_demand` — uses Open-Meteo shading demand when available, with safe fallback to sun alignment.
+- `shading_demand` — uses shading demand from the active radiation source when available, with fallback to sun alignment.
 
 Roof percentage source options:
 - `roof_sun_alignment` — default geometric roof sun alignment.
@@ -332,11 +335,13 @@ For deeper examples and troubleshooting, use the [Wiki](https://github.com/NoUse
 ### Open-Meteo sensors, only when enabled
 - `sensor.open_meteo_radiation_status` — diagnostic API/cache status.
 - `sensor.open_meteo_shortwave_radiation`, `sensor.open_meteo_direct_radiation`, `sensor.open_meteo_diffuse_radiation`, `sensor.open_meteo_direct_normal_irradiance` — raw diagnostic Open-Meteo values.
+
+### Radiation sensors, with a local GHI sensor or Open-Meteo
 - `sensor.front_wall_radiation_total`, `sensor.right_wall_radiation_total`, `sensor.back_wall_radiation_total`, `sensor.left_wall_radiation_total` — `Front/Right/Back/Left Wall Radiation Total` (`W/m²`).
 - `sensor.front_wall_radiation_direct`, `sensor.right_wall_radiation_direct`, `sensor.back_wall_radiation_direct`, `sensor.left_wall_radiation_direct` — `Front/Right/Back/Left Wall Radiation Direct` (`W/m²`).
 - `sensor.front_wall_shading_demand`, `sensor.right_wall_shading_demand`, `sensor.back_wall_shading_demand`, `sensor.left_wall_shading_demand` — wall shading demand (`%`).
 - `sensor.front_wall_shading_status`, `sensor.right_wall_shading_status`, `sensor.back_wall_shading_status`, `sensor.left_wall_shading_status` — wall shading status text.
-- `sensor.roof_radiation`, `sensor.roof_radiation_percentage` — roof forecast radiation and percentage of today’s roof peak.
+- `sensor.roof_radiation` — roof radiation from the active source. `sensor.roof_radiation_percentage` is available only when Open-Meteo provides today's forecast peak.
 - `3D Weather` — optional current-weather entity used by the GLB weather chip, popup, and visual effects when 3D weather is enabled.
 
 ### Number entities
@@ -521,10 +526,16 @@ cssFpsAutoLimitEnabled: true
 </details>
 
 ## Validation / Localization / Notes
-- Release version: `0.5.7`; requires Home Assistant `2026.1.0` or newer.
+- Release version: `0.5.8`; requires Home Assistant `2026.1.0` or newer.
 - HACS-friendly resource registration is handled by the integration.
 - In Force Sun Fallback mode, the card displays `SUN OVERRIDE ENABLED` and disables live solar-alignment calculation for testing.
 - The [Wiki](https://github.com/NoUsername10/Sunlight_Visualizer/wiki) has the deeper setup guide, automation examples, troubleshooting steps, and sensor explanations.
+
+### Maintainer release steps
+
+Commit and push the release files to `main`, then create and push an existing tag such as `0.5.8` on that same commit. In GitHub Actions, run **Create Draft Release** from `main` and enter the tag. The workflow checks the tag, version and changelog; runs backend tests with coverage, Python lint, packaged-card tests, HACS and Hassfest; and only then creates an unpublished draft with `sunlight_visualizer.zip`. Review the notes and publish the draft yourself. Neither a push nor a tag creates a draft automatically.
+
+Starting with 0.5.8, HACS downloads that named ZIP asset when the release is published. GitHub shows download counts for the asset; they represent asset downloads, not unique users or installations.
 
 ## Changelog
 See [`CHANGELOG.md`](./CHANGELOG.md).

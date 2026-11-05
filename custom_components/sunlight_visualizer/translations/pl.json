@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Wybierz czujnik z jednostką W/m².",
+      "local_ghi_self_reference": "Wybierz czujnik spoza Sunlight Visualizer."
+    },
     "step": {
       "init": {
         "title": "Opcje Sunlight Visualizer",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Włącz czujniki promieniowania Open-Meteo",
           "remove_radiation_entities_on_disable": "Usuń czujniki Open-Meteo po wyłączeniu",
           "weather_visuals_enabled": "Włącz efekty pogodowe 3D"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Lokalny czujnik promieniowania słonecznego",
+            "description": "Użyj globalnego promieniowania poziomego mierzonego przez stację pogodową.",
+            "data": {
+              "local_ghi_entity": "Czujnik GHI stacji pogodowej (W/m²)",
+              "local_ghi_smoothing": "Czas uśredniania (minuty)",
+              "local_ghi_stale": "Odczyt nieaktualny po (minutach)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Wybierz czujnik poziomego promieniowania słonecznego w W/m². Pozostaw puste, aby używać tylko Open-Meteo.",
+              "local_ghi_smoothing": "Wygładza wahania odczytów z 5–60 minut. Domyślnie: 10 minut.",
+              "local_ghi_stale": "Jeśli stacja nie prześle odczytu w tym czasie, używane jest Open-Meteo, o ile jest włączone. Domyślnie: 15 minut."
+            }
+          }
         },
         "data_description": {
           "location_source": "Wybierz lokalizację Home Assistant (domyślnie) lub własną strefę.",

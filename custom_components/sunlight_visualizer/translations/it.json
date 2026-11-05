@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Seleziona un sensore con unità W/m².",
+      "local_ghi_self_reference": "Seleziona un sensore esterno a Sunlight Visualizer."
+    },
     "step": {
       "init": {
         "title": "Opzioni di Sunlight Visualizer",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Attiva i sensori di radiazione di Open-Meteo",
           "remove_radiation_entities_on_disable": "Rimuovi i sensori di Open-Meteo alla disattivazione",
           "weather_visuals_enabled": "Attiva gli effetti meteo 3D"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Sensore solare locale",
+            "description": "Usa l'irradianza globale orizzontale misurata da una stazione meteo.",
+            "data": {
+              "local_ghi_entity": "Sensore GHI della stazione meteo (W/m²)",
+              "local_ghi_smoothing": "Tempo di media (minuti)",
+              "local_ghi_stale": "Lettura obsoleta dopo (minuti)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Seleziona un sensore di irradianza solare orizzontale in W/m². Lascia vuoto per usare solo Open-Meteo.",
+              "local_ghi_smoothing": "Smussa le variazioni delle letture su 5–60 minuti. Valore predefinito: 10 minuti.",
+              "local_ghi_stale": "Se la stazione non invia una lettura entro questo intervallo, viene usato Open-Meteo, se attivo. Valore predefinito: 15 minuti."
+            }
+          }
         },
         "data_description": {
           "location_source": "Scegli la posizione di Home Assistant (predefinita) o una zona personalizzata.",

@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Pasirinkite jutiklį, kurio vienetas yra W/m².",
+      "local_ghi_self_reference": "Pasirinkite jutiklį, nepriklausantį „Sunlight Visualizer“."
+    },
     "step": {
       "init": {
         "title": "Sunlight Visualizer parinktys",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Įjungti Open-Meteo spinduliuotės jutiklius",
           "remove_radiation_entities_on_disable": "Išjungiant pašalinti Open-Meteo jutiklius",
           "weather_visuals_enabled": "Įjungti 3D orų efektus"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Vietinis saulės spinduliuotės jutiklis",
+            "description": "Naudokite meteorologinės stoties matuojamą bendrąją horizontaliąją saulės spinduliuotę.",
+            "data": {
+              "local_ghi_entity": "Meteorologinės stoties GHI jutiklis (W/m²)",
+              "local_ghi_smoothing": "Vidurkinimo trukmė (minutės)",
+              "local_ghi_stale": "Rodmuo pasensta po (minučių)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Pasirinkite horizontaliosios saulės spinduliuotės jutiklį, rodantį W/m². Palikite tuščią, jei norite naudoti tik „Open-Meteo“.",
+              "local_ghi_smoothing": "Išlygina 5–60 minučių matavimų svyravimus. Numatyta: 10 minučių.",
+              "local_ghi_stale": "Jei stotis per šį laiką nepateikia naujo rodmens, naudojami „Open-Meteo“ duomenys, jei ši parinktis įjungta. Numatyta: 15 minučių."
+            }
+          }
         },
         "data_description": {
           "location_source": "Pasirinkite Home Assistant vietą (numatyta) arba pasirinktinę zoną.",
