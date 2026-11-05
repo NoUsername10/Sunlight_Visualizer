@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "単位が W/m² のセンサーを選択してください。",
+      "local_ghi_self_reference": "Sunlight Visualizer 以外のセンサーを選択してください。"
+    },
     "step": {
       "init": {
         "title": "Sunlight Visualizer のオプション",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Open-Meteo の日射センサーを有効化",
           "remove_radiation_entities_on_disable": "無効化時に Open-Meteo センサーを削除",
           "weather_visuals_enabled": "3D 天気エフェクトを有効化"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "ローカル日射量センサー",
+            "description": "気象観測装置が測定した全天水平日射量を使用します。",
+            "data": {
+              "local_ghi_entity": "気象観測装置の GHI センサー (W/m²)",
+              "local_ghi_smoothing": "平均化時間 (分)",
+              "local_ghi_stale": "測定値の有効期限 (分)"
+            },
+            "data_description": {
+              "local_ghi_entity": "水平面の日射量を W/m² で報告するセンサーを選択します。Open-Meteo のみを使う場合は空欄にします。",
+              "local_ghi_smoothing": "5～60 分間の測定値の変動を平滑化します。既定値は 10 分です。",
+              "local_ghi_stale": "この時間内に観測装置から新しい値が届かない場合、有効になっていれば Open-Meteo を使用します。既定値は 15 分です。"
+            }
+          }
         },
         "data_description": {
           "location_source": "Home Assistant の位置（デフォルト）またはカスタムゾーンを選択します。",

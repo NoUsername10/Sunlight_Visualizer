@@ -16,11 +16,13 @@ from homeassistant.helpers import frame
 import voluptuous as vol
 
 import custom_components.sunlight_visualizer as integration
+from custom_components.sunlight_visualizer.config_flow import SunlightIntensityOptionsFlow
 from custom_components.sunlight_visualizer.const import (
     CONF_FORCE_SUN_AZIMUTH,
     CONF_FORCE_SUN_ELEVATION,
     CONF_FORCE_SUN_FALLBACK,
     CONF_CAMERA_ZOOM,
+    CONF_LOCAL_GHI_ENTITY,
     CONF_RADIATION_ENABLED,
     CONF_WEATHER_VISUALS_ENABLED,
     DOMAIN,
@@ -33,6 +35,7 @@ from custom_components.sunlight_visualizer.sensor import (
     SunAzimuthSensor,
     SunElevationSensor,
     SunWallIntensityCoordinator,
+    RoofRadiationPercentageSensor,
     _wall_shading_status,
 )
 from custom_components.sunlight_visualizer.sun_calculations import (
@@ -161,6 +164,14 @@ class CoordinatorSmokeTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(coordinator.data["sun_position"]["source"], "astral")
         coordinator.async_shutdown()
 
+    async def test_local_sensor_section_is_available_in_options(self) -> None:
+        flow = SunlightIntensityOptionsFlow(_config_entry())
+        flow.hass = self.hass
+        result = await flow.async_step_init()
+        self.assertEqual(result["type"], "form")
+        fields = result["data_schema"].schema
+        self.assertTrue(any(str(field) == "local_sunlight_sensor" for field in fields))
+
     async def test_forced_sun_refresh_builds_complete_core_data(self) -> None:
         entry = _config_entry(
             **{
@@ -192,6 +203,74 @@ class CoordinatorSmokeTests(unittest.IsolatedAsyncioTestCase):
 
         await coordinator.async_refresh()
         self.assertEqual(coordinator.general_cache_hits, 1)
+        coordinator.async_shutdown()
+
+    async def test_local_station_works_without_open_meteo(self) -> None:
+        self.hass.states.async_set(
+            "sensor.station_ghi", "400", {"unit_of_measurement": "W/m²"}
+        )
+        entry = _config_entry(**{
+            CONF_LOCAL_GHI_ENTITY: "sensor.station_ghi",
+            CONF_FORCE_SUN_FALLBACK: True,
+            CONF_FORCE_SUN_AZIMUTH: 180,
+            CONF_FORCE_SUN_ELEVATION: 30,
+            CONF_RADIATION_ENABLED: False,
+        })
+        coordinator = SunWallIntensityCoordinator(self.hass, entry, integration.VERSION)
+        with patch.object(coordinator, "_async_ensure_radiation_cache", new_callable=AsyncMock) as fetch:
+            await coordinator.async_refresh()
+            fetch.assert_not_awaited()
+
+        radiation = coordinator.data["radiation"]
+        self.assertTrue(radiation["available"])
+        self.assertEqual(radiation["source"], "local_station")
+        self.assertEqual(radiation["active_current"]["shortwave_radiation"], 400)
+        front = radiation["surfaces"]["front"]
+        self.assertEqual(
+            front["shading_demand"],
+            round(min(100, 400 * front["incidence_factor"] / 400 * 100), 1),
+        )
+        self.assertGreater(radiation["surfaces"]["ceiling"]["radiation"], 0)
+        self.assertFalse(RoofRadiationPercentageSensor(coordinator, entry).available)
+        previous_sun_timestamp = coordinator.data["sun_position"]["timestamp"]
+        self.hass.states.async_set(
+            "sensor.station_ghi", "500", {"unit_of_measurement": "W/m²"}
+        )
+        coordinator._local_ghi_history.clear()
+        coordinator._local_radiation_dirty = True
+        await coordinator.async_refresh()
+        self.assertEqual(coordinator.data["sun_position"]["timestamp"], previous_sun_timestamp)
+        self.assertEqual(coordinator.data["radiation"]["active_current"]["shortwave_radiation"], 500)
+        self.assertEqual(coordinator.general_cache_hits, 1)
+        coordinator.async_shutdown()
+
+    async def test_stale_station_uses_open_meteo_when_enabled(self) -> None:
+        entry = _config_entry(**{
+            CONF_LOCAL_GHI_ENTITY: "sensor.station_ghi",
+            CONF_FORCE_SUN_FALLBACK: True,
+            CONF_FORCE_SUN_AZIMUTH: 180,
+            CONF_FORCE_SUN_ELEVATION: 30,
+            CONF_RADIATION_ENABLED: True,
+        })
+        coordinator = SunWallIntensityCoordinator(self.hass, entry, integration.VERSION)
+        coordinator._radiation_cache_data = {}
+        values = {
+            "shortwave_radiation": 350.0,
+            "direct_radiation": 200.0,
+            "diffuse_radiation": 150.0,
+            "direct_normal_irradiance": 400.0,
+        }
+        with (
+            patch.object(coordinator, "_local_ghi", return_value=None),
+            patch.object(coordinator, "_async_ensure_radiation_cache", new_callable=AsyncMock, return_value="open_meteo_cached"),
+            patch.object(coordinator, "_radiation_values_for_time", return_value=values),
+            patch.object(coordinator, "_hourly_radiation_rows", return_value=[]),
+        ):
+            await coordinator.async_refresh()
+        radiation = coordinator.data["radiation"]
+        self.assertTrue(radiation["available"])
+        self.assertEqual(radiation["source"], "open_meteo_cached")
+        self.assertEqual(radiation["active_current"]["shortwave_radiation"], 350)
         coordinator.async_shutdown()
 
     async def test_today_profile_matches_astral_and_alignment_geometry(self) -> None:
@@ -319,7 +398,11 @@ class _FakeCoordinator:
         self.entry = entry
         self.version = version
         self.refreshed = False
+        self.local_source_initialized = False
         type(self).instance = self
+
+    def async_initialize_local_source(self) -> None:
+        self.local_source_initialized = True
 
     async def async_config_entry_first_refresh(self) -> None:
         self.refreshed = True
@@ -449,6 +532,7 @@ class IntegrationSetupSmokeTests(unittest.IsolatedAsyncioTestCase):
         self.assertIsNotNone(coordinator)
         assert coordinator is not None
         self.assertTrue(coordinator.refreshed)
+        self.assertTrue(coordinator.local_source_initialized)
         self.assertIs(hass.data[DOMAIN][entry.entry_id]["coordinator"], coordinator)
         self.assertEqual(len(hass.config_entries.forwarded), 1)
         self.assertEqual(len(hass.services.registered), 1)

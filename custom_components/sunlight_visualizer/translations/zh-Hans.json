@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "请选择单位为 W/m² 的传感器。",
+      "local_ghi_self_reference": "请选择 Sunlight Visualizer 之外的传感器。"
+    },
     "step": {
       "init": {
         "title": "Sunlight Visualizer 选项",
@@ -85,6 +89,22 @@
           "radiation_enabled": "启用 Open-Meteo 太阳辐射传感器",
           "remove_radiation_entities_on_disable": "禁用时移除 Open-Meteo 传感器",
           "weather_visuals_enabled": "启用 3D 天气视觉效果"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "本地太阳辐射传感器",
+            "description": "使用气象站测得的水平面总太阳辐照度。",
+            "data": {
+              "local_ghi_entity": "气象站 GHI 传感器 (W/m²)",
+              "local_ghi_smoothing": "平均时长（分钟）",
+              "local_ghi_stale": "读数超过此时间后失效（分钟）"
+            },
+            "data_description": {
+              "local_ghi_entity": "请选择以 W/m² 报告水平面太阳辐照度的传感器。留空则仅使用 Open-Meteo。",
+              "local_ghi_smoothing": "对 5–60 分钟内波动的读数取平均。默认值：10 分钟。",
+              "local_ghi_stale": "如果气象站在此时间内未报告新读数，则在启用 Open-Meteo 时改用其数据。默认值：15 分钟。"
+            }
+          }
         },
         "data_description": {
           "location_source": "选择 Home Assistant 位置（默认）或自定义区域。",

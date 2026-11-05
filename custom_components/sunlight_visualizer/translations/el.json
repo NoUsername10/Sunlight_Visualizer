@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Επιλέξτε αισθητήρα με μονάδα W/m².",
+      "local_ghi_self_reference": "Επιλέξτε αισθητήρα εκτός του Sunlight Visualizer."
+    },
     "step": {
       "init": {
         "title": "Επιλογές του Sunlight Visualizer",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Ενεργοποίηση αισθητήρων ακτινοβολίας Open-Meteo",
           "remove_radiation_entities_on_disable": "Αφαίρεση αισθητήρων Open-Meteo κατά την απενεργοποίηση",
           "weather_visuals_enabled": "Ενεργοποίηση οπτικών εφέ καιρού 3D"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Τοπικός αισθητήρας ηλιακής ακτινοβολίας",
+            "description": "Χρησιμοποιήστε την ολική οριζόντια ηλιακή ακτινοβολία που μετρά ένας μετεωρολογικός σταθμός.",
+            "data": {
+              "local_ghi_entity": "Αισθητήρας GHI μετεωρολογικού σταθμού (W/m²)",
+              "local_ghi_smoothing": "Χρόνος μέσου όρου (λεπτά)",
+              "local_ghi_stale": "Η μέτρηση παλιώνει μετά από (λεπτά)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Επιλέξτε αισθητήρα οριζόντιας ηλιακής ακτινοβολίας σε W/m². Αφήστε κενό για χρήση μόνο του Open-Meteo.",
+              "local_ghi_smoothing": "Εξομαλύνει τις μεταβολές των μετρήσεων σε διάστημα 5–60 λεπτών. Προεπιλογή: 10 λεπτά.",
+              "local_ghi_stale": "Αν ο σταθμός δεν στείλει μέτρηση μέσα σε αυτό το διάστημα, χρησιμοποιείται το Open-Meteo εφόσον είναι ενεργό. Προεπιλογή: 15 λεπτά."
+            }
+          }
         },
         "data_description": {
           "location_source": "Επιλέξτε την τοποθεσία του Home Assistant (προεπιλογή) ή μια προσαρμοσμένη ζώνη.",

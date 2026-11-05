@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Select a sensor whose unit is W/m².",
+      "local_ghi_self_reference": "Select a sensor outside Sunlight Visualizer."
+    },
     "step": {
       "init": {
         "title": "Sunlight Visualizer Options",
@@ -106,6 +110,22 @@
           "radiation_enabled": "Fetch 15-minute forecast radiation from Open-Meteo every 15 minutes while the sun is up and hourly when the sun is down. Adds wall/roof radiation sensors. Disabled by default because it uses an external API.",
           "remove_radiation_entities_on_disable": "When turning Open-Meteo radiation off, remove only the Open-Meteo/radiation entities from Home Assistant. Regular sunlight sensors remain.",
           "weather_visuals_enabled": "Fetch current weather from Open-Meteo for optional 3D-only clouds, precipitation, wind, fog, and horizon lightning. The 2.5D renderer is never changed."
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Local sunlight sensor",
+            "description": "Use a horizontal outdoor solar radiation sensor. Fresh local readings take priority over Open-Meteo radiation.",
+            "data": {
+              "local_ghi_entity": "Weather-station GHI sensor (W/m²)",
+              "local_ghi_smoothing": "Averaging time (minutes)",
+              "local_ghi_stale": "Stale reading after (minutes)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Select a horizontal solar radiation sensor reporting W/m². Leave empty to use Open-Meteo only.",
+              "local_ghi_smoothing": "Smooth changing readings over 5–60 minutes. Default: 10 minutes.",
+              "local_ghi_stale": "If the station has not reported within this time, use Open-Meteo radiation when enabled. Default: 15 minutes."
+            }
+          }
         }
       }
     }

@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Vyberte senzor s jednotkou W/m².",
+      "local_ghi_self_reference": "Vyberte senzor mimo Sunlight Visualizer."
+    },
     "step": {
       "init": {
         "title": "Možnosti Sunlight Visualizer",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Povolit senzory slunečního záření Open-Meteo",
           "remove_radiation_entities_on_disable": "Při vypnutí odebrat senzory Open-Meteo",
           "weather_visuals_enabled": "Povolit 3D efekty počasí"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Místní senzor slunečního záření",
+            "description": "Použijte globální horizontální ozáření naměřené meteostanicí.",
+            "data": {
+              "local_ghi_entity": "Senzor GHI meteostanice (W/m²)",
+              "local_ghi_smoothing": "Doba průměrování (minuty)",
+              "local_ghi_stale": "Hodnota zastará po (minutách)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Vyberte senzor horizontálního slunečního záření v W/m². Ponechte prázdné, pokud chcete používat jen Open-Meteo.",
+              "local_ghi_smoothing": "Vyhlazuje kolísající hodnoty za 5–60 minut. Výchozí hodnota: 10 minut.",
+              "local_ghi_stale": "Pokud stanice během této doby neodešle novou hodnotu, použije se Open-Meteo, je-li zapnuté. Výchozí hodnota: 15 minut."
+            }
+          }
         },
         "data_description": {
           "location_source": "Vyberte polohu z Home Assistant (výchozí) nebo vlastní zónu.",

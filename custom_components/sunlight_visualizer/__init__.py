@@ -340,6 +340,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     from .sensor import SunWallIntensityCoordinator
     coordinator = SunWallIntensityCoordinator(hass, entry, VERSION)  # Pass VERSION as third argument
     entry.async_on_unload(coordinator.async_shutdown)
+    coordinator.async_initialize_local_source()
     
     await coordinator.async_config_entry_first_refresh()
     

@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Sélectionnez un capteur dont l’unité est W/m².",
+      "local_ghi_self_reference": "Sélectionnez un capteur extérieur à Sunlight Visualizer."
+    },
     "step": {
       "init": {
         "title": "Options de Sunlight Visualizer",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Activer les capteurs de rayonnement Open-Meteo",
           "remove_radiation_entities_on_disable": "Supprimer les capteurs Open-Meteo lors de la désactivation",
           "weather_visuals_enabled": "Activer les effets météo 3D"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Capteur solaire local",
+            "description": "Utilisez le rayonnement solaire global horizontal mesuré par une station météo.",
+            "data": {
+              "local_ghi_entity": "Capteur GHI de la station météo (W/m²)",
+              "local_ghi_smoothing": "Durée de moyennage (minutes)",
+              "local_ghi_stale": "Mesure périmée après (minutes)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Sélectionnez un capteur de rayonnement solaire horizontal en W/m². Laissez vide pour utiliser uniquement Open-Meteo.",
+              "local_ghi_smoothing": "Lisse les variations des mesures sur 5 à 60 minutes. Valeur par défaut : 10 minutes.",
+              "local_ghi_stale": "Si la station n’a pas transmis de mesure pendant cette durée, Open-Meteo est utilisé s’il est activé. Valeur par défaut : 15 minutes."
+            }
+          }
         },
         "data_description": {
           "location_source": "Choisissez l'emplacement Home Assistant (par défaut) ou une zone personnalisée.",

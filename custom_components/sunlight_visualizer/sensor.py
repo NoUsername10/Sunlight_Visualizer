@@ -22,7 +22,11 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE, EntityCategory
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.event import async_track_point_in_time
+from homeassistant.helpers.event import (
+    async_track_point_in_time,
+    async_track_state_change_event,
+    async_track_time_interval,
+)
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers import sun as sun_helper
 from homeassistant.helpers.update_coordinator import (
@@ -47,6 +51,9 @@ from .const import (
     CONF_ROOF_POWER_ENABLED,
     CONF_ROOF_POWER_INVERT,
     CONF_RADIATION_ENABLED,
+    CONF_LOCAL_GHI_ENTITY,
+    CONF_LOCAL_GHI_SMOOTHING,
+    CONF_LOCAL_GHI_STALE,
     CONF_WEATHER_VISUALS_ENABLED,
     CONF_FORCE_SUN_FALLBACK,
     CONF_FORCE_SUN_AZIMUTH,
@@ -69,6 +76,8 @@ from .const import (
     DEFAULT_FIXED_SUN_ROTATION_ENABLED,
     DEFAULT_CAMERA_ZOOM,
     DEFAULT_RADIATION_ENABLED,
+    DEFAULT_LOCAL_GHI_SMOOTHING,
+    DEFAULT_LOCAL_GHI_STALE,
     DEFAULT_WEATHER_VISUALS_ENABLED,
     WALLS,
     DEFAULT_UPDATE_INTERVAL,
@@ -83,6 +92,13 @@ from .const import (
 )
 
 from .sun_calculations import calculate_sun_angle, angle_to_percentage, calculate_optimal_alignment_time
+from .local_radiation import (
+    GHIHistory,
+    SHADING_FULL_DEMAND_WALL_FACING_GHI,
+    WATT_PER_SQUARE_METER_UNITS,
+    estimate_components,
+    shading_demand as calculate_shading_demand,
+)
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -125,23 +141,13 @@ RADIATION_FETCH_INTERVAL_DAYLIGHT = timedelta(minutes=15)
 RADIATION_FETCH_INTERVAL_NIGHT = timedelta(hours=1)
 OPEN_METEO_RETRY_DELAYS = (0.0, 0.5, 1.5)
 OPEN_METEO_TRANSIENT_STATUSES = {429, 500, 502, 503, 504}
-ELEVATION_COMFORT_CURVE = (
-    (3.0, 0.0),
-    (5.0, 0.25),
-    (10.0, 0.60),
-    (15.0, 1.00),
-    (45.0, 1.00),
-    (60.0, 0.65),
-    (75.0, 0.25),
-    (85.0, 0.05),
-)
 WALL_SHADING_STATUS_RECOMMENDATIONS = {
-    "No direct sun": "No blind or awning action is needed from direct sun on this wall.",
-    "Low need": "Direct sun impact is low; shading is usually not needed.",
-    "Mild sun": "There is some direct sun. Watch glare or room comfort if this wall has windows.",
+    "No direct sun": "No wall-facing sunlight is available for a shading recommendation.",
+    "Low need": "Wall-facing sunlight is low; shading is usually not needed.",
+    "Mild sun": "There is some wall-facing sunlight. Watch glare or room comfort if this wall has windows.",
     "Shade useful": "Shading may improve comfort on this wall.",
-    "Shade recommended": "Direct sun is strong enough that blinds or awnings are recommended for comfort.",
-    "Strong low sun": "Low direct sun can enter deeply through windows; shading is strongly recommended.",
+    "Shade recommended": "Wall-facing sunlight is strong enough that blinds or awnings may improve comfort.",
+    "Strong low sun": "Low sunlight can enter deeply through windows; shading is strongly recommended.",
 }
 
 SURFACE_FRIENDLY_PREFIX = {
@@ -172,18 +178,6 @@ def _safe_float(value: Any, default: float = 0.0) -> float:
     if not math.isfinite(result):
         return default
     return result
-
-
-def _interp_curve(x_value: float, points: tuple[tuple[float, float], ...]) -> float:
-    """Linearly interpolate a y value from a sorted curve."""
-    if x_value <= points[0][0]:
-        return points[0][1]
-    for (x0, y0), (x1, y1) in zip(points, points[1:]):
-        if x_value <= x1:
-            span = max(0.0001, x1 - x0)
-            ratio = (x_value - x0) / span
-            return y0 + (y1 - y0) * ratio
-    return points[-1][1]
 
 
 def _wall_sun_angle_details(coordinator: Any, wall: str) -> dict[str, Any]:
@@ -229,7 +223,7 @@ def _wall_shading_status(
     wall_sun_angle: float,
 ) -> str:
     """Return a human-friendly wall shading status."""
-    if direct_radiation <= 0 or shading_demand <= 0:
+    if shading_demand <= 0:
         return "No direct sun"
     if shading_demand < 15:
         return "Low need"
@@ -335,9 +329,10 @@ async def async_setup_entry(
                 "mdi:sun-wireless",
             ),
             OpenMeteoRadiationStatusSensor(coordinator, config_entry),
-            RoofRadiationSensor(coordinator, config_entry),
-            RoofRadiationPercentageSensor(coordinator, config_entry),
         ])
+    if coordinator.radiation_enabled or coordinator.local_ghi_entity:
+        entities.append(RoofRadiationSensor(coordinator, config_entry))
+        entities.append(RoofRadiationPercentageSensor(coordinator, config_entry))
         for wall in ("front", "right", "back", "left"):
             entities.append(WallRadiationSensor(coordinator, config_entry, wall))
             entities.append(WallDirectRadiationSensor(coordinator, config_entry, wall))
@@ -725,6 +720,17 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         self.radiation_enabled = bool(
             merged_config.get(CONF_RADIATION_ENABLED, DEFAULT_RADIATION_ENABLED)
         )
+        self.local_ghi_entity = merged_config.get(CONF_LOCAL_GHI_ENTITY) or None
+        self.local_ghi_smoothing = int(merged_config.get(
+            CONF_LOCAL_GHI_SMOOTHING, DEFAULT_LOCAL_GHI_SMOOTHING
+        ))
+        self.local_ghi_stale = int(merged_config.get(
+            CONF_LOCAL_GHI_STALE, DEFAULT_LOCAL_GHI_STALE
+        ))
+        self._local_ghi_history = GHIHistory()
+        self._local_ghi_unsubs: list[Any] = []
+        self._local_radiation_dirty = False
+        self._local_report_revision = 0
         self.weather_visuals_enabled = bool(
             merged_config.get(
                 CONF_WEATHER_VISUALS_ENABLED,
@@ -950,6 +956,65 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
     def async_shutdown(self) -> None:
         """Clean up coordinator-owned listeners/timers."""
         self._cancel_radiation_refresh_timer()
+        for unsubscribe in self._local_ghi_unsubs:
+            unsubscribe()
+        self._local_ghi_unsubs.clear()
+
+    @callback
+    def async_initialize_local_source(self) -> None:
+        """Watch station changes and poll reports that repeat the same value."""
+        if not self.local_ghi_entity:
+            return
+
+        @callback
+        def changed(_event) -> None:
+            self._local_radiation_dirty = True
+            self._local_report_revision += 1
+            self.hass.async_create_task(self.async_request_refresh())
+
+        @callback
+        def tick(_now: datetime) -> None:
+            self._local_radiation_dirty = True
+            self._local_report_revision += 1
+            self.hass.async_create_task(self.async_request_refresh())
+
+        self._local_ghi_unsubs.append(async_track_state_change_event(
+            self.hass, [self.local_ghi_entity], changed
+        ))
+        self._local_ghi_unsubs.append(async_track_time_interval(
+            self.hass, tick, timedelta(minutes=1)
+        ))
+
+    def _local_ghi(self, now: datetime) -> tuple[float, float] | None:
+        """Return smoothed GHI and report age if a valid sensor report is fresh."""
+        if not self.local_ghi_entity:
+            return None
+        state = self.hass.states.get(self.local_ghi_entity)
+        if state is None or state.attributes.get("unit_of_measurement") not in WATT_PER_SQUARE_METER_UNITS:
+            self._local_ghi_history.clear()
+            return None
+        try:
+            value = float(state.state)
+        except (ValueError, TypeError):
+            self._local_ghi_history.clear()
+            return None
+        if not math.isfinite(value) or value < 0:
+            self._local_ghi_history.clear()
+            return None
+        reported_at = getattr(state, "last_reported", state.last_updated)
+        if reported_at > now or now - reported_at > timedelta(minutes=self.local_ghi_stale):
+            self._local_ghi_history.clear()
+            return None
+        previous_report = self._local_ghi_history.last_reported
+        if previous_report and reported_at - previous_report > timedelta(minutes=self.local_ghi_stale):
+            self._local_ghi_history.clear()
+        self._local_ghi_history.add(reported_at, value)
+        average = self._local_ghi_history.average(
+            now, self.local_ghi_smoothing, self.local_ghi_stale
+        )
+        if average is None:
+            return None
+        return average, round((now - reported_at).total_seconds() / 60, 1)
 
     def _clear_radiation_cache(self) -> None:
         """Clear cached Open-Meteo radiation data."""
@@ -1388,20 +1453,33 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         sun_data: dict[str, float],
         surface_azimuths: dict[str, float],
     ) -> dict[str, Any]:
-        """Calculate radiation values from cached Open-Meteo data."""
-        if not self.radiation_enabled:
+        """Calculate radiation from a fresh local station or Open-Meteo."""
+        if not (self.radiation_enabled or self.local_ghi_entity):
             return {"enabled": False, "available": False, "source": "disabled"}
 
-        source = await self._async_ensure_radiation_cache(
-            now, _safe_float(sun_data.get("elevation"))
-        )
         sun_elevation = _safe_float(sun_data.get("elevation"))
+        local_reading = self._local_ghi(now)
+        source = "unavailable"
+        open_meteo_values = None
+        if self.radiation_enabled:
+            source = await self._async_ensure_radiation_cache(now, sun_elevation)
+            if self._radiation_cache_data is not None and source != "unavailable":
+                open_meteo_values = self._radiation_values_for_time(now)
         fetch_metadata = self._radiation_fetch_metadata(now, sun_elevation)
         data_age_minutes = None
         if self._radiation_last_success is not None:
             data_age_minutes = round((now - self._radiation_last_success).total_seconds() / 60, 1)
 
-        if self._radiation_cache_data is None or source == "unavailable":
+        if local_reading is not None:
+            current_values = estimate_components(local_reading[0], sun_elevation, now)
+            active_source = "local_station"
+            active_age = local_reading[1]
+        else:
+            current_values = open_meteo_values
+            active_source = source
+            active_age = data_age_minutes
+
+        if current_values is None:
             return {
                 "enabled": True,
                 "available": False,
@@ -1409,23 +1487,10 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                 "last_fetch": self._radiation_last_fetch.isoformat() if self._radiation_last_fetch else None,
                 "last_success": self._radiation_last_success.isoformat() if self._radiation_last_success else None,
                 "data_age_minutes": data_age_minutes,
-                "last_error": self._radiation_last_error,
-                "last_status": self._radiation_last_status,
-                "fetch_attempts": self._radiation_fetch_attempts,
-                "api_timezone": str(self._radiation_response_tz) if self._radiation_response_tz else None,
-                **fetch_metadata,
-            }
-
-        current_values = self._radiation_values_for_time(now)
-        if current_values is None:
-            return {
-                "enabled": True,
-                "available": False,
-                "source": source,
-                "last_fetch": self._radiation_last_fetch.isoformat() if self._radiation_last_fetch else None,
-                "last_success": self._radiation_last_success.isoformat() if self._radiation_last_success else None,
-                "data_age_minutes": data_age_minutes,
-                "last_error": "No current radiation values available in cached forecast",
+                "last_error": self._radiation_last_error or (
+                    "Local GHI sensor has no valid fresh W/m² report"
+                    if self.local_ghi_entity else None
+                ),
                 "last_status": self._radiation_last_status,
                 "fetch_attempts": self._radiation_fetch_attempts,
                 "api_timezone": str(self._radiation_response_tz) if self._radiation_response_tz else None,
@@ -1444,11 +1509,11 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             },
         }
 
-        daily_rows = self._hourly_radiation_rows(now.date())
+        daily_rows = self._hourly_radiation_rows(now.date()) if self.radiation_enabled else []
         forecast_end = now + timedelta(hours=4)
         future_rows = [
             row
-            for row in self._hourly_radiation_rows()
+            for row in (self._hourly_radiation_rows() if self.radiation_enabled else [])
             if now <= row["timestamp"] <= forecast_end
         ]
         surfaces: dict[str, dict[str, Any]] = {}
@@ -1483,7 +1548,7 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                     max_direct_radiation = row_components["direct_component"]
                     peak_direct_time = row["timestamp"]
 
-            radiation_percentage = 0.0
+            radiation_percentage = None
             if max_radiation > 0:
                 radiation_percentage = _clamp(current["radiation"] / max_radiation * 100, 0.0, 100.0)
 
@@ -1495,8 +1560,11 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
 
             shading_demand = None
             if definition["kind"] == "wall":
-                elevation_factor = _interp_curve(float(sun_data["elevation"]), ELEVATION_COMFORT_CURVE)
-                shading_demand = _clamp(direct_radiation_percentage * elevation_factor, 0.0, 100.0)
+                shading_demand = calculate_shading_demand(
+                    current_values["shortwave_radiation"],
+                    current["incidence_factor"],
+                    sun_elevation,
+                )
 
             minutes_to_peak = None
             if peak_time is not None:
@@ -1529,29 +1597,21 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                     "value": round(row_radiation_percentage, 1),
                 })
                 if definition["kind"] == "wall":
-                    row_direct_percentage = (
-                        _clamp(
-                            row_components["direct_component"] / max_direct_radiation * 100,
-                            0.0,
-                            100.0,
-                        )
-                        if max_direct_radiation > 0
-                        else 0.0
-                    )
-                    elevation_factor = _interp_curve(
-                        float(row_sun["elevation"]), ELEVATION_COMFORT_CURVE
-                    )
                     shading_demand_forecast.append({
                         "time": row["timestamp"].isoformat(),
                         "value": round(
-                            _clamp(row_direct_percentage * elevation_factor, 0.0, 100.0),
+                            calculate_shading_demand(
+                                row["shortwave_radiation"],
+                                row_components["incidence_factor"],
+                                row_sun["elevation"],
+                            ),
                             1,
                         ),
                     })
 
             surfaces[surface] = {
                 "radiation": round(current["radiation"], 1),
-                "radiation_percentage": round(radiation_percentage, 1),
+                "radiation_percentage": round(radiation_percentage, 1) if radiation_percentage is not None else None,
                 "shading_demand": round(shading_demand, 1) if shading_demand is not None else None,
                 "max_radiation_today": round(max_radiation, 1),
                 "peak_radiation_time": peak_time.isoformat() if peak_time else None,
@@ -1576,12 +1636,19 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
         return {
             "enabled": True,
             "available": True,
-            "source": source,
-            "current": {field: round(current_values[field], 1) for field in RADIATION_FIELDS},
+            "source": active_source,
+            "open_meteo_source": source,
+            "open_meteo_available": open_meteo_values is not None,
+            "open_meteo_data_age_minutes": data_age_minutes,
+            "local_ghi_entity": self.local_ghi_entity,
+            "local_ghi_smoothing_minutes": self.local_ghi_smoothing,
+            "local_ghi_stale_minutes": self.local_ghi_stale,
+            "current": {field: round(open_meteo_values[field], 1) for field in RADIATION_FIELDS} if open_meteo_values else {},
+            "active_current": {field: round(current_values[field], 1) for field in RADIATION_FIELDS},
             "surfaces": surfaces,
             "last_fetch": self._radiation_last_fetch.isoformat() if self._radiation_last_fetch else None,
             "last_success": self._radiation_last_success.isoformat() if self._radiation_last_success else None,
-            "data_age_minutes": data_age_minutes,
+            "data_age_minutes": active_age,
             "last_error": self._radiation_last_error,
             "last_status": self._radiation_last_status,
             "fetch_attempts": self._radiation_fetch_attempts,
@@ -1730,6 +1797,16 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                 (now - self._last_calculation_time) < self._cache_duration):
                 _LOGGER.debug("Using cached calculation result")
                 self.general_cache_hits += 1  # Track cache hit
+                if self._local_radiation_dirty:
+                    report_revision = self._local_report_revision
+                    updated = dict(self._last_calculation_result)
+                    updated["radiation"] = await self._async_calculate_radiation(
+                        now, updated["sun_position"], self._get_surface_azimuths()
+                    )
+                    self._last_calculation_result = updated
+                    if report_revision == self._local_report_revision:
+                        self._local_radiation_dirty = False
+                    return updated
                 return self._last_calculation_result
             
             # Get current sun position (forced fallback optional)
@@ -1887,6 +1964,7 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
                     'minutes_to_optimal': round(time_diff, 1)
                 })
 
+            report_revision = self._local_report_revision
             radiation_data = await self._async_calculate_radiation(
                 now, sun_data, surface_azimuths
             )
@@ -1925,6 +2003,8 @@ class SunWallIntensityCoordinator(DataUpdateCoordinator):
             
             # Cache the result
             self._last_calculation_time = now
+            if report_revision == self._local_report_revision:
+                self._local_radiation_dirty = False
             self._last_calculation_result = result
             
             return result
@@ -2246,6 +2326,9 @@ class RadiationSensorBase(CoordinatorEntity, SensorEntity):
             CARD_SOURCE_ATTR: CARD_SOURCE_VALUE,
             "radiation_enabled": radiation.get("enabled", False),
             "radiation_source": radiation.get("source"),
+            "local_ghi_entity": radiation.get("local_ghi_entity"),
+            "local_ghi_smoothing_minutes": radiation.get("local_ghi_smoothing_minutes"),
+            "local_ghi_stale_minutes": radiation.get("local_ghi_stale_minutes"),
             "radiation_data_age_minutes": radiation.get("data_age_minutes"),
             "radiation_last_fetch": radiation.get("last_fetch"),
             "radiation_last_success": radiation.get("last_success"),
@@ -2289,8 +2372,7 @@ class OpenMeteoRadiationStatusSensor(RadiationSensorBase):
     @property
     def available(self) -> bool:
         """Return True when radiation support is enabled and coordinator data exists."""
-        radiation = self._radiation_data
-        return bool(self.coordinator.last_update_success and radiation.get("enabled"))
+        return bool(self.coordinator.last_update_success and self.coordinator.radiation_enabled)
 
     @property
     def native_value(self) -> str | None:
@@ -2298,8 +2380,8 @@ class OpenMeteoRadiationStatusSensor(RadiationSensorBase):
         radiation = self._radiation_data
         if not radiation.get("enabled"):
             return None
-        source = radiation.get("source")
-        if radiation.get("available"):
+        source = radiation.get("open_meteo_source", radiation.get("source"))
+        if radiation.get("open_meteo_available"):
             if source == "open_meteo_stale_cache":
                 return "Stale cache"
             return "OK"
@@ -2320,7 +2402,7 @@ class OpenMeteoRadiationStatusSensor(RadiationSensorBase):
         }
         attrs["status"] = status
         attrs["meaning"] = meanings.get(status)
-        attrs["latest_success_minutes_ago"] = self._radiation_data.get("data_age_minutes")
+        attrs["latest_success_minutes_ago"] = self._radiation_data.get("open_meteo_data_age_minutes")
         attrs["daylight_fetch_interval"] = "15 minutes"
         attrs["night_fetch_interval"] = "60 minutes"
         attrs["forecast_resolution"] = "15 minutes"
@@ -2360,7 +2442,15 @@ class RawRadiationSensor(RadiationSensorBase):
         current = self._radiation_data.get("current", {}) or {}
         if self._field not in current:
             return None
-        return round(_safe_float(current.get(self._field)), 1)
+        return round(_safe_float(current[self._field]), 1)
+
+    @property
+    def available(self) -> bool:
+        """Keep Open-Meteo raw sensors separate from the local source."""
+        return bool(
+            self.coordinator.last_update_success
+            and self._radiation_data.get("open_meteo_available")
+        )
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
@@ -2451,7 +2541,7 @@ class WallDirectRadiationSensor(RadiationSensorBase):
 
 
 class WallShadingDemandSensor(RadiationSensorBase):
-    """Wall shading demand sensor from direct sun and comfort elevation curve."""
+    """Wall shading demand from source-independent GHI and wall geometry."""
 
     def __init__(
         self,
@@ -2484,10 +2574,8 @@ class WallShadingDemandSensor(RadiationSensorBase):
         surface = self._radiation_data.get("surfaces", {}).get(self._wall, {}) or {}
         attrs.update(surface)
         attrs["wall"] = self._wall
-        attrs["elevation_comfort_curve"] = [
-            {"elevation": elevation, "factor": factor}
-            for elevation, factor in ELEVATION_COMFORT_CURVE
-        ]
+        attrs["full_demand_wall_facing_ghi"] = SHADING_FULL_DEMAND_WALL_FACING_GHI
+        attrs["shading_method"] = "GHI times wall incidence, capped at 100%"
         attrs["forecast_4h"] = (
             surface.get("forecast_4h", {}).get("shading_demand", [])
         )
@@ -2616,9 +2704,14 @@ class RoofRadiationPercentageSensor(RadiationSensorBase):
     def native_value(self) -> float | None:
         """Return roof radiation percentage."""
         surface = self._radiation_data.get("surfaces", {}).get("ceiling", {})
-        if not surface:
+        if not surface or surface.get("radiation_percentage") is None:
             return None
         return round(_safe_float(surface.get("radiation_percentage")), 1)
+
+    @property
+    def available(self) -> bool:
+        """A daily forecast peak is required for this percentage."""
+        return bool(super().available and self.native_value is not None)
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:

@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Velg en sensor med enheten W/m².",
+      "local_ghi_self_reference": "Velg en sensor utenfor Sunlight Visualizer."
+    },
     "step": {
       "init": {
         "title": "Innstillinger for Sunlight Visualizer",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Aktiver strålingssensorer fra Open-Meteo",
           "remove_radiation_entities_on_disable": "Fjern Open-Meteo-sensorer ved deaktivering",
           "weather_visuals_enabled": "Aktiver væreffekter i 3D"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Lokal solstrålingssensor",
+            "description": "Bruk global horisontal solstråling målt av en værstasjon.",
+            "data": {
+              "local_ghi_entity": "Værstasjonens GHI-sensor (W/m²)",
+              "local_ghi_smoothing": "Gjennomsnittstid (minutter)",
+              "local_ghi_stale": "Måling foreldet etter (minutter)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Velg en sensor for horisontal solstråling i W/m². La feltet stå tomt for å bruke bare Open-Meteo.",
+              "local_ghi_smoothing": "Jevner ut varierende målinger over 5–60 minutter. Standard: 10 minutter.",
+              "local_ghi_stale": "Hvis stasjonen ikke har rapportert innen denne tiden, brukes Open-Meteo hvis det er aktivert. Standard: 15 minutter."
+            }
+          }
         },
         "data_description": {
           "location_source": "Velg plasseringen fra Home Assistant (standard) eller en egendefinert sone.",

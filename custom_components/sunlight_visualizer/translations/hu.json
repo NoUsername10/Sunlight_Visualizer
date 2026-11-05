@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Válasszon W/m² mértékegységű érzékelőt.",
+      "local_ghi_self_reference": "A Sunlight Visualizer integráción kívüli érzékelőt válasszon."
+    },
     "step": {
       "init": {
         "title": "A Sunlight Visualizer beállításai",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Open-Meteo sugárzásérzékelők engedélyezése",
           "remove_radiation_entities_on_disable": "Open-Meteo érzékelők eltávolítása kikapcsoláskor",
           "weather_visuals_enabled": "3D időjárási látványelemek engedélyezése"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Helyi napsugárzás-érzékelő",
+            "description": "Használja egy időjárás-állomás által mért globális vízszintes besugárzást.",
+            "data": {
+              "local_ghi_entity": "Az időjárás-állomás GHI-érzékelője (W/m²)",
+              "local_ghi_smoothing": "Átlagolási idő (perc)",
+              "local_ghi_stale": "Mérés elavul ennyi idő után (perc)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Válasszon W/m²-ben mérő vízszintes napsugárzás-érzékelőt. Hagyja üresen, ha csak az Open-Meteót szeretné használni.",
+              "local_ghi_smoothing": "Az ingadozó méréseket 5–60 perc alatt simítja. Alapértelmezés: 10 perc.",
+              "local_ghi_stale": "Ha az állomás ennyi ideig nem küld új mérést, a rendszer az Open-Meteót használja, ha engedélyezve van. Alapértelmezés: 15 perc."
+            }
+          }
         },
         "data_description": {
           "location_source": "Válassza a Home Assistant helyét (alapértelmezett) vagy egy egyéni zónát.",

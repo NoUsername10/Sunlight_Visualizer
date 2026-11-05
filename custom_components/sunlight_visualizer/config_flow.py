@@ -8,9 +8,10 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_LATITUDE, CONF_LONGITUDE
 from homeassistant.core import callback
-from homeassistant.data_entry_flow import FlowResult
+from homeassistant.data_entry_flow import FlowResult, section
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers import selector
+from homeassistant.helpers import entity_registry as er
 
 from .const import (
     CONF_ADVANCED_MODE,
@@ -24,6 +25,9 @@ from .const import (
     CONF_HOUSE_ANGLE,
     CONF_LOCATION_SOURCE,
     CONF_LOCATION_ZONE_ENTITY,
+    CONF_LOCAL_GHI_ENTITY,
+    CONF_LOCAL_GHI_SMOOTHING,
+    CONF_LOCAL_GHI_STALE,
     CONF_ROOF_DIRECTION,
     CONF_ROOF_POWER_ENABLED,
     CONF_ROOF_POWER_ENTITY,
@@ -42,6 +46,8 @@ from .const import (
     DEFAULT_HOUSE_ANGLE,
     DEFAULT_LOCATION_SOURCE,
     DEFAULT_LOCATION_ZONE_ENTITY,
+    DEFAULT_LOCAL_GHI_SMOOTHING,
+    DEFAULT_LOCAL_GHI_STALE,
     DEFAULT_ROOF_DIRECTION,
     DEFAULT_ROOF_POWER_ENABLED,
     DEFAULT_ROOF_POWER_ENTITY,
@@ -58,8 +64,10 @@ from .const import (
     ROOF_DIRECTIONS,
     RADIATION_CLEANUP_MARKER_PREFIX,
 )
+from .local_radiation import WATT_PER_SQUARE_METER_UNITS
 
 ZONE_HOME_OPTION = "__use_home_default__"
+LOCAL_SUNLIGHT_SECTION = "local_sunlight_sensor"
 
 
 def _validate_house_angle(value: Any) -> int:
@@ -437,11 +445,48 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
         """Manage integration options."""
         errors: dict[str, str] = {}
         current_config = {**self.config_entry.data, **self.config_entry.options}
+        local_ghi_marker = vol.Optional(
+            CONF_LOCAL_GHI_ENTITY,
+            description={"suggested_value": current_config[CONF_LOCAL_GHI_ENTITY]}
+            if current_config.get(CONF_LOCAL_GHI_ENTITY)
+            else None,
+        )
         was_radiation_enabled = bool(
             current_config.get(CONF_RADIATION_ENABLED, DEFAULT_RADIATION_ENABLED)
         )
 
         if user_input is not None:
+            local_section = user_input.pop(LOCAL_SUNLIGHT_SECTION, None)
+            if local_section is not None:
+                local_entity = local_section.get(CONF_LOCAL_GHI_ENTITY)
+                if local_entity:
+                    user_input[CONF_LOCAL_GHI_ENTITY] = local_entity
+                else:
+                    user_input.pop(CONF_LOCAL_GHI_ENTITY, None)
+                user_input[CONF_LOCAL_GHI_SMOOTHING] = local_section[
+                    CONF_LOCAL_GHI_SMOOTHING
+                ]
+                user_input[CONF_LOCAL_GHI_STALE] = local_section[CONF_LOCAL_GHI_STALE]
+            elif current_config.get(CONF_LOCAL_GHI_ENTITY):
+                user_input[CONF_LOCAL_GHI_ENTITY] = current_config[CONF_LOCAL_GHI_ENTITY]
+                user_input[CONF_LOCAL_GHI_SMOOTHING] = current_config.get(
+                    CONF_LOCAL_GHI_SMOOTHING, DEFAULT_LOCAL_GHI_SMOOTHING
+                )
+                user_input[CONF_LOCAL_GHI_STALE] = current_config.get(
+                    CONF_LOCAL_GHI_STALE, DEFAULT_LOCAL_GHI_STALE
+                )
+            selected_local = user_input.get(CONF_LOCAL_GHI_ENTITY)
+            if selected_local:
+                registry_entry = er.async_get(self.hass).async_get(selected_local)
+                if registry_entry and registry_entry.config_entry_id == self.config_entry.entry_id:
+                    errors["base"] = "local_ghi_self_reference"
+                selected_state = self.hass.states.get(selected_local)
+                if (
+                    selected_state is not None
+                    and selected_state.attributes.get("unit_of_measurement")
+                    not in WATT_PER_SQUARE_METER_UNITS
+                ):
+                    errors["base"] = "invalid_local_ghi_unit"
             _apply_location_selection(self.hass, user_input)
             remove_radiation_entities_on_disable = bool(
                 user_input.pop(CONF_REMOVE_RADIATION_ENTITIES_ON_DISABLE, True)
@@ -511,6 +556,7 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 if (
                     was_radiation_enabled
                     and not requested_radiation_enabled
+                    and not user_input.get(CONF_LOCAL_GHI_ENTITY)
                     and remove_radiation_entities_on_disable
                 ):
                     domain_data[cleanup_key] = True
@@ -652,6 +698,35 @@ class SunlightIntensityOptionsFlow(config_entries.OptionsFlow):
                 CONF_RADIATION_ENABLED,
                 default=current_radiation_enabled,
             ): bool,
+            vol.Optional(LOCAL_SUNLIGHT_SECTION): section(
+                vol.Schema({
+                    local_ghi_marker: selector.EntitySelector(
+                        selector.EntitySelectorConfig(domain="sensor")
+                    ),
+                    vol.Required(
+                        CONF_LOCAL_GHI_SMOOTHING,
+                        default=current_config.get(
+                            CONF_LOCAL_GHI_SMOOTHING, DEFAULT_LOCAL_GHI_SMOOTHING
+                        ),
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            min=5, max=60, step=5,
+                            mode=selector.NumberSelectorMode.SLIDER,
+                        )
+                    ),
+                    vol.Required(
+                        CONF_LOCAL_GHI_STALE,
+                        default=current_config.get(
+                            CONF_LOCAL_GHI_STALE, DEFAULT_LOCAL_GHI_STALE
+                        ),
+                    ): selector.NumberSelector(
+                        selector.NumberSelectorConfig(
+                            min=5, max=60, step=5,
+                            mode=selector.NumberSelectorMode.SLIDER,
+                        )
+                    ),
+                })
+            ),
             vol.Required(
                 CONF_WEATHER_VISUALS_ENABLED,
                 default=current_weather_visuals_enabled,

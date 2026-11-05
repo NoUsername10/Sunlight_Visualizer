@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Planned
 - Configurable placement for the 2.5D power pole and tree.
 
+## [0.5.8] - 2026-11-05
+
+### Added
+- Optional local weather-station GHI sensor in W/m², with a 5–60 minute averaging slider (10 minutes by default) and a configurable stale timeout (15 minutes by default). The local reading drives wall and roof radiation without Open-Meteo; when stale, Open-Meteo is used if enabled.
+- Radiation source and local sensor settings in radiation sensor attributes. Local-only roof radiation percentage is unavailable because it has no forecast peak.
+- Translated the local sunlight sensor options and validation messages across all 26 interface languages.
+
+### Changed
+- Wall Shading Demand now uses the same GHI × wall-incidence scale for both local and Open-Meteo sources. It reaches 100% when that scaled value reaches 400 W/m² while the wall faces the sun; the scale is not a measurement of actual wall irradiance.
+
+### Fixed
+- Discard old weather-station readings after an invalid or stale interval so they cannot skew the next rolling average.
+
 ## [0.5.7] - 2026-11-03
 
 ### Fixed

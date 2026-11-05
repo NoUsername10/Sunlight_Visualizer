@@ -61,6 +61,10 @@
     }
   },
   "options": {
+    "error": {
+      "invalid_local_ghi_unit": "Valitse anturi, jonka yksikkö on W/m².",
+      "local_ghi_self_reference": "Valitse anturi Sunlight Visualizerin ulkopuolelta."
+    },
     "step": {
       "init": {
         "title": "Sunlight Visualizerin asetukset",
@@ -85,6 +89,22 @@
           "radiation_enabled": "Ota Open-Meteo-säteilyanturit käyttöön",
           "remove_radiation_entities_on_disable": "Poista Open-Meteo-anturit, kun toiminto poistetaan käytöstä",
           "weather_visuals_enabled": "Ota 3D-säätehosteet käyttöön"
+        },
+        "sections": {
+          "local_sunlight_sensor": {
+            "name": "Paikallinen auringonsäteilyanturi",
+            "description": "Käytä sääaseman mittaamaa vaakasuoran pinnan kokonaissäteilyä.",
+            "data": {
+              "local_ghi_entity": "Sääaseman GHI-anturi (W/m²)",
+              "local_ghi_smoothing": "Keskiarvoaika (minuuttia)",
+              "local_ghi_stale": "Mittaus vanhenee (minuutissa)"
+            },
+            "data_description": {
+              "local_ghi_entity": "Valitse vaakasuoraa auringonsäteilyä mittaava anturi, jonka yksikkö on W/m². Jätä tyhjäksi, jos käytät vain Open-Meteota.",
+              "local_ghi_smoothing": "Tasoittaa vaihtelevia mittauksia 5–60 minuutin ajalta. Oletus: 10 minuuttia.",
+              "local_ghi_stale": "Jos asema ei ole lähettänyt mittausta tässä ajassa, käytetään Open-Meteota, jos se on käytössä. Oletus: 15 minuuttia."
+            }
+          }
         },
         "data_description": {
           "location_source": "Valitse Home Assistantin sijainti (oletus) tai mukautettu vyöhyke.",

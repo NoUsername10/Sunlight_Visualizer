@@ -30715,7 +30715,7 @@ function KR(r, e, t, n, i) {
   const o = -de.degToRad(i.vertDeg), a = de.degToRad(i.effectiveHorizDeg);
   r.updateMatrixWorld(!0), xm.makeRotationX(o), av.makeRotationY(a), xm.multiply(av).invert(), sv.multiplyMatrices(xm, r.matrixWorld), sv.decompose(r.position, r.quaternion, r.scale), r.updateMatrixWorld(!0), e.rotation.set(0, 0, 0), t.rotation.set(0, 0, 0), n.scale.x = 1, n.rotation.y = -de.degToRad(i.houseAngleDeg);
 }
-const ZR = "0.5.7";
+const ZR = "0.5.8";
 function JR(r) {
   let e = r >>> 0;
   return () => (e = e * 1664525 + 1013904223 >>> 0, e / 4294967296);

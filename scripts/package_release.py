@@ -44,11 +44,11 @@ def allowed(path):
         return False
     return path.is_file()
 
-def write_archive(destination, files, prefix=''):
+def write_archive(destination, files, prefix='', archive_root=ROOT):
     inventory = {}
     with zipfile.ZipFile(destination, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for path in sorted(files):
-            name = prefix + path.relative_to(ROOT).as_posix()
+            name = prefix + path.relative_to(archive_root).as_posix()
             data = path.read_bytes()
             info = zipfile.ZipInfo(name, (2026,1,1,0,0,0))
             info.compress_type = zipfile.ZIP_DEFLATED
@@ -68,6 +68,11 @@ installation = OUTPUT/f'sunlight_visualizer-{version}.zip'
 files = [p for p in integration.rglob('*') if allowed(p)]
 inventory = write_archive(installation,files)
 (OUTPUT/'file-sha256.json').write_text(json.dumps(inventory,indent=2)+'\n')
+hacs_manifest = json.loads((ROOT/'hacs.json').read_text())
+if not hacs_manifest.get('zip_release') or hacs_manifest.get('filename') != 'sunlight_visualizer.zip':
+    raise SystemExit('HACS release asset configuration mismatch')
+hacs_asset = OUTPUT/hacs_manifest['filename']
+write_archive(hacs_asset, files, archive_root=integration)
 github = OUTPUT/f'Sunlight_Visualizer-{version}-github.zip'
 roots = ['.github','custom_components','tests','scripts','assets','Icons']
 github_files = [p for name in roots for p in (ROOT/name).rglob('*') if allowed(p)]
@@ -83,7 +88,7 @@ for name, digest in github_inventory.items():
     if hashlib.sha256((OUTPUT/name).read_bytes()).hexdigest() != digest:
         raise SystemExit('Staged GitHub upload mismatch: '+name)
 print(f'Verified staged GitHub upload: {len(github_inventory)} files')
-(OUTPUT/'SHA256SUMS').write_text(''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n' for p in [github,installation]))
+(OUTPUT/'SHA256SUMS').write_text(''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n' for p in [github,installation,hacs_asset]))
 # Retire the old generated upload archive so it cannot publish card source by mistake.
 legacy_source = OUTPUT/f'Sunlight_Visualizer-{version}-source.zip'
 if legacy_source.exists():
