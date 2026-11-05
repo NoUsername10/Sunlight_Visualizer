@@ -251,7 +251,9 @@ function smokePage() {
       await pauseControls();
       await assertControls(svgCard, false, "Cancelled touch");
       const saveButton = svgCard.shadowRoot.querySelector(".cam-btn-save");
-      saveButton.focus();
+      // The preceding test used a pointer. Plain programmatic focus inherits
+      // pointer modality in Chromium and does not necessarily match :focus-visible.
+      saveButton.focus({ focusVisible: true });
       if (!saveButton.matches(":focus-visible")) throw new Error("Keyboard focus not established");
       await pauseControls();
       await assertControls(svgCard, true, "Keyboard focus");
@@ -317,7 +319,12 @@ function smokePage() {
         const waitFor = async (predicate, label) => {
           const deadline = Date.now() + 4000;
           while (!predicate()) {
-            if (Date.now() > deadline) throw new Error(label);
+            if (Date.now() > deadline) {
+              const rect = card.getBoundingClientRect();
+              throw new Error(label + "; scrollY=" + scrollY + "; viewport=" + innerHeight
+                + "; rect=" + JSON.stringify({ top: rect.top, bottom: rect.bottom })
+                + "; scrollHeight=" + document.documentElement.scrollHeight);
+            }
             await sleep(40);
           }
         };
@@ -725,10 +732,14 @@ function smokePage() {
             reconnectStartedAt = Date.now();
             rendererBeforeReconnect = card._threeHouseRenderer;
             canvasBeforeReconnect = card.shadowRoot?.querySelector("canvas.three-house-scene");
+            phase("3D reconnect: remove");
             card.remove();
             await new Promise((resolveReconnect) => setTimeout(resolveReconnect, 50));
+            phase("3D reconnect: append");
             document.body.append(card);
+            phase("3D reconnect: updateComplete");
             await card.updateComplete;
+            phase("3D reconnect: load");
             lightningCompiled = false;
             setTimeout(poll, 50);
             return;
@@ -781,7 +792,9 @@ function smokePage() {
           );
           return;
         }
-        if (Date.now() - started > 40000) {
+        // The reconnect has its own 15-second budget above. The initial-load
+        // budget must not consume that time after the UI checks have run.
+        if (!reconnectStartedAt && Date.now() - started > 40000) {
           finish(
             "failed",
             "timeout phase=" + card._threeHouseLoadPhase
