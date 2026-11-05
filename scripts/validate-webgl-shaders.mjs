@@ -882,6 +882,30 @@ try {
   });
 
   let stderr = "";
+  let browserTransportError = null;
+  const failPending = (error) => {
+    browserTransportError ??= error;
+    for (const waiter of pending.values()) {
+      clearTimeout(waiter.timer);
+      waiter.reject(browserTransportError);
+    }
+    pending.clear();
+  };
+  const browserPipeError = (name) => (error) => {
+    // Chromium can close its debugging pipes while a command is in flight.
+    // Node otherwise emits an unhandled Socket error, hiding the actual test failure.
+    failPending(new Error(`Chromium ${name} pipe failed: ${error.message}. ${stderr.slice(-1200)}`));
+  };
+  const pending = new Map();
+  child.on("error", (error) => failPending(new Error(`Chromium failed to start: ${error.message}`)));
+  child.on("exit", (code, signal) => {
+    if (pending.size) {
+      failPending(new Error(`Chromium exited during a browser command (${signal ?? code}). ${stderr.slice(-1200)}`));
+    }
+  });
+  child.stdio[3].on("error", browserPipeError("command"));
+  child.stdio[4].on("error", browserPipeError("response"));
+  child.stderr.on("error", browserPipeError("stderr"));
   child.stderr.setEncoding("utf8");
   child.stderr.on("data", (chunk) => {
     stderr += chunk;
@@ -889,7 +913,6 @@ try {
   });
 
   let commandId = 0;
-  const pending = new Map();
   let resolvePageLoaded;
   const pageLoaded = new Promise((resolveLoaded) => {
     resolvePageLoaded = resolveLoaded;
@@ -936,6 +959,10 @@ try {
   });
 
   const send = (method, params = {}, sessionId = null) => new Promise((resolveCommand, rejectCommand) => {
+    if (browserTransportError) {
+      rejectCommand(browserTransportError);
+      return;
+    }
     if (!child || child.exitCode !== null) {
       rejectCommand(new Error(`Browser exited before ${method}. ${stderr.slice(-1200)}`));
       return;
@@ -951,7 +978,9 @@ try {
       method,
       params,
       ...(sessionId ? { sessionId } : {}),
-    })}\0`);
+    })}\0`, (error) => {
+      if (error) browserPipeError("command")(error);
+    });
   });
 
   const created = await send("Target.createTarget", {
