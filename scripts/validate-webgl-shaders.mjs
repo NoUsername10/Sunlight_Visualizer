@@ -139,6 +139,7 @@ function smokePage() {
   <script type="module">
     const required = ${JSON.stringify(REQUIRED_PROGRAM_KEYS)};
     const criticalPattern = ${CRITICAL_WEBGL_PATTERN};
+    const phase = (name) => { document.body.dataset.phase = name; };
     const finish = (status, detail) => {
       document.body.dataset.smoke = status;
       document.body.dataset.detail = String(detail || "").slice(0, 6000);
@@ -199,6 +200,7 @@ function smokePage() {
         }
       };
 
+      phase("2.5D controls");
       const svgCard = document.createElement("sunlight-visualizer-card");
       svgCard.setConfig({
         rendererMode: "two_point_five_d",
@@ -271,6 +273,7 @@ function smokePage() {
       svgCard.remove();
       if (svgCard._cameraControlsVisibility.timer !== null) throw new Error("Detached card retained controls timer");
 
+      phase("3D initial load");
       const card = document.createElement("sunlight-visualizer-card");
       card.setConfig({
         rendererMode: "three_d",
@@ -601,6 +604,7 @@ function smokePage() {
             return;
           }
           if (!controlsValidated) {
+            phase("3D controls");
             await pauseControls();
             await assertControls(card, false, "Idle 3D controls");
             const hud = card.shadowRoot.querySelector(".weather-chip");
@@ -616,6 +620,7 @@ function smokePage() {
             return;
           }
           if (!colorParityValidated) {
+            phase("3D color and fog");
             try {
               validateColorParity();
               validateFogBudget();
@@ -626,6 +631,7 @@ function smokePage() {
             }
           }
           if (!gestureValidated) {
+            phase("3D gesture");
             await card.updateComplete;
             const renderCache = card._threeHouseRenderCache;
             const originalRender = renderCache?.render;
@@ -676,6 +682,7 @@ function smokePage() {
             return;
           }
           if (!visibilityValidated) {
+            phase("3D viewport visibility");
             try {
               await validateViewportPause();
               visibilityValidated = true;
@@ -687,6 +694,7 @@ function smokePage() {
             return;
           }
           if (!configSaveApplied) {
+            phase("3D config save and DOM move");
             const rendererBeforeSave = card._threeHouseRenderer;
             card.setConfig({ ...card._config, weatherVisuals: "normal" });
             await card.updateComplete;
@@ -713,6 +721,7 @@ function smokePage() {
             return;
           }
           if (!reconnectStartedAt) {
+            phase("3D disconnect and reconnect");
             reconnectStartedAt = Date.now();
             rendererBeforeReconnect = card._threeHouseRenderer;
             canvasBeforeReconnect = card.shadowRoot?.querySelector("canvas.three-house-scene");
@@ -958,7 +967,7 @@ try {
     }
   });
 
-  const send = (method, params = {}, sessionId = null) => new Promise((resolveCommand, rejectCommand) => {
+  const send = (method, params = {}, sessionId = null, timeoutMs = 15000) => new Promise((resolveCommand, rejectCommand) => {
     if (browserTransportError) {
       rejectCommand(browserTransportError);
       return;
@@ -970,8 +979,11 @@ try {
     const id = ++commandId;
     const timer = setTimeout(() => {
       pending.delete(id);
-      rejectCommand(new Error(`Browser command timed out: ${method}`));
-    }, 15000);
+      rejectCommand(new Error(
+        `Browser command timed out: ${method} after ${timeoutMs} ms; browser=${browser};`
+        + ` exitCode=${child.exitCode}; stderr=${stderr.slice(-1800) || "(none)"}`,
+      ));
+    }, timeoutMs);
     pending.set(id, { resolve: resolveCommand, reject: rejectCommand, timer });
     child.stdio[3].write(`${JSON.stringify({
       id,
@@ -983,14 +995,17 @@ try {
     });
   });
 
-  const created = await send("Target.createTarget", {
-    url: "about:blank",
-  });
+  // Reuse a startup page when Chromium provides one. Some headless builds do
+  // not expose that page, so create and activate a page in that case.
+  const targets = await send("Target.getTargets", {}, null, 45000);
+  const pageTarget = targets.targetInfos?.find((target) => target.type === "page")
+    ?? await send("Target.createTarget", { url: "about:blank" });
   const attached = await send("Target.attachToTarget", {
-    targetId: created.targetId,
+    targetId: pageTarget.targetId,
     flatten: true,
   });
   const sessionId = attached.sessionId;
+  await send("Target.activateTarget", { targetId: pageTarget.targetId });
   await send("Runtime.enable", {}, sessionId);
   await send("Log.enable", {}, sessionId);
   await send("Page.enable", {}, sessionId);
@@ -1012,7 +1027,7 @@ try {
     const response = await send(
       "Runtime.evaluate",
       {
-        expression: "({status:document.body?.dataset?.smoke||'pending',detail:document.body?.dataset?.detail||''})",
+        expression: "({status:document.body?.dataset?.smoke||'pending',detail:document.body?.dataset?.detail||'',phase:document.body?.dataset?.phase||''})",
         returnByValue: true,
       },
       sessionId,
@@ -1034,7 +1049,7 @@ try {
       }
     }
     throw new Error(
-      `WebGL shader compile smoke failed: ${result.detail || result.status}`
+      `WebGL shader compile smoke failed: ${result.detail || result.status}; phase=${result.phase || "unknown"}`
         + (criticalDiagnostics.length ? `\n${criticalDiagnostics.join("\n")}` : "")
         + (stderr ? `\nBrowser stderr:\n${stderr.slice(-1800)}` : ""),
     );
