@@ -37,7 +37,17 @@ jobs:
             echo "Enter an existing tag such as 0.5.8." >&2
             exit 1
           fi
-          git ls-remote --exit-code --refs origin "refs/tags/$RELEASE_TAG" >/dev/null
+          if git ls-remote --exit-code --refs origin "refs/tags/$RELEASE_TAG" >/dev/null; then
+            :
+          else
+            status=$?
+            if [[ "$status" -eq 2 ]]; then
+              echo "Tag $RELEASE_TAG does not exist on GitHub. Create it on the current main commit and push the tag before running this action." >&2
+            else
+              echo "Could not verify tag $RELEASE_TAG on GitHub (git exit status $status)." >&2
+            fi
+            exit 1
+          fi
           git fetch origin main:refs/remotes/origin/main
           git fetch origin "refs/tags/$RELEASE_TAG:refs/tags/$RELEASE_TAG"
           python3 scripts/check_release_tag.py --tag "$RELEASE_TAG"
