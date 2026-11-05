@@ -251,9 +251,12 @@ function smokePage() {
       await pauseControls();
       await assertControls(svgCard, false, "Cancelled touch");
       const saveButton = svgCard.shadowRoot.querySelector(".cam-btn-save");
-      // The preceding test used a pointer. Plain programmatic focus inherits
-      // pointer modality in Chromium and does not necessarily match :focus-visible.
-      saveButton.focus({ focusVisible: true });
+      // The parent test driver sends a real CDP Tab key before continuing.
+      // A synthetic KeyboardEvent or focus() option does not consistently set
+      // Chromium's keyboard modality on hosted Linux runners.
+      phase("2.5D keyboard input");
+      await new Promise((resolveKeyboard) => { window.__svContinueAfterKeyboard = resolveKeyboard; });
+      saveButton.focus();
       if (!saveButton.matches(":focus-visible")) throw new Error("Keyboard focus not established");
       await pauseControls();
       await assertControls(svgCard, true, "Keyboard focus");
@@ -610,6 +613,19 @@ function smokePage() {
             finish("failed", "3D renderer canvas is missing");
             return;
           }
+          if (!${expectBakedNightLighting}) {
+            try {
+              validateColorParity();
+              validateFogBudget();
+            } catch (error) {
+              finish("failed", error?.stack || error);
+              return;
+            }
+            finish("passed", "validated daylight scene and compiled " + required.length
+              + " required Three.js programs; color parity: " + colorParityResults.join("; ")
+              + "; " + fogBudgetResult);
+            return;
+          }
           if (!controlsValidated) {
             phase("3D controls");
             await pauseControls();
@@ -737,8 +753,9 @@ function smokePage() {
             await new Promise((resolveReconnect) => setTimeout(resolveReconnect, 50));
             phase("3D reconnect: append");
             document.body.append(card);
-            phase("3D reconnect: updateComplete");
-            await card.updateComplete;
+            // A reconnect can schedule further Lit updates while the model
+            // reloads. The poll below checks the actual renderer and model
+            // readiness, so waiting on updateComplete here can stall forever.
             phase("3D reconnect: load");
             lightningCompiled = false;
             setTimeout(poll, 50);
@@ -1022,6 +1039,12 @@ try {
   await send("Runtime.enable", {}, sessionId);
   await send("Log.enable", {}, sessionId);
   await send("Page.enable", {}, sessionId);
+  // The smoke test checks control visibility at rest. Use the card's
+  // reduced-motion mode so a headless tab cannot leave opacity frozen between
+  // CSS transition frames.
+  await send("Emulation.setEmulatedMedia", {
+    features: [{ name: "prefers-reduced-motion", value: "reduce" }],
+  }, sessionId);
   await send(
     "Page.navigate",
     { url: `http://127.0.0.1:${address.port}/` },
@@ -1035,6 +1058,7 @@ try {
   ]);
 
   let result = { status: "pending", detail: "" };
+  let keyboardInputSent = false;
   const deadline = Date.now() + 75000;
   while (Date.now() < deadline) {
     const response = await send(
@@ -1046,6 +1070,13 @@ try {
       sessionId,
     );
     result = response?.result?.value ?? result;
+    if (result.phase === "2.5D keyboard input" && !keyboardInputSent) {
+      keyboardInputSent = true;
+      const tabKey = { key: "Tab", code: "Tab", windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9 };
+      await send("Input.dispatchKeyEvent", { type: "keyDown", ...tabKey }, sessionId);
+      await send("Input.dispatchKeyEvent", { type: "keyUp", ...tabKey }, sessionId);
+      await send("Runtime.evaluate", { expression: "window.__svContinueAfterKeyboard?.()" }, sessionId);
+    }
     if (result.status !== "pending") break;
     await sleep(100);
   }
